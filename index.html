@@ -229,6 +229,140 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 .doctor-directory-action{margin-top:14px;font-size:12px;font-weight:600;color:#7b6816}
 .doctor-council-image{display:block;max-width:100%;max-height:72vh;margin:auto;object-fit:contain}
 
+
+/* Outsource workspace */
+#outsourceMenu nav a.hidden{display:none!important}
+
+
+/* Doctor V5 Profile + Management */
+.doctor-profile-frame{
+  width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:16px;
+  background:#f7f3df;margin-bottom:14px;border:1px solid #efe6bf
+}
+.doctor-profile-photo{
+  width:100%;height:100%;object-fit:cover;display:block
+}
+.doctor-profile-placeholder{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:700;color:#8c7b30;background:linear-gradient(135deg,#fff9df,#f4e5a5)
+}
+.doctor-management-avatar{
+  width:54px;height:54px;border-radius:14px;object-fit:cover;display:block;border:1px solid var(--line)
+}
+.doctor-management-avatar-placeholder{
+  display:flex;align-items:center;justify-content:center;background:#fff6cf;color:#806e22;
+  font-size:12px;font-weight:700
+}
+.doctor-management-actions{display:flex;gap:7px;flex-wrap:wrap}
+#doctorProfileFile,#doctorCouncilFile{padding:8px;background:#fff}
+
+
+/* V6 Password Login */
+.password-input-wrap{position:relative}
+.password-input-wrap input{
+  padding-right:14px!important;
+  -webkit-text-security:disc;
+}
+.login-password-help{margin-top:11px;font-size:10.5px;color:var(--muted);line-height:1.6}
+.sidebar-password-btn{
+  width:100%;border:1px solid var(--line);background:#fffdf3;color:var(--text);
+  border-radius:11px;padding:9px 10px;font-family:inherit;font-size:11.5px;
+  cursor:pointer;margin-bottom:8px
+}
+.sidebar-password-btn:hover{background:#fff5c8}
+.account-password-overlay{
+  position:fixed;inset:0;z-index:9999;background:rgba(20,20,16,.54);
+  display:flex;align-items:center;justify-content:center;padding:20px
+}
+.account-password-modal{
+  width:min(520px,100%);max-height:90vh;overflow:auto;background:#fffdf7;
+  border-radius:22px;border:1px solid #eadfae;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.22)
+}
+.account-password-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px
+}
+.account-password-head h3{margin:5px 0 0}
+.account-password-close{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
+  background:#fff;font-size:22px;cursor:pointer;line-height:1
+}
+.password-status-set{
+  display:inline-flex;padding:5px 9px;border-radius:999px;background:#e7f5ec;color:#34724d;
+  font-size:10.5px;font-weight:700
+}
+.password-status-missing{
+  display:inline-flex;padding:5px 9px;border-radius:999px;background:#fff0e9;color:#a85335;
+  font-size:10.5px;font-weight:700
+}
+
+
+/* V7 Branch API + Master Management */
+.branch-live-card{display:flex;flex-direction:column;gap:13px}
+.branch-live-top{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:16px
+}
+.branch-live-top h4{margin:5px 0 0;font-size:16px;line-height:1.5}
+.branch-id-label{
+  font-size:10px;font-weight:750;letter-spacing:.13em;color:var(--muted)
+}
+.branch-map-link{
+  color:#806c16;font-weight:650;text-decoration:none
+}
+.branch-map-link:hover{text-decoration:underline}
+#branchManageAddress{resize:vertical;min-height:88px}
+
+
+/* V9 Default Password Flow */
+.user-account-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.user-reset-password-btn{
+  border:1px solid #e2cf7a;
+  background:#fff8d7;
+  color:#665513;
+  border-radius:10px;
+  padding:8px 10px;
+  font-family:inherit;
+  font-size:10.5px;
+  font-weight:650;
+  cursor:pointer;
+}
+.user-reset-password-btn:hover{
+  background:#fff0ad;
+}
+.default-password-card{
+  margin-top:16px;
+  border:1px solid #ead87b;
+  background:#fff8d8;
+  border-radius:14px;
+  padding:14px 16px;
+}
+.default-password-card>div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.default-password-card strong{
+  font-family:"Nunito Sans",sans-serif;
+  font-size:26px;
+  letter-spacing:.12em;
+}
+.default-password-label{
+  font-size:10px;
+  font-weight:750;
+  letter-spacing:.12em;
+  color:#766319;
+}
+.default-password-card p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -243,9 +377,16 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
     <p class="muted">กรอกรหัสพนักงานเพื่อเข้าใช้งานข้อมูลภายในของ Lumieclinic</p>
     <form id="loginForm">
       <label for="employeeId">รหัสพนักงาน</label>
-      <input id="employeeId" inputmode="numeric" autocomplete="off" placeholder="กรอกรหัสพนักงาน" required>
-      <button type="submit">เข้าสู่เว็บไซต์</button>
+      <input id="employeeId" inputmode="numeric" autocomplete="username" placeholder="กรอกรหัสพนักงาน" required>
+
+      <label for="employeePassword" style="margin-top:12px">รหัสผ่าน</label>
+      <div class="password-input-wrap">
+        <input id="employeePassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่าน" required>
+      </div>
+
+      <button id="loginSubmitButton" type="submit">เข้าสู่เว็บไซต์</button>
       <div id="loginError" class="error"></div>
+      <div class="login-password-help">บัญชีใหม่ใช้รหัสเริ่มต้น 1234 · หลัง Login สามารถเปลี่ยนรหัสผ่านของตัวเองได้</div>
     </form>
     <div id="employeeDbStatus" class="hint">กำลังเชื่อมต่อฐานข้อมูลพนักงาน...</div>
     <div style="margin-top:7px;font-size:10px;color:var(--muted);line-height:1.5">ฐานข้อมูลจะ Sync จาก Google Sheet ใหม่อัตโนมัติ หากเชื่อมต่อไม่ได้ชั่วคราว ระบบจะใช้ข้อมูลล่าสุดที่บันทึกไว้</div>
@@ -267,6 +408,16 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
       <a href="#branch" data-page="branch">Branch</a>
       <a href="#contact" data-page="contact">Contact</a>
     </nav>
+
+    <div id="outsourceMenu" class="hidden">
+      <div class="nav-title dashboard-title">OUTSOURCE</div>
+      <nav>
+        <a href="#outsource-ad-optimize" data-page="outsource-ad-optimize">Ad Optimize</a>
+        <a href="#outsource-content" data-page="outsource-content">Content</a>
+        <a href="#outsource-graphic" data-page="outsource-graphic">Graphic</a>
+      </nav>
+    </div>
+
     <div id="dashboardMenu">
       <div class="nav-title dashboard-title">DASHBOARD</div>
       <nav>
@@ -291,11 +442,14 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
         <a href="#user-management" data-page="user-management">User Management</a>
         <a href="#permission-management" data-page="permission-management">Permission Management</a>
         <a href="#employee-management" data-page="employee-management">Employee Management</a>
+        <a href="#doctor-management" data-page="doctor-management">Doctor Management</a>
+        <a href="#branch-management" data-page="branch-management">Branch Management</a>
         <a href="#contact-management" data-page="contact-management">Contact Inbox</a>
       </nav>
     </div>
     <div class="sidebar-bottom">
       <div class="employee"><span class="avatar" id="employeeAvatar">E</span><span><b id="employeeDisplay"></b><small id="employeePosition">Employee</small></span></div>
+      <button id="changePasswordButton" class="sidebar-password-btn" type="button">เปลี่ยนรหัสผ่าน</button>
       <button id="logoutButton" class="logout">ออกจากระบบ</button>
     </div>
   </aside>
@@ -350,28 +504,46 @@ function pickApiValue(obj, names){
 
 function normalizeApiEmployee(obj){
   return {
-    id: pickApiValue(obj,["Employee ID","รหัสพนักงาน","employeeId","id"]).replace(/\.0$/,""),
-    level: pickApiValue(obj,["Level","ระดับ","ระดับการใช้สิทธิ์","level"]),
-    position: pickApiValue(obj,["Position","ตำแหน่ง","position"]),
-    name: pickApiValue(obj,["Name","ชื่อ","ชื่อพนักงาน","name"]),
-    phone: pickApiValue(obj,["Tel","เบอร์โทร","เบอร์โทรศัพท์","phone","tel"]),
-    email: pickApiValue(obj,["Email","Email บริษัท","อีเมลบริษัท","email"])
+    id:pickApiValue(obj,["Employee ID","รหัสพนักงาน","employeeId","id"]).replace(/\.0$/,""),
+    level:pickApiValue(obj,["Level","ระดับ","ระดับการใช้สิทธิ์","level"]),
+    position:pickApiValue(obj,["Position","ตำแหน่ง","position"]),
+    name:pickApiValue(obj,["Name","ชื่อ","ชื่อพนักงาน","name"]),
+    phone:pickApiValue(obj,["Tel","เบอร์โทร","เบอร์โทรศัพท์","phone","tel"]),
+    email:pickApiValue(obj,["Email","Email บริษัท","อีเมลบริษัท","email"]),
+    passwordSet:
+      obj?.passwordSet===true ||
+      String(obj?.passwordSet||"").toLowerCase()==="true" ||
+      String(obj?.passwordSet||"")==="1"
   };
 }
 
 function normalizeApiDoctor(obj){
-  const rawHasImage=
+  const rawHasCouncil=
     obj?.hasCouncilImage ??
     obj?.["hasCouncilImage"] ??
     obj?.["แพทยสภา"];
 
+  const rawHasProfile=
+    obj?.hasProfileImage ??
+    obj?.["hasProfileImage"] ??
+    obj?.["Profile"];
+
   return {
-    name:pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","Name","name"]),
+    name:pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","ชื่อแพทย์","Name","name"]),
     license:pickApiValue(obj,["เลข ว","เลข ว.","License","license"]),
+
+    hasProfileImage:
+      rawHasProfile===true ||
+      String(rawHasProfile||"").toLowerCase()==="true" ||
+      String(rawHasProfile||"")==="1",
+
+    profileImageUrl:
+      pickApiValue(obj,["profileImageUrl","Profile URL","profileUrl"]),
+
     hasCouncilImage:
-      rawHasImage===true ||
-      String(rawHasImage||"").toLowerCase()==="true" ||
-      String(rawHasImage||"")==="1"
+      rawHasCouncil===true ||
+      String(rawHasCouncil||"").toLowerCase()==="true" ||
+      String(rawHasCouncil||"")==="1"
   };
 }
 
@@ -380,6 +552,12 @@ async function lumieApiGet(action,params={}){
     action:String(action||""),
     _:String(Date.now())
   });
+
+  const token=sessionStorage.getItem("lumie_auth_token")||"";
+
+  if(token){
+    query.set("authToken",token);
+  }
 
   Object.entries(params||{}).forEach(([key,value])=>{
     if(value!==undefined && value!==null && String(value)!==""){
@@ -405,14 +583,30 @@ async function lumieApiGet(action,params={}){
 }
 
 async function lumieApiPost(payload){
+  const token=sessionStorage.getItem("lumie_auth_token")||"";
+
+  const requestPayload={
+    ...payload
+  };
+
+  if(token){
+    requestPayload.authToken=token;
+  }
+
   const res=await fetch(LUMIE_API_URL,{
     method:"POST",
-    body:JSON.stringify(payload),
+    body:JSON.stringify(requestPayload),
     redirect:"follow"
   });
+
   if(!res.ok) throw new Error(`API HTTP ${res.status}`);
+
   const result=await res.json();
-  if(!result || result.success!==true) throw new Error(result?.message||"Lumie API error");
+
+  if(!result || result.success!==true){
+    throw new Error(result?.message||"Lumie API error");
+  }
+
   return result;
 }
 
@@ -437,6 +631,9 @@ async function syncAllLumieData(){
   const doctors=(Array.isArray(result.doctors)?result.doctors:[])
     .map(normalizeApiDoctor).filter(d=>d.name);
 
+  const branches=(Array.isArray(result.branches)?result.branches:[])
+    .map(normalizeApiBranch).filter(b=>b.id||b.name);
+
   if(!employees.length) throw new Error("API ไม่ส่งข้อมูลพนักงาน");
   employeeDatabase=employees;
   cacheEmployeeDatabase("Apps Script API");
@@ -445,6 +642,12 @@ async function syncAllLumieData(){
     doctorDatabase=doctors;
     try{localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(doctorDatabase));}catch{}
   }
+
+  if(branches.length){
+    branchDatabase=branches;
+    try{localStorage.setItem(BRANCH_CACHE_KEY,JSON.stringify(branchDatabase));}catch{}
+  }
+
   return result;
 }
 
@@ -458,6 +661,10 @@ const pages = {
   branch:["Branch","LUMIECLINIC"],
   contact:["Contact","LUMIECLINIC"],
 
+  "outsource-ad-optimize":["Ad Optimize","OUTSOURCE"],
+  "outsource-content":["Content","OUTSOURCE"],
+  "outsource-graphic":["Graphic","OUTSOURCE"],
+
   executive:["Executive","POWER BI"],
   sales:["Sale Performance","POWER BI"],
   customer:["Customer","POWER BI"],
@@ -470,6 +677,8 @@ const pages = {
   "user-management":["User Management","MASTER CONTROL"],
   "permission-management":["Permission Management","MASTER CONTROL"],
   "employee-management":["Employee Management","MASTER CONTROL"],
+  "doctor-management":["Doctor Management","MASTER CONTROL"],
+  "branch-management":["Branch Management","MASTER CONTROL"],
   "contact-management":["Contact Inbox","MASTER CONTROL"]
 };
 
@@ -496,13 +705,123 @@ const DOCTORS = [
  {name:"พญ.อิสรีย์ จิรวารศิริกุล (หมอทีม)", license:"ว.66241"}
 ];
 
-const BRANCHES = [
- {name:"สาขาเซ็นทรัลปิ่นเกล้า", detail:"ชั้น 3 ของศูนย์การค้า Central Pinklao", status:"เปิดให้บริการ"},
- {name:"สาขาเดอะมอลล์บางแค", detail:"The Mall Bangkae ชั้น M", status:"เปิดให้บริการ"},
- {name:"สาขาสยามสแควร์ ซอย 2", detail:"", status:"Coming soon"},
- {name:"สาขาซีคอนสแควร์ ศรีนครินทร์", detail:"", status:"Open 9 September 2026"},
- {name:"สาขาเดอะมอลล์ไลฟ์สโตร์ บางกะปิ", detail:"", status:"Open 11 September 2026"}
+const BRANCH_CACHE_KEY = "lumie_branch_db_website_sheet_v1";
+
+const BUILTIN_BRANCH_SNAPSHOT = [
+  {
+    id:"CPK",
+    name:"Central Pinklao | Floor 3",
+    address:"",
+    phone:"095-3692244",
+    hours:"10.00 - 20.00",
+    map:"",
+    status:"Active"
+  },
+  {
+    id:"BKE",
+    name:"The mall Bangkae | Floor M",
+    address:"",
+    phone:"088-9875599",
+    hours:"10.00 - 20.00",
+    map:"",
+    status:"Active"
+  },
+  {
+    id:"SCS",
+    name:"Seacon Square Srinakarin",
+    address:"",
+    phone:"",
+    hours:"",
+    map:"",
+    status:"9 September 2026"
+  },
+  {
+    id:"BKP",
+    name:"The mall Bangkapi",
+    address:"",
+    phone:"",
+    hours:"",
+    map:"",
+    status:"11 September 2026"
+  },
+  {
+    id:"SS2",
+    name:"Siam Square Soi 2",
+    address:"",
+    phone:"",
+    hours:"",
+    map:"",
+    status:"Coming soon"
+  }
 ];
+
+let branchDatabase=[...BUILTIN_BRANCH_SNAPSHOT];
+
+function normalizeApiBranch(obj){
+  return {
+    id:pickApiValue(obj,["Branch ID","branchId","id","ID"]),
+    name:pickApiValue(obj,["ชื่อสาขา","Branch Name","branchName","name"]),
+    address:pickApiValue(obj,["ที่อยู่","Address","address"]),
+    phone:pickApiValue(obj,["เบอร์โทร","Tel","Phone","phone","tel"]),
+    hours:pickApiValue(obj,["เวลาเปิด","Opening Hours","Hours","openingHours","hours"]),
+    map:pickApiValue(obj,["Google Map","Google Maps","Map","googleMap","map"]),
+    status:pickApiValue(obj,["Status","สถานะ","status"])
+  };
+}
+
+function safeHttpUrl(value){
+  const text=String(value||"").trim();
+
+  if(!/^https?:\/\//i.test(text)){
+    return "";
+  }
+
+  return text;
+}
+
+async function syncBranchDatabase(){
+  try{
+    const result=await lumieApiGet("branches");
+
+    const source=
+      Array.isArray(result.data)
+        ? result.data
+        :(Array.isArray(result.branches)?result.branches:[]);
+
+    const data=source
+      .map(normalizeApiBranch)
+      .filter(b=>b.id || b.name);
+
+    if(!data.length){
+      throw new Error("API ไม่ส่งข้อมูล Branch");
+    }
+
+    branchDatabase=data;
+
+    try{
+      localStorage.setItem(
+        BRANCH_CACHE_KEY,
+        JSON.stringify(data)
+      );
+    }catch{}
+
+    return true;
+  }catch(err){
+    console.warn("Lumie Branch API ใช้งานไม่ได้:",err);
+
+    try{
+      const cached=JSON.parse(
+        localStorage.getItem(BRANCH_CACHE_KEY)||"null"
+      );
+
+      if(Array.isArray(cached)&&cached.length){
+        branchDatabase=cached;
+      }
+    }catch{}
+
+    return false;
+  }
+}
 
 /* ---------- dashboard sample data ---------- */
 const MONTHS = ["เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย."];
@@ -701,7 +1020,7 @@ function permissionClass(level){
   if(l==="master") return "permission-master";
   if(l==="executive") return "permission-executive";
   if(l==="employee") return "permission-employee";
-  if(l==="outsource") return "permission-outsource";
+  if(l==="outsource" || l.startsWith("outsource-")) return "permission-outsource";
   return "";
 }
 function permissionBadge(level){
@@ -720,19 +1039,53 @@ function hasDashboardAccess(emp){
   const level=employeeLevel(emp);
   return level==="master" || level==="executive" || level==="employee";
 }
-function isOutsource(emp){ return employeeLevel(emp)==="outsource"; }
+function isOutsource(emp){
+  const level=employeeLevel(emp);
+  return level==="outsource" || level.startsWith("outsource-");
+}
 
 const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","contact"];
+const OUTSOURCE_PAGES=["outsource-ad-optimize","outsource-content","outsource-graphic"];
 const DASHBOARD_PAGES=["executive","sales","customer","ads"];
 const EXECUTIVE_PAGES=["doctor-performance","sale-content-performance","admin-sale-performance"];
-const MASTER_PAGES=["user-management","permission-management","employee-management","contact-management"];
+const MASTER_PAGES=["user-management","permission-management","employee-management","doctor-management","branch-management","contact-management"];
+
+function outsourceAllowedWorkspacePages(level){
+  const l=String(level||"").trim().toLowerCase();
+
+  if(l==="outsource-content") return ["outsource-content"];
+  if(l==="outsource-graphic") return ["outsource-graphic"];
+  if(l==="outsource-ad optimize") return ["outsource-ad-optimize"];
+  if(l==="outsource-all") return [...OUTSOURCE_PAGES];
+
+  return [];
+}
+
+function hasOutsourceMenuAccess(emp){
+  const level=employeeLevel(emp);
+
+  if(["master","executive","employee"].includes(level)) return true;
+  return outsourceAllowedWorkspacePages(level).length>0;
+}
 
 function canAccessPage(emp,page){
   if(isMaster(emp)) return true;
+
   const level=employeeLevel(emp);
-  if(level==="executive") return !MASTER_PAGES.includes(page);
-  if(level==="employee") return !EXECUTIVE_PAGES.includes(page) && !MASTER_PAGES.includes(page);
-  if(level==="outsource") return OUTSOURCE_ALLOWED_PAGES.includes(page);
+
+  if(level==="executive"){
+    return !MASTER_PAGES.includes(page);
+  }
+
+  if(level==="employee"){
+    return !EXECUTIVE_PAGES.includes(page) && !MASTER_PAGES.includes(page);
+  }
+
+  if(isOutsource(emp)){
+    if(OUTSOURCE_ALLOWED_PAGES.includes(page)) return true;
+    return outsourceAllowedWorkspacePages(level).includes(page);
+  }
+
   return page==="home";
 }
 function showApp(){
@@ -742,10 +1095,19 @@ function showApp(){
   employeeDisplay.textContent=emp.name || emp.id;
   employeePosition.textContent=[emp.position,emp.level].filter(Boolean).join(" · ") || "Employee";
   employeeAvatar.textContent=(emp.name||"E").trim().charAt(0).toUpperCase();
+  const outsourceMenu=document.getElementById("outsourceMenu");
   const dashboardMenu=document.getElementById("dashboardMenu");
   const executiveMenu=document.getElementById("executiveMenu");
   const masterMenu=document.getElementById("masterMenu");
   const aboutNavLink=document.getElementById("aboutNavLink");
+
+  if(outsourceMenu){
+    outsourceMenu.classList.toggle("hidden",!hasOutsourceMenuAccess(emp));
+
+    outsourceMenu.querySelectorAll("a[data-page]").forEach(link=>{
+      link.classList.toggle("hidden",!canAccessPage(emp,link.dataset.page));
+    });
+  }
 
   if(dashboardMenu) dashboardMenu.classList.toggle("hidden",!hasDashboardAccess(emp));
   if(executiveMenu) executiveMenu.classList.toggle("hidden",!hasExecutiveAccess(emp));
@@ -757,15 +1119,16 @@ function showApp(){
 function showLogin(){
   appScreen.classList.add("hidden");
   loginScreen.classList.remove("hidden");
+
   employeeId.value="";
+
+  const passwordInput=document.getElementById("employeePassword");
+  if(passwordInput) passwordInput.value="";
+
   loginError.textContent="";
-  // ให้ Login ใช้ snapshot/cache ได้ทันที แล้วค่อยอัปเดต Google Sheets แบบ background
-  if(!employeeDatabase.length){
-    employeeDatabase=BUILTIN_EMPLOYEE_SNAPSHOT.map(e=>({...e}));
-    employeeDbReady=true;
-  }
-  employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · กำลัง Sync Lumie API`;
-  if(!employeeDbLoading) loadEmployeeDatabase();
+
+  employeeDbStatus.textContent=
+    "Secure Login · Employee ID + Password · Lumie API";
 }
 function parseCSV(text){
   const rows=[]; let row=[],cell="",quoted=false;
@@ -895,37 +1258,174 @@ async function loadEmployeeDatabase(){
 }
 function toast(msg){ toastEl.textContent=msg; toastEl.classList.add("show"); setTimeout(()=>toastEl.classList.remove("show"),2600); }
 
-loginForm.addEventListener("submit",e=>{
+loginForm.addEventListener("submit",async e=>{
   e.preventDefault();
+
   loginError.textContent="";
+
   const id=employeeId.value.trim();
+  const password=document.getElementById("employeePassword").value;
+  const loginButton=document.getElementById("loginSubmitButton");
 
-  // Master หลักเข้าได้ตลอด ไม่ขึ้นกับสถานะการเชื่อม Google Sheets
-  if(id===ALWAYS_ALLOWED_EMPLOYEE_ID){
-    const master=employeeDatabase.find(x=>x.id===id) || {...BUILTIN_EMPLOYEE_SNAPSHOT[0]};
-    sessionStorage.setItem("lumie_employee",JSON.stringify(master));
-    sessionStorage.setItem("lumie_logged_in","true");
+  loginButton.disabled=true;
+  loginButton.textContent="กำลังเข้าสู่ระบบ...";
+
+  try{
+    const result=await lumieApiPost({
+      action:"login",
+      employeeId:id,
+      password
+    });
+
+    const emp=normalizeApiEmployee(result.employee||{});
+
+    if(!emp.id){
+      throw new Error("ไม่พบข้อมูลผู้ใช้งาน");
+    }
+
+    sessionStorage.setItem(
+      "lumie_employee",
+      JSON.stringify(emp)
+    );
+
+    sessionStorage.setItem(
+      "lumie_auth_token",
+      String(result.authToken||"")
+    );
+
+    sessionStorage.setItem(
+      "lumie_logged_in",
+      "true"
+    );
+
+    employeeDatabase=[
+      emp,
+      ...employeeDatabase.filter(x=>x.id!==emp.id)
+    ];
+
     location.hash="#home";
     showApp();
-    return;
-  }
 
-  // รหัสอื่นใช้ฐานข้อมูลล่าสุดที่เคย sync สำเร็จ / snapshot ล่าสุด โดยไม่ต้องรอ network
-  const emp=employeeDatabase.find(x=>x.id===id);
-  if(emp){
-    sessionStorage.setItem("lumie_employee",JSON.stringify(emp));
-    sessionStorage.setItem("lumie_logged_in","true");
-    location.hash="#home";
-    showApp();
-    return;
-  }
+    if(isMaster(emp)){
+      loadEmployeeDatabase();
+    }
+  }catch(err){
+    sessionStorage.removeItem("lumie_auth_token");
+    sessionStorage.removeItem("lumie_logged_in");
+    sessionStorage.removeItem("lumie_employee");
 
-  loginError.textContent="ไม่พบรหัสพนักงานนี้ในฐานข้อมูลล่าสุด";
-  employeeId.focus();
-  // ลองอัปเดตเบื้องหลัง เผื่อเพิ่งเพิ่มรหัสใหม่ใน Google Sheet
-  if(!employeeDbLoading) loadEmployeeDatabase();
+    loginError.textContent=err.message||"เข้าสู่ระบบไม่สำเร็จ";
+    document.getElementById("employeePassword").focus();
+  }finally{
+    loginButton.disabled=false;
+    loginButton.textContent="เข้าสู่เว็บไซต์";
+  }
 });
-document.getElementById("logoutButton").addEventListener("click",()=>{ sessionStorage.removeItem("lumie_logged_in"); sessionStorage.removeItem("lumie_employee"); location.hash="#home"; showLogin(); });
+document.getElementById("logoutButton").addEventListener("click",()=>{ sessionStorage.removeItem("lumie_logged_in"); sessionStorage.removeItem("lumie_employee"); sessionStorage.removeItem("lumie_auth_token"); location.hash="#home"; showLogin(); });
+
+function openChangePasswordModal(){
+  const modal=document.createElement("div");
+  modal.className="account-password-overlay";
+
+  modal.innerHTML=`
+    <div class="account-password-modal">
+      <div class="account-password-head">
+        <div>
+          <div class="eyebrow">ACCOUNT SECURITY</div>
+          <h3>เปลี่ยนรหัสผ่าน</h3>
+        </div>
+        <button class="account-password-close" type="button">×</button>
+      </div>
+
+      <form id="changePasswordForm">
+        <div class="form-grid">
+          <div class="form-field full">
+            <label>รหัสผ่านปัจจุบัน</label>
+            <input id="currentAccountPassword" type="password" autocomplete="current-password" required>
+          </div>
+
+          <div class="form-field full">
+            <label>รหัสผ่านใหม่</label>
+            <input id="newAccountPassword" type="password" autocomplete="new-password" minlength="8" required>
+            <small class="muted">อย่างน้อย 8 ตัวอักษร และต้องมีทั้งตัวอักษรกับตัวเลข</small>
+          </div>
+
+          <div class="form-field full">
+            <label>ยืนยันรหัสผ่านใหม่</label>
+            <input id="confirmAccountPassword" type="password" autocomplete="new-password" minlength="8" required>
+          </div>
+        </div>
+
+        <button id="changeAccountPasswordBtn" class="btn-primary" type="submit" style="margin-top:16px">
+          บันทึกรหัสผ่านใหม่
+        </button>
+
+        <div id="changePasswordStatus" class="notice" style="display:none"></div>
+      </form>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  const close=()=>modal.remove();
+
+  modal.querySelector(".account-password-close").addEventListener("click",close);
+  modal.addEventListener("click",e=>{
+    if(e.target===modal) close();
+  });
+
+  modal.querySelector("#changePasswordForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+
+    const currentPassword=
+      modal.querySelector("#currentAccountPassword").value;
+
+    const newPassword=
+      modal.querySelector("#newAccountPassword").value;
+
+    const confirmPassword=
+      modal.querySelector("#confirmAccountPassword").value;
+
+    const status=
+      modal.querySelector("#changePasswordStatus");
+
+    const button=
+      modal.querySelector("#changeAccountPasswordBtn");
+
+    if(newPassword!==confirmPassword){
+      status.style.display="block";
+      status.textContent="รหัสผ่านใหม่และช่องยืนยันไม่ตรงกัน";
+      return;
+    }
+
+    button.disabled=true;
+    button.textContent="กำลังบันทึก...";
+    status.style.display="block";
+    status.textContent="กำลังเปลี่ยนรหัสผ่าน...";
+
+    try{
+      await lumieApiPost({
+        action:"changePassword",
+        currentPassword,
+        newPassword
+      });
+
+      status.textContent="เปลี่ยนรหัสผ่านเรียบร้อยแล้ว";
+      toast("เปลี่ยนรหัสผ่านเรียบร้อยแล้ว");
+
+      setTimeout(close,700);
+    }catch(err){
+      status.textContent="เปลี่ยนรหัสผ่านไม่สำเร็จ: "+err.message;
+      button.disabled=false;
+      button.textContent="บันทึกรหัสผ่านใหม่";
+    }
+  });
+}
+
+
+document.getElementById("changePasswordButton").addEventListener("click",()=>{
+  openChangePasswordModal();
+});
+
 document.getElementById("menuButton").addEventListener("click",()=>sidebar.classList.toggle("open"));
 window.addEventListener("hashchange",render);
 
@@ -947,10 +1447,13 @@ function render(){
 
   const map={home:renderHome, about:renderAbout, service:renderService, promotion:renderPromotion,
     doctor:renderDoctor, branch:renderBranch, contact:renderContact,
+    "outsource-ad-optimize":renderOutsourceAdOptimize,
+    "outsource-content":renderOutsourceContent,
+    "outsource-graphic":renderOutsourceGraphic,
     executive:renderExecutive, sales:renderSales, customer:renderCustomer, ads:renderAds,
     "doctor-performance":renderDoctorPerformance,"sale-content-performance":renderSaleContentPerformance,"admin-sale-performance":renderAdminSalePerformance,
     "user-management":renderUserManagement,"permission-management":renderPermissionManagement,
-    "employee-management":renderEmployeeManagement,"contact-management":renderContactManagement};
+    "employee-management":renderEmployeeManagement,"doctor-management":renderDoctorManagement,"branch-management":renderBranchManagement,"contact-management":renderContactManagement};
   map[page]();
 }
 
@@ -1000,55 +1503,135 @@ function renderUserManagement(){
     <td><b>${escapeHtml(e.name)}</b></td>
     <td>${escapeHtml(e.position)}</td>
     <td>${permissionBadge(e.level)}</td>
+    <td>${e.passwordSet?'<span class="password-status-set">พร้อมใช้งาน</span>':'<span class="password-status-missing">รหัสเริ่มต้น 1234</span>'}</td>
     <td>${escapeHtml(e.phone||"-")}</td>
     <td>${escapeHtml(e.email||"-")}</td>
-    <td><button class="user-edit-btn" type="button" data-id="${escapeHtml(e.id)}">แก้ไข</button></td>
+    <td>
+      <div class="user-account-actions">
+        <button class="user-edit-btn" type="button" data-id="${escapeHtml(e.id)}">แก้ไข</button>
+        <button class="user-reset-password-btn" type="button" data-id="${escapeHtml(e.id)}">Reset → 1234</button>
+      </div>
+    </td>
   </tr>`).join("");
 
   document.getElementById("pageContent").innerHTML=`
     <section class="hero">
-      <div class="eyebrow">MASTER CONTROL · APPS SCRIPT API</div>
+      <div class="eyebrow">MASTER CONTROL · SECURE USER API</div>
       <h1>User Management</h1>
-      <p>เพิ่มและแก้ไขบัญชีผู้ใช้งานเว็บไซต์ได้จากหน้านี้ ข้อมูลจะถูกบันทึกกลับ Data Employee ผ่าน Lumie API</p>
+      <p>เพิ่มและแก้ไข Account ได้จากเว็บไซต์ โดย User ใหม่จะได้รับรหัสเริ่มต้น 1234 อัตโนมัติ</p>
     </section>
 
     <section class="grid g2" style="margin-top:18px;align-items:start">
       <div class="card">
-        <div class="section" style="margin-top:0"><div><h3 id="userFormTitle">เพิ่มผู้ใช้งาน</h3><p>Employee ID ต้องไม่ซ้ำ</p></div></div>
+        <div class="section" style="margin-top:0">
+          <div>
+            <h3 id="userFormTitle">เพิ่มผู้ใช้งาน</h3>
+            <p>ไม่ต้องตั้ง Password เอง · ระบบจะกำหนดรหัสเริ่มต้นเป็น 1234</p>
+          </div>
+        </div>
+
         <form id="userApiForm">
           <input type="hidden" id="userEditMode" value="add">
+
           <div class="form-grid">
-            <div class="form-field"><label>Employee ID</label><input id="userEmployeeId" required placeholder="เช่น 202600050"></div>
-            <div class="form-field"><label>Level</label>
+            <div class="form-field">
+              <label>Employee ID</label>
+              <input id="userEmployeeId" required placeholder="เช่น 202600050">
+            </div>
+
+            <div class="form-field">
+              <label>Level</label>
               <select id="userLevel" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff">
-                <option>Master</option><option>Executive</option><option selected>Employee</option><option>Outsource</option>
+                <option>Master</option>
+                <option>Executive</option>
+                <option selected>Employee</option>
+                <option>Outsource</option>
+                <option>Outsource-Content</option>
+                <option>Outsource-Graphic</option>
+                <option>Outsource-Ad Optimize</option>
+                <option>Outsource-All</option>
               </select>
             </div>
-            <div class="form-field"><label>ชื่อ</label><input id="userName" required></div>
-            <div class="form-field"><label>ตำแหน่ง</label><input id="userPosition" required></div>
-            <div class="form-field"><label>เบอร์โทร</label><input id="userTel"></div>
-            <div class="form-field"><label>Email</label><input id="userEmail" type="email"></div>
+
+            <div class="form-field">
+              <label>ชื่อ</label>
+              <input id="userName" required>
+            </div>
+
+            <div class="form-field">
+              <label>ตำแหน่ง</label>
+              <input id="userPosition" required>
+            </div>
+
+            <div class="form-field">
+              <label>เบอร์โทร</label>
+              <input id="userTel">
+            </div>
+
+            <div class="form-field">
+              <label>Email</label>
+              <input id="userEmail" type="email">
+            </div>
           </div>
+
+          <div class="default-password-card">
+            <div>
+              <span class="default-password-label">INITIAL PASSWORD</span>
+              <strong>1234</strong>
+            </div>
+            <p>User สามารถเปลี่ยนรหัสผ่านของตัวเองได้จากปุ่ม “เปลี่ยนรหัสผ่าน” หลัง Login</p>
+          </div>
+
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
             <button id="saveUserApiBtn" class="btn-primary" type="submit">เพิ่มผู้ใช้งาน</button>
             <button id="cancelUserEditBtn" class="user-secondary-btn hidden" type="button">ยกเลิกการแก้ไข</button>
           </div>
+
           <div id="userApiStatus" class="notice" style="display:none"></div>
         </form>
       </div>
 
       <div class="card">
-        <b>เชื่อมต่อ Apps Script แล้ว</b>
-        <p class="muted" style="font-size:12.5px;line-height:1.8">การเพิ่ม/แก้ชื่อ/ตำแหน่ง/เบอร์โทร/Email/Level จะเขียนกลับ Google Sheet ผ่าน API โดยไม่ต้องเปิดชีตเอง</p>
-        <div class="notice">การแก้ Employee ID เดิมยังไม่รองรับใน API ปัจจุบัน หากอยู่โหมดแก้ไข ช่อง Employee ID จะถูกล็อกไว้</div>
+        <div class="kpi-label">PASSWORD FLOW</div>
+        <h3 style="margin:8px 0">Initial 1234 → User เปลี่ยนเอง</h3>
+
+        <p class="muted" style="font-size:12.5px;line-height:1.8">
+          ระบบเก็บเฉพาะ Password Hash + Salt ใน Google Sheet ไม่ได้บันทึกรหัสผ่านจริงเป็นข้อความ
+        </p>
+
+        <div class="notice">
+          หาก User ลืมรหัส ให้ Master กด “Reset → 1234” แล้วแจ้งให้ User Login ด้วย 1234 และเปลี่ยนรหัสใหม่อีกครั้ง
+        </div>
       </div>
     </section>
 
-    <div class="section"><div><h3>Website Users</h3><p>${employeeDatabase.length} บัญชี</p></div></div>
-    <div class="table-wrap"><table class="data">
-      <thead><tr><th>รหัสพนักงาน</th><th>ชื่อ</th><th>ตำแหน่ง</th><th>Level</th><th>เบอร์โทร</th><th>Email</th><th></th></tr></thead>
-      <tbody>${rows||'<tr><td colspan="7">ยังไม่มีข้อมูล</td></tr>'}</tbody>
-    </table></div>`;
+    <div class="section">
+      <div>
+        <h3>Website Users</h3>
+        <p>${employeeDatabase.length} บัญชี</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>รหัสพนักงาน</th>
+            <th>ชื่อ</th>
+            <th>ตำแหน่ง</th>
+            <th>Level</th>
+            <th>Password</th>
+            <th>เบอร์โทร</th>
+            <th>Email</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows||'<tr><td colspan="8">ยังไม่มีข้อมูล</td></tr>'}
+        </tbody>
+      </table>
+    </div>`;
 
   const form=document.getElementById("userApiForm");
   const mode=document.getElementById("userEditMode");
@@ -1076,7 +1659,9 @@ function renderUserManagement(){
 
   document.querySelectorAll(".user-edit-btn").forEach(btn=>btn.addEventListener("click",()=>{
     const emp=employeeDatabase.find(e=>e.id===btn.dataset.id);
+
     if(!emp) return;
+
     mode.value="edit";
     employeeIdInput.value=emp.id;
     employeeIdInput.disabled=true;
@@ -1085,19 +1670,58 @@ function renderUserManagement(){
     positionInput.value=emp.position||"";
     telInput.value=emp.phone||"";
     emailInput.value=emp.email||"";
+
     title.textContent=`แก้ไข ${emp.name||emp.id}`;
     saveBtn.textContent="บันทึกการแก้ไข";
     cancelBtn.classList.remove("hidden");
-    window.scrollTo({top:0,behavior:"smooth"});
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
   }));
+
+  document.querySelectorAll(".user-reset-password-btn").forEach(btn=>{
+    btn.addEventListener("click",async()=>{
+      const emp=employeeDatabase.find(e=>e.id===btn.dataset.id);
+
+      if(!emp) return;
+
+      const confirmed=window.confirm(
+        `Reset Password ของ ${emp.name||emp.id} เป็น 1234 ใช่หรือไม่?`
+      );
+
+      if(!confirmed) return;
+
+      btn.disabled=true;
+      btn.textContent="กำลัง Reset...";
+
+      try{
+        await lumieApiPost({
+          action:"resetUserPassword",
+          employeeId:emp.id
+        });
+
+        await loadEmployeeDatabase();
+
+        toast("Reset Password เป็น 1234 เรียบร้อย");
+        renderUserManagement();
+      }catch(err){
+        toast("Reset Password ไม่สำเร็จ");
+        btn.disabled=false;
+        btn.textContent="Reset → 1234";
+      }
+    });
+  });
 
   cancelBtn.addEventListener("click",resetForm);
 
   form.addEventListener("submit",async e=>{
     e.preventDefault();
+
     saveBtn.disabled=true;
     status.style.display="block";
-    status.textContent="กำลังบันทึกผ่าน Apps Script API...";
+    status.textContent="กำลังบันทึกผ่าน Secure API...";
 
     const payload={
       employeeId:employeeIdInput.value.trim(),
@@ -1110,12 +1734,25 @@ function renderUserManagement(){
 
     try{
       if(mode.value==="edit"){
-        await lumieApiPost({action:"updateEmployee",...payload});
+        await lumieApiPost({
+          action:"updateEmployee",
+          ...payload
+        });
       }else{
-        await lumieApiPost({action:"addEmployee",...payload});
+        await lumieApiPost({
+          action:"addEmployee",
+          ...payload
+        });
       }
+
       await loadEmployeeDatabase();
-      toast(mode.value==="edit"?"แก้ไขข้อมูลเรียบร้อย":"เพิ่มผู้ใช้งานเรียบร้อย");
+
+      toast(
+        mode.value==="edit"
+          ?"แก้ไขข้อมูล User เรียบร้อย"
+          :"เพิ่ม User เรียบร้อย · Password เริ่มต้น 1234"
+      );
+
       renderUserManagement();
     }catch(err){
       status.textContent="บันทึกไม่สำเร็จ: "+err.message;
@@ -1135,7 +1772,7 @@ function renderPermissionManagement(){
     <td>${permissionBadge(e.level)}</td>
     <td>
       <select class="permission-level-select" data-id="${escapeHtml(e.id)}" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff">
-        ${["Master","Executive","Employee","Outsource"].map(l=>`<option value="${l}" ${l===e.level?"selected":""}>${l}</option>`).join("")}
+        ${["Master","Executive","Employee","Outsource","Outsource-Content","Outsource-Graphic","Outsource-Ad Optimize","Outsource-All"].map(l=>`<option value="${l}" ${l===e.level?"selected":""}>${l}</option>`).join("")}
       </select>
     </td>
     <td><button class="permission-save-btn" data-id="${escapeHtml(e.id)}" type="button">บันทึก</button></td>
@@ -1149,10 +1786,15 @@ function renderPermissionManagement(){
     </section>
 
     <section class="grid g2" style="margin-top:18px">
-      <div class="card"><span class="permission-badge permission-master">Master</span><h3>Master</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE + MASTER CONTROL</p></div>
-      <div class="card"><span class="permission-badge permission-executive">Executive</span><h3>Executive</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE</p></div>
-      <div class="card"><span class="permission-badge permission-employee">Employee</span><h3>Employee</h3><p class="muted">MAIN + DASHBOARD</p></div>
-      <div class="card"><span class="permission-badge permission-outsource">Outsource</span><h3>Outsource</h3><p class="muted">Home + Service + Promotion + Doctor + Branch + Contact</p></div>
+      <div class="card"><span class="permission-badge permission-master">Master</span><h3>Master</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE + OUTSOURCE + MASTER CONTROL</p></div>
+      <div class="card"><span class="permission-badge permission-executive">Executive</span><h3>Executive</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE + OUTSOURCE</p></div>
+      <div class="card"><span class="permission-badge permission-employee">Employee</span><h3>Employee</h3><p class="muted">MAIN + DASHBOARD + OUTSOURCE</p></div>
+      <div class="card"><span class="permission-badge permission-outsource">Outsource</span><h3>Outsource</h3><p class="muted">MAIN เฉพาะ Home / Service / Promotion / Doctor / Branch / Contact</p></div>
+
+      <div class="card"><span class="permission-badge permission-outsource">Outsource-Content</span><h3>Outsource-Content</h3><p class="muted">MAIN + OUTSOURCE เฉพาะหน้า Content</p></div>
+      <div class="card"><span class="permission-badge permission-outsource">Outsource-Graphic</span><h3>Outsource-Graphic</h3><p class="muted">MAIN + OUTSOURCE เฉพาะหน้า Graphic</p></div>
+      <div class="card"><span class="permission-badge permission-outsource">Outsource-Ad Optimize</span><h3>Outsource-Ad Optimize</h3><p class="muted">MAIN + OUTSOURCE เฉพาะหน้า Ad Optimize</p></div>
+      <div class="card"><span class="permission-badge permission-outsource">Outsource-All</span><h3>Outsource-All</h3><p class="muted">MAIN + OUTSOURCE ทุกหน้า</p></div>
     </section>
 
     <div class="notice">หลังเปลี่ยน Level ผู้ใช้งานคนนั้นควร Logout และ Login ใหม่ เพื่อให้ Session ใช้สิทธิ์ล่าสุด</div>
@@ -1364,18 +2006,23 @@ function renderDoctor(){
   const draw=()=>{
     const cards=doctorDatabase.map(d=>{
       const hasLegacy=!!doctorLicensePath(d.license);
-      const hasImage=d.hasCouncilImage===true;
-      const canOpen=hasImage||hasLegacy||!!d.license;
+      const hasCouncil=d.hasCouncilImage===true;
+      const canOpen=hasCouncil||hasLegacy||!!d.license;
+
+      const profile=d.profileImageUrl
+        ? `<img class="doctor-profile-photo" src="${escapeHtml(d.profileImageUrl)}" alt="${escapeHtml(d.name)}">`
+        : `<div class="doctor-profile-placeholder">${escapeHtml((d.name||"D").replace(/^(นพ\.|พญ\.)\s*/,"").charAt(0)||"D")}</div>`;
 
       return `
         <button class="card doctor-directory-card ${canOpen?"doctor-card-click":""}"
                 type="button"
                 ${canOpen?`data-doctor-name="${escapeHtml(d.name)}" data-doctor-license="${escapeHtml(d.license)}"`:"disabled"}>
-          <div class="doctor-directory-index">DOCTOR</div>
+          <div class="doctor-profile-frame">${profile}</div>
+          <div class="doctor-directory-index">LUMIE DOCTOR</div>
           <div class="doctor-directory-name">${escapeHtml(d.name)}</div>
           <div class="badge alt">${escapeHtml(d.license||"-")}</div>
           <div class="doctor-directory-action">
-            ${hasImage
+            ${hasCouncil
               ?"ดูภาพใบแพทยสภา →"
               :(hasLegacy?"ดูเอกสารแพทย์ →":"คลิกเพื่อตรวจสอบใบแพทยสภา →")}
           </div>
@@ -1386,7 +2033,7 @@ function renderDoctor(){
       <section class="hero">
         <div class="eyebrow">DOCTOR DIRECTORY</div>
         <h1>ทีมแพทย์ Lumie Clinic</h1>
-        <p>เลือกชื่อแพทย์เพื่อเปิดดูรายละเอียดและภาพใบแพทยสภาที่เชื่อมจาก Google Sheet</p>
+        <p>เลือกแพทย์เพื่อดูข้อมูลและภาพใบแพทยสภา รูป Profile เชื่อมจาก Google Sheet ผ่าน Apps Script</p>
       </section>
 
       <div class="doctor-breadcrumb">
@@ -1419,10 +2066,88 @@ function renderDoctor(){
 }
 
 function renderBranch(){
-  document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">BRANCH</div><h1>สาขา LUMIE</h1><p>ข้อมูลสาขาปัจจุบันและสาขาที่กำลังจะเปิดให้บริการ เบอร์ติดต่อและเวลาเปิด–ปิดจะอัปเดตเพิ่มเติมภายหลัง</p></section>
-    <div class="section"><div><h3>รายชื่อสาขา</h3><p>${BRANCHES.length} สาขา</p></div></div>
-    <section class="grid g2">${BRANCHES.map(b=>`<div class="card branch-card"><span class="badge ${b.status==='เปิดให้บริการ'?'new':'alt'}">${escapeHtml(b.status)}</span><h4 style="margin-top:14px">${escapeHtml(b.name)}</h4>${b.detail?`<div class="branch-row"><b>ที่ตั้ง</b><span>${escapeHtml(b.detail)}</span></div>`:''}<div class="branch-row"><b>ติดต่อ</b><span>รออัปเดตเบอร์ติดต่อและเวลาเปิด–ปิด</span></div></div>`).join("")}</section>`;
+  const draw=()=>{
+    const cards=branchDatabase.map(b=>{
+      const status=String(b.status||"").trim();
+      const isActive=/^active$/i.test(status) || status==="เปิดให้บริการ";
+      const mapUrl=safeHttpUrl(b.map);
+
+      return `
+        <div class="card branch-card branch-live-card">
+          <div class="branch-live-top">
+            <div>
+              <div class="branch-id-label">${escapeHtml(b.id||"BRANCH")}</div>
+              <h4>${escapeHtml(b.name||"-")}</h4>
+            </div>
+
+            <span class="badge ${isActive?"new":"alt"}">
+              ${escapeHtml(status||"รออัปเดต")}
+            </span>
+          </div>
+
+          ${b.address
+            ? `<div class="branch-row">
+                <b>ที่อยู่</b>
+                <span>${escapeHtml(b.address)}</span>
+              </div>`
+            : ""}
+
+          ${b.phone
+            ? `<div class="branch-row">
+                <b>เบอร์โทร</b>
+                <span>${escapeHtml(b.phone)}</span>
+              </div>`
+            : ""}
+
+          ${b.hours
+            ? `<div class="branch-row">
+                <b>เวลาเปิด</b>
+                <span>${escapeHtml(b.hours)}</span>
+              </div>`
+            : ""}
+
+          ${mapUrl
+            ? `<div class="branch-row">
+                <b>แผนที่</b>
+                <span>
+                  <a class="branch-map-link"
+                     href="${escapeHtml(mapUrl)}"
+                     target="_blank"
+                     rel="noopener">
+                    เปิด Google Map ↗
+                  </a>
+                </span>
+              </div>`
+            : ""}
+        </div>`;
+    }).join("");
+
+    document.getElementById("pageContent").innerHTML=`
+      <section class="hero">
+        <div class="eyebrow">BRANCH · LIVE DATA</div>
+        <h1>สาขา LUMIE</h1>
+        <p>ข้อมูลหน้านี้เชื่อมกับฐานข้อมูล Branch ผ่าน Lumie API</p>
+      </section>
+
+      <div class="section">
+        <div>
+          <h3>รายชื่อสาขา</h3>
+          <p>${branchDatabase.length} สาขา</p>
+        </div>
+      </div>
+
+      <section class="grid g2">
+        ${cards||'<div class="card">ยังไม่มีข้อมูลสาขา</div>'}
+      </section>`;
+  };
+
+  draw();
+
+  syncBranchDatabase().then(ok=>{
+    if(ok && location.hash==="#branch"){
+      draw();
+    }
+  });
 }
 
 function renderContact(){
@@ -1605,6 +2330,607 @@ function renderEmployeeManagement(){
 }
 
 
+
+function readDoctorImageFile(file){
+  return new Promise((resolve,reject)=>{
+    if(!file){
+      resolve(null);
+      return;
+    }
+
+    const allowed=["image/jpeg","image/png","image/webp"];
+
+    if(!allowed.includes(file.type)){
+      reject(new Error("รองรับเฉพาะ JPG, PNG และ WEBP"));
+      return;
+    }
+
+    if(file.size > 5 * 1024 * 1024){
+      reject(new Error("ไฟล์รูปต้องไม่เกิน 5 MB"));
+      return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+      const value=String(reader.result||"");
+      const comma=value.indexOf(",");
+
+      if(comma<0){
+        reject(new Error("ไม่สามารถอ่านไฟล์รูปได้"));
+        return;
+      }
+
+      resolve({
+        fileName:file.name,
+        mimeType:file.type,
+        base64:value.slice(comma+1)
+      });
+    };
+
+    reader.onerror=()=>{
+      reject(new Error("ไม่สามารถอ่านไฟล์รูปได้"));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+async function uploadDoctorImageFromInput(license,imageType,input){
+  const file=input?.files?.[0];
+
+  if(!file) return false;
+
+  const image=await readDoctorImageFile(file);
+
+  await lumieApiPost({
+    action:"uploadDoctorImage",
+    license,
+    imageType,
+    fileName:image.fileName,
+    mimeType:image.mimeType,
+    base64:image.base64
+  });
+
+  return true;
+}
+
+
+function renderDoctorManagement(){
+  if(!requireMaster()) return;
+
+  const draw=()=>{
+    const rows=doctorDatabase.map(d=>{
+      const profile=d.profileImageUrl
+        ? `<img class="doctor-management-avatar" src="${escapeHtml(d.profileImageUrl)}" alt="${escapeHtml(d.name)}">`
+        : `<div class="doctor-management-avatar doctor-management-avatar-placeholder">DR</div>`;
+
+      return `<tr>
+        <td>${profile}</td>
+        <td><b>${escapeHtml(d.name)}</b></td>
+        <td>${escapeHtml(d.license||"-")}</td>
+        <td>${d.hasProfileImage?'<span class="badge">มีรูป</span>':'<span class="muted">ยังไม่มี</span>'}</td>
+        <td>${d.hasCouncilImage?'<span class="badge">มีรูป</span>':'<span class="muted">ยังไม่มี</span>'}</td>
+        <td>
+          <div class="doctor-management-actions">
+            <button class="user-edit-btn doctor-edit-btn" type="button" data-license="${escapeHtml(d.license)}">แก้ไข</button>
+            <button class="user-edit-btn doctor-view-council-btn" type="button" data-license="${escapeHtml(d.license)}" data-name="${escapeHtml(d.name)}">ดูแพทยสภา</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join("");
+
+    document.getElementById("pageContent").innerHTML=`
+      <section class="hero">
+        <div class="eyebrow">MASTER CONTROL · DOCTOR API</div>
+        <h1>Doctor Management</h1>
+        <p>เพิ่มแพทย์ แก้ชื่อ/เลข ว และเปลี่ยนรูป Profile หรือภาพใบแพทยสภาจากเว็บไซต์ได้โดยตรง</p>
+      </section>
+
+      <section class="grid g2" style="margin-top:20px;align-items:start">
+        <div class="card">
+          <div class="section" style="margin-top:0">
+            <div>
+              <h3 id="doctorFormTitle">เพิ่มแพทย์</h3>
+              <p>ข้อมูลจะบันทึกกลับ Google Sheet ผ่าน Apps Script</p>
+            </div>
+          </div>
+
+          <form id="doctorManagementForm">
+            <input type="hidden" id="doctorFormMode" value="add">
+            <input type="hidden" id="doctorOriginalLicense">
+
+            <div class="form-grid">
+              <div class="form-field full">
+                <label>ชื่อแพทย์</label>
+                <input id="doctorManageName" required placeholder="เช่น พญ. ... (หมอ...)">
+              </div>
+
+              <div class="form-field full">
+                <label>เลข ว</label>
+                <input id="doctorManageLicense" required placeholder="เช่น ว.76639">
+              </div>
+
+              <div class="form-field">
+                <label>Profile</label>
+                <input id="doctorProfileFile" type="file" accept="image/jpeg,image/png,image/webp">
+                <small class="muted">JPG / PNG / WEBP ไม่เกิน 5 MB</small>
+              </div>
+
+              <div class="form-field">
+                <label>แพทยสภา</label>
+                <input id="doctorCouncilFile" type="file" accept="image/jpeg,image/png,image/webp">
+                <small class="muted">JPG / PNG / WEBP ไม่เกิน 5 MB</small>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+              <button id="doctorSaveBtn" class="btn-primary" type="submit">เพิ่มแพทย์</button>
+              <button id="doctorCancelEditBtn" class="user-secondary-btn hidden" type="button">ยกเลิกการแก้ไข</button>
+            </div>
+
+            <div id="doctorManageStatus" class="notice" style="display:none"></div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="kpi-label">IMAGE STORAGE</div>
+          <h3 style="margin:8px 0 8px">Google Drive + Google Sheet</h3>
+          <p class="muted" style="line-height:1.8">
+            รูปที่อัปโหลดจากเว็บไซต์จะถูกเก็บในโฟลเดอร์
+            <b>Lumie Website - Doctor Assets</b> บน Google Drive
+            และใส่กลับเป็นภาพในเซลล์ของชีต Doctor
+          </p>
+
+          <div class="notice">
+            ถ้าเปลี่ยนรูปใหม่ ระบบจะใช้รูปใหม่แทน และไฟล์เดิมที่เคยอัปโหลดจากเว็บไซต์จะถูกย้ายไปถังขยะใน Drive
+          </div>
+        </div>
+      </section>
+
+      <div class="section">
+        <div>
+          <h3>รายชื่อแพทย์</h3>
+          <p>${doctorDatabase.length} คน</p>
+        </div>
+
+        <button id="refreshDoctorManagementBtn" class="btn-primary" type="button">↻ Refresh</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>ชื่อแพทย์</th>
+              <th>เลข ว</th>
+              <th>Profile</th>
+              <th>แพทยสภา</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows||'<tr><td colspan="6">ยังไม่มีข้อมูลแพทย์</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+
+    const form=document.getElementById("doctorManagementForm");
+    const mode=document.getElementById("doctorFormMode");
+    const originalLicense=document.getElementById("doctorOriginalLicense");
+    const nameInput=document.getElementById("doctorManageName");
+    const licenseInput=document.getElementById("doctorManageLicense");
+    const profileInput=document.getElementById("doctorProfileFile");
+    const councilInput=document.getElementById("doctorCouncilFile");
+    const saveBtn=document.getElementById("doctorSaveBtn");
+    const cancelBtn=document.getElementById("doctorCancelEditBtn");
+    const status=document.getElementById("doctorManageStatus");
+    const title=document.getElementById("doctorFormTitle");
+    const refreshBtn=document.getElementById("refreshDoctorManagementBtn");
+
+    const resetForm=()=>{
+      form.reset();
+      mode.value="add";
+      originalLicense.value="";
+      title.textContent="เพิ่มแพทย์";
+      saveBtn.textContent="เพิ่มแพทย์";
+      cancelBtn.classList.add("hidden");
+      status.style.display="none";
+    };
+
+    cancelBtn.addEventListener("click",resetForm);
+
+    document.querySelectorAll(".doctor-edit-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const doctor=doctorDatabase.find(d=>d.license===btn.dataset.license);
+        if(!doctor) return;
+
+        mode.value="edit";
+        originalLicense.value=doctor.license;
+        nameInput.value=doctor.name||"";
+        licenseInput.value=doctor.license||"";
+        profileInput.value="";
+        councilInput.value="";
+        title.textContent=`แก้ไข ${doctor.name}`;
+        saveBtn.textContent="บันทึกการแก้ไข";
+        cancelBtn.classList.remove("hidden");
+        status.style.display="none";
+
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+    });
+
+    document.querySelectorAll(".doctor-view-council-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        openDoctorLicense(btn.dataset.name,btn.dataset.license);
+      });
+    });
+
+    refreshBtn.addEventListener("click",async()=>{
+      refreshBtn.disabled=true;
+      refreshBtn.textContent="กำลังโหลด...";
+      await syncDoctorDatabase();
+      toast("Refresh ข้อมูลแพทย์แล้ว");
+      renderDoctorManagement();
+    });
+
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();
+
+      const name=nameInput.value.trim();
+      const license=licenseInput.value.trim();
+
+      if(!name || !license) return;
+
+      saveBtn.disabled=true;
+      status.style.display="block";
+      status.textContent="กำลังบันทึกข้อมูลแพทย์...";
+
+      try{
+        if(mode.value==="edit"){
+          await lumieApiPost({
+            action:"updateDoctor",
+            originalLicense:originalLicense.value.trim(),
+            name,
+            license
+          });
+        }else{
+          await lumieApiPost({
+            action:"addDoctor",
+            name,
+            license
+          });
+        }
+
+        if(profileInput.files?.[0]){
+          status.textContent="กำลังอัปโหลด Profile...";
+          await uploadDoctorImageFromInput(license,"profile",profileInput);
+        }
+
+        if(councilInput.files?.[0]){
+          status.textContent="กำลังอัปโหลดภาพแพทยสภา...";
+          await uploadDoctorImageFromInput(license,"council",councilInput);
+        }
+
+        await syncDoctorDatabase();
+
+        toast(mode.value==="edit"?"แก้ไขข้อมูลแพทย์เรียบร้อย":"เพิ่มแพทย์เรียบร้อย");
+        renderDoctorManagement();
+      }catch(err){
+        status.textContent="บันทึกไม่สำเร็จ: "+err.message;
+        toast("บันทึก Doctor ไม่สำเร็จ");
+        saveBtn.disabled=false;
+      }
+    });
+  };
+
+  draw();
+
+  syncDoctorDatabase().then(ok=>{
+    if(ok && location.hash==="#doctor-management"){
+      draw();
+    }
+  });
+}
+
+
+
+function renderBranchManagement(){
+  if(!requireMaster()) return;
+
+  const draw=()=>{
+    const rows=branchDatabase.map(b=>`
+      <tr>
+        <td><b>${escapeHtml(b.id||"-")}</b></td>
+        <td>${escapeHtml(b.name||"-")}</td>
+        <td>${escapeHtml(b.address||"-")}</td>
+        <td>${escapeHtml(b.phone||"-")}</td>
+        <td>${escapeHtml(b.hours||"-")}</td>
+        <td>${escapeHtml(b.status||"-")}</td>
+        <td>
+          <button
+            class="user-edit-btn branch-edit-btn"
+            type="button"
+            data-id="${escapeHtml(b.id)}">
+            แก้ไข
+          </button>
+        </td>
+      </tr>
+    `).join("");
+
+    document.getElementById("pageContent").innerHTML=`
+      <section class="hero">
+        <div class="eyebrow">MASTER CONTROL · BRANCH API</div>
+        <h1>Branch Management</h1>
+        <p>เพิ่มและแก้ไขข้อมูลสาขาจากเว็บไซต์ โดยข้อมูลจะบันทึกกลับ Google Sheet ผ่าน API</p>
+      </section>
+
+      <section class="grid g2" style="margin-top:20px;align-items:start">
+        <div class="card">
+          <div class="section" style="margin-top:0">
+            <div>
+              <h3 id="branchFormTitle">เพิ่มสาขา</h3>
+              <p>Branch ID ใช้เป็นรหัสหลักของสาขา</p>
+            </div>
+          </div>
+
+          <form id="branchManagementForm">
+            <input id="branchFormMode" type="hidden" value="add">
+            <input id="branchOriginalId" type="hidden">
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Branch ID</label>
+                <input id="branchManageId" required placeholder="เช่น CPK">
+              </div>
+
+              <div class="form-field">
+                <label>ชื่อสาขา</label>
+                <input id="branchManageName" required placeholder="เช่น Central Pinklao | Floor 3">
+              </div>
+
+              <div class="form-field full">
+                <label>ที่อยู่</label>
+                <textarea id="branchManageAddress" rows="3" placeholder="ที่อยู่สาขา"></textarea>
+              </div>
+
+              <div class="form-field">
+                <label>เบอร์โทร</label>
+                <input id="branchManagePhone" placeholder="เช่น 095-3692244">
+              </div>
+
+              <div class="form-field">
+                <label>เวลาเปิด</label>
+                <input id="branchManageHours" placeholder="เช่น 10.00 - 20.00">
+              </div>
+
+              <div class="form-field full">
+                <label>Google Map</label>
+                <input id="branchManageMap" placeholder="https://maps.google.com/...">
+              </div>
+
+              <div class="form-field full">
+                <label>Status</label>
+                <input
+                  id="branchManageStatus"
+                  list="branchStatusOptions"
+                  placeholder="Active / Coming soon / วันที่เปิด">
+                <datalist id="branchStatusOptions">
+                  <option value="Active">
+                  <option value="Coming soon">
+                  <option value="Inactive">
+                </datalist>
+                <small class="muted">
+                  สามารถพิมพ์วันที่เปิดเองได้ เช่น 9 September 2026
+                </small>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+              <button id="branchSaveBtn" class="btn-primary" type="submit">
+                เพิ่มสาขา
+              </button>
+
+              <button
+                id="branchCancelEditBtn"
+                class="user-secondary-btn hidden"
+                type="button">
+                ยกเลิกการแก้ไข
+              </button>
+            </div>
+
+            <div id="branchManageStatusBox" class="notice" style="display:none"></div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="kpi-label">BRANCH DATA FLOW</div>
+          <h3 style="margin:8px 0">Website → API → Google Sheet</h3>
+
+          <p class="muted" style="line-height:1.8">
+            หน้า MAIN → Branch จะอ่านข้อมูลล่าสุดจาก API
+            ส่วนหน้านี้ใช้สำหรับ Master ในการเพิ่มหรือแก้ข้อมูล
+          </p>
+
+          <div class="notice">
+            ในโหมดแก้ไข Branch ID จะถูกล็อกไว้ เพื่อไม่ให้รหัสอ้างอิงของสาขาเปลี่ยนโดยไม่ตั้งใจ
+          </div>
+        </div>
+      </section>
+
+      <div class="section">
+        <div>
+          <h3>Branch Database</h3>
+          <p>${branchDatabase.length} สาขา</p>
+        </div>
+
+        <button id="refreshBranchManagementBtn" class="btn-primary" type="button">
+          ↻ Refresh
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Branch ID</th>
+              <th>ชื่อสาขา</th>
+              <th>ที่อยู่</th>
+              <th>เบอร์โทร</th>
+              <th>เวลาเปิด</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${rows||'<tr><td colspan="7">ยังไม่มีข้อมูลสาขา</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+
+    const form=document.getElementById("branchManagementForm");
+    const mode=document.getElementById("branchFormMode");
+    const originalId=document.getElementById("branchOriginalId");
+    const idInput=document.getElementById("branchManageId");
+    const nameInput=document.getElementById("branchManageName");
+    const addressInput=document.getElementById("branchManageAddress");
+    const phoneInput=document.getElementById("branchManagePhone");
+    const hoursInput=document.getElementById("branchManageHours");
+    const mapInput=document.getElementById("branchManageMap");
+    const statusInput=document.getElementById("branchManageStatus");
+    const statusBox=document.getElementById("branchManageStatusBox");
+    const saveBtn=document.getElementById("branchSaveBtn");
+    const cancelBtn=document.getElementById("branchCancelEditBtn");
+    const title=document.getElementById("branchFormTitle");
+    const refreshBtn=document.getElementById("refreshBranchManagementBtn");
+
+    const resetForm=()=>{
+      form.reset();
+      mode.value="add";
+      originalId.value="";
+      idInput.disabled=false;
+      title.textContent="เพิ่มสาขา";
+      saveBtn.textContent="เพิ่มสาขา";
+      cancelBtn.classList.add("hidden");
+      statusBox.style.display="none";
+    };
+
+    cancelBtn.addEventListener("click",resetForm);
+
+    document.querySelectorAll(".branch-edit-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const branch=branchDatabase.find(b=>b.id===btn.dataset.id);
+
+        if(!branch) return;
+
+        mode.value="edit";
+        originalId.value=branch.id||"";
+
+        idInput.value=branch.id||"";
+        idInput.disabled=true;
+
+        nameInput.value=branch.name||"";
+        addressInput.value=branch.address||"";
+        phoneInput.value=branch.phone||"";
+        hoursInput.value=branch.hours||"";
+        mapInput.value=branch.map||"";
+        statusInput.value=branch.status||"";
+
+        title.textContent=`แก้ไข ${branch.name||branch.id}`;
+        saveBtn.textContent="บันทึกการแก้ไข";
+        cancelBtn.classList.remove("hidden");
+        statusBox.style.display="none";
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+      });
+    });
+
+    refreshBtn.addEventListener("click",async()=>{
+      refreshBtn.disabled=true;
+      refreshBtn.textContent="กำลังโหลด...";
+
+      await syncBranchDatabase();
+
+      toast("Refresh ข้อมูล Branch แล้ว");
+      renderBranchManagement();
+    });
+
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();
+
+      const payload={
+        branchId:idInput.value.trim(),
+        originalBranchId:originalId.value.trim(),
+        name:nameInput.value.trim(),
+        branchName:nameInput.value.trim(),
+        address:addressInput.value.trim(),
+        tel:phoneInput.value.trim(),
+        phone:phoneInput.value.trim(),
+        openingHours:hoursInput.value.trim(),
+        hours:hoursInput.value.trim(),
+        googleMap:mapInput.value.trim(),
+        map:mapInput.value.trim(),
+        status:statusInput.value.trim()
+      };
+
+      if(!payload.branchId || !payload.name){
+        return;
+      }
+
+      saveBtn.disabled=true;
+      statusBox.style.display="block";
+      statusBox.textContent="กำลังบันทึกข้อมูล Branch...";
+
+      try{
+        if(mode.value==="edit"){
+          await lumieApiPost({
+            action:"updateBranch",
+            ...payload
+          });
+        }else{
+          await lumieApiPost({
+            action:"addBranch",
+            ...payload
+          });
+        }
+
+        await syncBranchDatabase();
+
+        toast(
+          mode.value==="edit"
+            ?"แก้ไขข้อมูลสาขาเรียบร้อย"
+            :"เพิ่มสาขาเรียบร้อย"
+        );
+
+        renderBranchManagement();
+      }catch(err){
+        statusBox.textContent=
+          "บันทึกไม่สำเร็จ: "+err.message;
+
+        toast("บันทึก Branch ไม่สำเร็จ");
+        saveBtn.disabled=false;
+      }
+    });
+  };
+
+  draw();
+
+  syncBranchDatabase().then(ok=>{
+    if(
+      ok &&
+      location.hash==="#branch-management"
+    ){
+      draw();
+    }
+  });
+}
+
+
 function normalizeApiContact(obj){
   return {
     id:pickApiValue(obj,["ID","Employee ID","employeeId","id"]),
@@ -1690,6 +3016,51 @@ async function renderContactManagement(){
   await load();
 }
 
+
+function renderOutsourceWorkspace(title,description){
+  document.getElementById("pageContent").innerHTML=`
+    <section class="hero">
+      <div class="eyebrow">OUTSOURCE WORKSPACE</div>
+      <h1>${escapeHtml(title)}</h1>
+      <p>${escapeHtml(description)}</p>
+    </section>
+
+    <section class="grid g2" style="margin-top:22px">
+      <div class="card">
+        <div class="kpi-label">WORKSPACE</div>
+        <h3 style="margin:8px 0 8px">${escapeHtml(title)}</h3>
+        <p class="muted">พื้นที่นี้พร้อมสำหรับเพิ่มข้อมูล เอกสาร ลิงก์ หรือเครื่องมือของทีมในขั้นตอนถัดไป</p>
+      </div>
+
+      <div class="card">
+        <div class="kpi-label">ACCESS CONTROL</div>
+        <h3 style="margin:8px 0 8px">Permission Protected</h3>
+        <p class="muted">การเข้าถึงหน้านี้ถูกควบคุมจาก Level ของ Account ที่ Login</p>
+      </div>
+    </section>`;
+}
+
+function renderOutsourceAdOptimize(){
+  renderOutsourceWorkspace(
+    "Ad Optimize",
+    "พื้นที่สำหรับทีม Outsource ด้าน Ad Optimize"
+  );
+}
+
+function renderOutsourceContent(){
+  renderOutsourceWorkspace(
+    "Content",
+    "พื้นที่สำหรับทีม Outsource ด้าน Content"
+  );
+}
+
+function renderOutsourceGraphic(){
+  renderOutsourceWorkspace(
+    "Graphic",
+    "พื้นที่สำหรับทีม Outsource ด้าน Graphic"
+  );
+}
+
 /* ---------- DASHBOARD PAGES ---------- */
 function renderPowerBIDashboard(sectionTitle,pageKey){
   const url=POWER_BI_PAGES[pageKey];
@@ -1717,7 +3088,14 @@ function renderCustomer(){ renderPowerBIDashboard("Customer","customer"); }
 function renderAds(){ renderPowerBIDashboard("Ad Performance","ads"); }
 
 loadEmployeeCache();
-if(loggedIn()) showApp(); else { showLogin(); loadEmployeeDatabase(); }
+if(loggedIn() && sessionStorage.getItem("lumie_auth_token")){
+  showApp();
+}else{
+  sessionStorage.removeItem("lumie_logged_in");
+  sessionStorage.removeItem("lumie_employee");
+  sessionStorage.removeItem("lumie_auth_token");
+  showLogin();
+}
 })();
 </script>
 </body>
