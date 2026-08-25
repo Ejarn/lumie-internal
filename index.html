@@ -191,6 +191,15 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 .powerbi-frame-wrap iframe{display:block;width:100%;height:100%;border:0;background:#fff}
 @media(max-width:820px){.powerbi-frame-wrap{height:72vh;min-height:560px;border-radius:16px}.powerbi-hero{padding:20px}}
 
+
+/* Master Control API controls */
+.user-edit-btn,.permission-save-btn,.user-secondary-btn{
+  border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 12px;
+  font-family:inherit;font-weight:500;color:var(--text);cursor:pointer
+}
+.user-edit-btn:hover,.permission-save-btn:hover,.user-secondary-btn:hover{background:#fff6cf;border-color:#ddc96f}
+.user-edit-btn:disabled,.permission-save-btn:disabled,.user-secondary-btn:disabled{opacity:.55;cursor:wait}
+
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -210,7 +219,6 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
       <div id="loginError" class="error"></div>
     </form>
     <div id="employeeDbStatus" class="hint">กำลังเชื่อมต่อฐานข้อมูลพนักงาน...</div>
-    <button type="button" id="retryEmployeeDb" style="width:100%;height:38px;margin-top:8px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:11px;font-weight:800">Sync Google Sheet</button>
     <div style="margin-top:7px;font-size:10px;color:var(--muted);line-height:1.5">ฐานข้อมูลจะ Sync จาก Google Sheet ใหม่อัตโนมัติ หากเชื่อมต่อไม่ได้ชั่วคราว ระบบจะใช้ข้อมูลล่าสุดที่บันทึกไว้</div>
     <div class="login-foot">LUMIECLINIC · Internal Use Only</div>
   </div>
@@ -298,6 +306,92 @@ let employeeDatabase = BUILTIN_EMPLOYEE_SNAPSHOT.map(e=>({...e}));
 let employeeDbReady = true;
 let employeeDbLoading = null;
 const fmt = n => Number(n).toLocaleString("th-TH");
+
+const LUMIE_API_URL = "https://script.google.com/macros/s/AKfycbxXFrNFP38X6vx9QeDnTctcRvrwRaQ7eDSVjOSSbeXRqo3Dmbvux2sPtYRdI7NhazXO/exec";
+
+function pickApiValue(obj, names){
+  for(const name of names){
+    if(obj && Object.prototype.hasOwnProperty.call(obj,name)){
+      return String(obj[name] ?? "").trim();
+    }
+  }
+  return "";
+}
+
+function normalizeApiEmployee(obj){
+  return {
+    id: pickApiValue(obj,["Employee ID","รหัสพนักงาน","employeeId","id"]).replace(/\.0$/,""),
+    level: pickApiValue(obj,["Level","ระดับ","ระดับการใช้สิทธิ์","level"]),
+    position: pickApiValue(obj,["Position","ตำแหน่ง","position"]),
+    name: pickApiValue(obj,["Name","ชื่อ","ชื่อพนักงาน","name"]),
+    phone: pickApiValue(obj,["Tel","เบอร์โทร","เบอร์โทรศัพท์","phone","tel"]),
+    email: pickApiValue(obj,["Email","Email บริษัท","อีเมลบริษัท","email"])
+  };
+}
+
+function normalizeApiDoctor(obj){
+  return {
+    name: pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","Name","name"]),
+    license: pickApiValue(obj,["เลข ว","เลข ว.","License","license"])
+  };
+}
+
+async function lumieApiGet(action){
+  const res=await fetch(`${LUMIE_API_URL}?action=${encodeURIComponent(action)}&_=${Date.now()}`,{
+    method:"GET",
+    cache:"no-store",
+    redirect:"follow"
+  });
+  if(!res.ok) throw new Error(`API HTTP ${res.status}`);
+  const result=await res.json();
+  if(!result || result.success!==true) throw new Error(result?.message||"Lumie API error");
+  return result;
+}
+
+async function lumieApiPost(payload){
+  const res=await fetch(LUMIE_API_URL,{
+    method:"POST",
+    body:JSON.stringify(payload),
+    redirect:"follow"
+  });
+  if(!res.ok) throw new Error(`API HTTP ${res.status}`);
+  const result=await res.json();
+  if(!result || result.success!==true) throw new Error(result?.message||"Lumie API error");
+  return result;
+}
+
+function cacheEmployeeDatabase(sourceLabel="Lumie API"){
+  if(!employeeDatabase.some(e=>e.id===ALWAYS_ALLOWED_EMPLOYEE_ID)){
+    employeeDatabase.unshift({...BUILTIN_EMPLOYEE_SNAPSHOT[0]});
+  }
+  employeeDbReady=employeeDatabase.length>0;
+  try{
+    localStorage.setItem(EMPLOYEE_CACHE_KEY,JSON.stringify({savedAt:Date.now(),rows:employeeDatabase}));
+  }catch{}
+  if(employeeDbStatus){
+    employeeDbStatus.textContent=`เชื่อมต่อฐานข้อมูลพนักงานสำเร็จ (${employeeDatabase.length} คน) · ${sourceLabel}`;
+  }
+}
+
+async function syncAllLumieData(){
+  const result=await lumieApiGet("all");
+
+  const employees=(Array.isArray(result.employees)?result.employees:[])
+    .map(normalizeApiEmployee).filter(e=>e.id);
+  const doctors=(Array.isArray(result.doctors)?result.doctors:[])
+    .map(normalizeApiDoctor).filter(d=>d.name);
+
+  if(!employees.length) throw new Error("API ไม่ส่งข้อมูลพนักงาน");
+  employeeDatabase=employees;
+  cacheEmployeeDatabase("Apps Script API");
+
+  if(doctors.length){
+    doctorDatabase=doctors;
+    try{localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(doctorDatabase));}catch{}
+  }
+  return result;
+}
+
 
 const pages = {
   home:["Home","LUMIECLINIC"], about:["About","LUMIECLINIC"], service:["Service","LUMIECLINIC"],
@@ -397,18 +491,17 @@ function parseCsvRows(text){
 
 async function syncDoctorDatabase(){
   try{
-    const res=await fetch(DOCTOR_CSV_URL+"&_="+Date.now(),{cache:"no-store"});
-    if(!res.ok) throw new Error("HTTP "+res.status);
-    const rows=parseCsvRows(await res.text());
-    const data=rows.slice(1).map(r=>({
-      name:String(r[0]||"").trim(),
-      license:String(r[1]||"").trim()
-    })).filter(d=>d.name);
-    if(!data.length) throw new Error("Doctor sheet is empty");
+    const result=await lumieApiGet("doctors");
+    const data=(Array.isArray(result.data)?result.data:[])
+      .map(normalizeApiDoctor)
+      .filter(d=>d.name);
+
+    if(!data.length) throw new Error("API ไม่ส่งข้อมูล Doctor");
     doctorDatabase=data;
-    localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(data));
+    try{localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(data));}catch{}
     return true;
   }catch(err){
+    console.warn("Lumie Doctor API ใช้งานไม่ได้:",err);
     try{
       const cached=JSON.parse(localStorage.getItem(DOCTOR_CACHE_KEY)||"null");
       if(Array.isArray(cached)&&cached.length) doctorDatabase=cached;
@@ -557,7 +650,7 @@ function showLogin(){
     employeeDatabase=BUILTIN_EMPLOYEE_SNAPSHOT.map(e=>({...e}));
     employeeDbReady=true;
   }
-  employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · กำลัง Sync Google Sheet`;
+  employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · กำลัง Sync Lumie API`;
   if(!employeeDbLoading) loadEmployeeDatabase();
 }
 function parseCSV(text){
@@ -613,7 +706,7 @@ function loadEmployeeCache(){
     // รหัส Master หลักต้องเข้าได้เสมอ แม้ snapshot ล่าสุดเผลอลบออก
     if(!employeeDatabase.some(e=>e.id===ALWAYS_ALLOWED_EMPLOYEE_ID)) employeeDatabase.unshift({...BUILTIN_EMPLOYEE_SNAPSHOT[0]});
     employeeDbReady=employeeDatabase.length>0;
-    if(employeeDbReady){ employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · กำลัง Sync Google Sheet`; }
+    if(employeeDbReady){ employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · กำลัง Sync Lumie API`; }
     return employeeDbReady;
   }catch{return false;}
 }
@@ -641,58 +734,50 @@ function loadEmployeeViaGviz(){
 }
 
 async function loadEmployeeDatabase(){
-  // ป้องกันการโหลดซ้ำพร้อมกันจาก showLogin / ปุ่ม retry / submit
   if(employeeDbLoading) return employeeDbLoading;
 
   employeeDbLoading=(async()=>{
-    const previousRows = employeeDatabase.slice();
-    const hadCache = loadEmployeeCache();
+    const previousRows=employeeDatabase.slice();
+    const hadCache=loadEmployeeCache();
+
     if(!hadCache && previousRows.length){
-      employeeDatabase = previousRows;
-      employeeDbReady = true;
-    }
-    if(!employeeDbReady) employeeDbStatus.textContent="กำลังเชื่อมต่อฐานข้อมูลพนักงาน...";
-
-    let lastErr=null;
-
-    // เมื่อเปิดเป็นไฟล์ .html ตรงจากเครื่อง (file://) ให้ข้าม fetch CSV
-    // เพราะ browser มักบล็อก CORS และทำให้ต้องรอ timeout ก่อน fallback
-    if(location.protocol !== "file:"){
-      try{
-        const controller=new AbortController();
-        const timer=setTimeout(()=>controller.abort(),2500);
-        const res=await fetch(EMPLOYEE_CSV_URL,{cache:"no-store",signal:controller.signal});
-        clearTimeout(timer);
-        if(!res.ok) throw new Error("CSV HTTP "+res.status);
-        const text=await res.text();
-        if(/<!doctype html|<html/i.test(text)) throw new Error("CSV endpoint returned HTML");
-        setEmployeeRows(parseCSV(text),"Google Sheets (CSV)");
-        return;
-      }catch(err){ lastErr=err; console.warn("CSV ใช้งานไม่ได้:",err); }
-    }
-
-    // GViz JSONP ใช้ได้กับ file:// และไม่ติด CORS แบบ fetch
-    try{
-      await loadEmployeeViaGviz();
-      return;
-    }catch(err){ lastErr=err; console.warn("GViz ใช้งานไม่ได้:",err); }
-
-    // ถ้าออนไลน์ล้มเหลวแต่มี cache ให้ Login ต่อได้ทันที
-    if(employeeDatabase.length){
+      employeeDatabase=previousRows;
       employeeDbReady=true;
-      employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · Google Sheet ยังเชื่อมต่อไม่ได้`;
-      return;
     }
 
-    // ห้ามล้างฐานข้อมูลล่าสุดเมื่อเชื่อมต่อไม่สำเร็จ ให้ใช้ snapshot/cache ต่อไป
-    if(!employeeDatabase.length) employeeDatabase=BUILTIN_EMPLOYEE_SNAPSHOT.map(e=>({...e}));
-    employeeDbReady=true;
-    employeeDbStatus.textContent=`กำลังใช้ฐานข้อมูลพนักงานล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · Google Sheet ยังเชื่อมต่อไม่ได้`;
-    console.error("Employee database update error:",lastErr);
+    if(employeeDbStatus) employeeDbStatus.textContent="กำลังเชื่อมต่อ Lumie API...";
+
+    try{
+      const result=await lumieApiGet("employees");
+      const rows=(Array.isArray(result.data)?result.data:[])
+        .map(normalizeApiEmployee)
+        .filter(e=>e.id);
+
+      if(!rows.length) throw new Error("API ไม่ส่งข้อมูลพนักงาน");
+
+      employeeDatabase=rows;
+      cacheEmployeeDatabase("Apps Script API");
+      return true;
+    }catch(err){
+      console.warn("Lumie Employee API ใช้งานไม่ได้:",err);
+
+      if(!employeeDatabase.length){
+        employeeDatabase=BUILTIN_EMPLOYEE_SNAPSHOT.map(e=>({...e}));
+      }
+      if(!employeeDatabase.some(e=>e.id===ALWAYS_ALLOWED_EMPLOYEE_ID)){
+        employeeDatabase.unshift({...BUILTIN_EMPLOYEE_SNAPSHOT[0]});
+      }
+
+      employeeDbReady=true;
+      if(employeeDbStatus){
+        employeeDbStatus.textContent=`ใช้ฐานข้อมูลล่าสุดที่บันทึกไว้ (${employeeDatabase.length} คน) · API ยังเชื่อมต่อไม่ได้`;
+      }
+      return false;
+    }
   })();
 
-  try{ return await employeeDbLoading; }
-  finally{ employeeDbLoading=null; }
+  try{return await employeeDbLoading;}
+  finally{employeeDbLoading=null;}
 }
 function toast(msg){ toastEl.textContent=msg; toastEl.classList.add("show"); setTimeout(()=>toastEl.classList.remove("show"),2600); }
 
@@ -724,7 +809,6 @@ loginForm.addEventListener("submit",e=>{
   // ลองอัปเดตเบื้องหลัง เผื่อเพิ่งเพิ่มรหัสใหม่ใน Google Sheet
   if(!employeeDbLoading) loadEmployeeDatabase();
 });
-document.getElementById("retryEmployeeDb").addEventListener("click",async()=>{ employeeDbStatus.textContent="กำลัง Sync Google Sheet..."; await loadEmployeeDatabase(); });
 document.getElementById("logoutButton").addEventListener("click",()=>{ sessionStorage.removeItem("lumie_logged_in"); sessionStorage.removeItem("lumie_employee"); showLogin(); });
 document.getElementById("menuButton").addEventListener("click",()=>sidebar.classList.toggle("open"));
 window.addEventListener("hashchange",render);
@@ -794,69 +878,199 @@ function renderAdminSalePerformance(){
 
 function renderUserManagement(){
   if(!requireMaster()) return;
+
   const rows=employeeDatabase.map(e=>`<tr>
-    <td>${escapeHtml(e.id)}</td><td>${escapeHtml(e.name)}</td><td>${escapeHtml(e.position)}</td>
-    <td>${permissionBadge(e.level)}</td><td>${escapeHtml(e.phone||"-")}</td><td>${escapeHtml(e.email||"-")}</td>
+    <td>${escapeHtml(e.id)}</td>
+    <td><b>${escapeHtml(e.name)}</b></td>
+    <td>${escapeHtml(e.position)}</td>
+    <td>${permissionBadge(e.level)}</td>
+    <td>${escapeHtml(e.phone||"-")}</td>
+    <td>${escapeHtml(e.email||"-")}</td>
+    <td><button class="user-edit-btn" type="button" data-id="${escapeHtml(e.id)}">แก้ไข</button></td>
   </tr>`).join("");
+
   document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">MASTER CONTROL</div><h1>User Management</h1><p>แสดงเฉพาะรายชื่อผู้ใช้งานที่มีข้อมูลสำหรับ Login เข้าเว็บไซต์จาก Google Sheet · Data Employee</p></section>
+    <section class="hero">
+      <div class="eyebrow">MASTER CONTROL · APPS SCRIPT API</div>
+      <h1>User Management</h1>
+      <p>เพิ่มและแก้ไขบัญชีผู้ใช้งานเว็บไซต์ได้จากหน้านี้ ข้อมูลจะถูกบันทึกกลับ Data Employee ผ่าน Lumie API</p>
+    </section>
+
     <section class="grid g2" style="margin-top:18px;align-items:start">
       <div class="card">
-        <b>ฐานข้อมูลพนักงาน</b>
-        <p class="muted" style="font-size:12.5px;line-height:1.7">เว็บไซต์จะอ่านข้อมูลล่าสุดจาก Data Employee ตอนโหลดหน้า Login หากต้องการเพิ่มพนักงานหรือแก้ไขข้อมูล ให้แก้ใน Google Sheet แล้ว Refresh เว็บไซต์</p>
-        <a class="btn-primary" style="display:inline-block;margin-top:12px" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1B-sQg-ycCgfLaY_u1YD2KMZCt4XkaudEJFu2qvobQWI/edit?gid=272594078#gid=272594078">เปิด Data Employee</a>
+        <div class="section" style="margin-top:0"><div><h3 id="userFormTitle">เพิ่มผู้ใช้งาน</h3><p>Employee ID ต้องไม่ซ้ำ</p></div></div>
+        <form id="userApiForm">
+          <input type="hidden" id="userEditMode" value="add">
+          <div class="form-grid">
+            <div class="form-field"><label>Employee ID</label><input id="userEmployeeId" required placeholder="เช่น 202600050"></div>
+            <div class="form-field"><label>Level</label>
+              <select id="userLevel" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff">
+                <option>Master</option><option>Executive</option><option selected>Employee</option><option>Outsource</option>
+              </select>
+            </div>
+            <div class="form-field"><label>ชื่อ</label><input id="userName" required></div>
+            <div class="form-field"><label>ตำแหน่ง</label><input id="userPosition" required></div>
+            <div class="form-field"><label>เบอร์โทร</label><input id="userTel"></div>
+            <div class="form-field"><label>Email</label><input id="userEmail" type="email"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+            <button id="saveUserApiBtn" class="btn-primary" type="submit">เพิ่มผู้ใช้งาน</button>
+            <button id="cancelUserEditBtn" class="user-secondary-btn hidden" type="button">ยกเลิกการแก้ไข</button>
+          </div>
+          <div id="userApiStatus" class="notice" style="display:none"></div>
+        </form>
       </div>
+
       <div class="card">
-        <b>การจัดการสิทธิ์</b>
-        <p class="muted" style="font-size:12.5px;line-height:1.7">เฉพาะ Executive เท่านั้นที่เห็น Executive และ Master Control แต่ในเวอร์ชันนี้การเปลี่ยนระดับสิทธิ์จะทำใน Google Sheet โดยตรง เนื่องจากนำ Apps Script ออกจากระบบแล้ว</p>
-        <div class="notice">หลังแก้ค่า “ระดับ” ใน Data Employee ให้ผู้ใช้ออกจากระบบแล้ว Login ใหม่ เพื่อให้เว็บไซต์อ่านสิทธิ์ล่าสุด</div>
+        <b>เชื่อมต่อ Apps Script แล้ว</b>
+        <p class="muted" style="font-size:12.5px;line-height:1.8">การเพิ่ม/แก้ชื่อ/ตำแหน่ง/เบอร์โทร/Email/Level จะเขียนกลับ Google Sheet ผ่าน API โดยไม่ต้องเปิดชีตเอง</p>
+        <div class="notice">การแก้ Employee ID เดิมยังไม่รองรับใน API ปัจจุบัน หากอยู่โหมดแก้ไข ช่อง Employee ID จะถูกล็อกไว้</div>
       </div>
     </section>
-    <div class="section"><div><h3>Website Users</h3><p>${employeeDatabase.length} บัญชี · เฉพาะผู้ที่มีข้อมูลสำหรับเข้าเว็บไซต์</p></div></div>
-    <div class="table-wrap"><table class="data"><thead><tr><th>รหัสพนักงาน</th><th>ชื่อ</th><th>ตำแหน่ง</th><th>ระดับสิทธิ์</th><th>เบอร์โทร</th><th>Email บริษัท</th></tr></thead><tbody>${rows||'<tr><td colspan="6">ยังไม่มีข้อมูล</td></tr>'}</tbody></table></div>`;
+
+    <div class="section"><div><h3>Website Users</h3><p>${employeeDatabase.length} บัญชี</p></div></div>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>รหัสพนักงาน</th><th>ชื่อ</th><th>ตำแหน่ง</th><th>Level</th><th>เบอร์โทร</th><th>Email</th><th></th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="7">ยังไม่มีข้อมูล</td></tr>'}</tbody>
+    </table></div>`;
+
+  const form=document.getElementById("userApiForm");
+  const mode=document.getElementById("userEditMode");
+  const employeeIdInput=document.getElementById("userEmployeeId");
+  const levelInput=document.getElementById("userLevel");
+  const nameInput=document.getElementById("userName");
+  const positionInput=document.getElementById("userPosition");
+  const telInput=document.getElementById("userTel");
+  const emailInput=document.getElementById("userEmail");
+  const status=document.getElementById("userApiStatus");
+  const saveBtn=document.getElementById("saveUserApiBtn");
+  const cancelBtn=document.getElementById("cancelUserEditBtn");
+  const title=document.getElementById("userFormTitle");
+
+  const resetForm=()=>{
+    form.reset();
+    mode.value="add";
+    employeeIdInput.disabled=false;
+    levelInput.value="Employee";
+    title.textContent="เพิ่มผู้ใช้งาน";
+    saveBtn.textContent="เพิ่มผู้ใช้งาน";
+    cancelBtn.classList.add("hidden");
+    status.style.display="none";
+  };
+
+  document.querySelectorAll(".user-edit-btn").forEach(btn=>btn.addEventListener("click",()=>{
+    const emp=employeeDatabase.find(e=>e.id===btn.dataset.id);
+    if(!emp) return;
+    mode.value="edit";
+    employeeIdInput.value=emp.id;
+    employeeIdInput.disabled=true;
+    levelInput.value=emp.level||"Employee";
+    nameInput.value=emp.name||"";
+    positionInput.value=emp.position||"";
+    telInput.value=emp.phone||"";
+    emailInput.value=emp.email||"";
+    title.textContent=`แก้ไข ${emp.name||emp.id}`;
+    saveBtn.textContent="บันทึกการแก้ไข";
+    cancelBtn.classList.remove("hidden");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }));
+
+  cancelBtn.addEventListener("click",resetForm);
+
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
+    saveBtn.disabled=true;
+    status.style.display="block";
+    status.textContent="กำลังบันทึกผ่าน Apps Script API...";
+
+    const payload={
+      employeeId:employeeIdInput.value.trim(),
+      level:levelInput.value,
+      position:positionInput.value.trim(),
+      name:nameInput.value.trim(),
+      tel:telInput.value.trim(),
+      email:emailInput.value.trim()
+    };
+
+    try{
+      if(mode.value==="edit"){
+        await lumieApiPost({action:"updateEmployee",...payload});
+      }else{
+        await lumieApiPost({action:"addEmployee",...payload});
+      }
+      await loadEmployeeDatabase();
+      toast(mode.value==="edit"?"แก้ไขข้อมูลเรียบร้อย":"เพิ่มผู้ใช้งานเรียบร้อย");
+      renderUserManagement();
+    }catch(err){
+      status.textContent="บันทึกไม่สำเร็จ: "+err.message;
+      toast("บันทึกข้อมูลไม่สำเร็จ");
+      saveBtn.disabled=false;
+    }
+  });
 }
 function escapeHtml(v){ return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 function renderPermissionManagement(){
   if(!requireMaster()) return;
-  const rows=employeeDatabase.map(e=>`<tr><td>${escapeHtml(e.id)}</td><td>${escapeHtml(e.name)}</td><td>${escapeHtml(e.position)}</td><td>${permissionBadge(e.level)}</td></tr>`).join("");
+
+  const rows=employeeDatabase.map(e=>`<tr>
+    <td>${escapeHtml(e.id)}</td>
+    <td><b>${escapeHtml(e.name)}</b></td>
+    <td>${escapeHtml(e.position)}</td>
+    <td>${permissionBadge(e.level)}</td>
+    <td>
+      <select class="permission-level-select" data-id="${escapeHtml(e.id)}" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff">
+        ${["Master","Executive","Employee","Outsource"].map(l=>`<option value="${l}" ${l===e.level?"selected":""}>${l}</option>`).join("")}
+      </select>
+    </td>
+    <td><button class="permission-save-btn" data-id="${escapeHtml(e.id)}" type="button">บันทึก</button></td>
+  </tr>`).join("");
+
   document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">MASTER CONTROL</div><h1>Permission Management</h1>
-      <p>คู่มือ Level สำหรับกำหนดขอบเขตการใช้งานเว็บไซต์จากคอลัมน์ Level ใน Google Sheet · Data Employee</p>
+    <section class="hero">
+      <div class="eyebrow">MASTER CONTROL · APPS SCRIPT API</div>
+      <h1>Permission Management</h1>
+      <p>Master สามารถเปลี่ยน Level ได้จากเว็บไซต์และบันทึกกลับฐานข้อมูลผ่าน Apps Script</p>
     </section>
 
     <section class="grid g2" style="margin-top:18px">
-      <div class="card">
-        <span class="permission-badge permission-master">Master</span>
-        <h3>Master</h3>
-        <p class="muted">สิทธิ์สูงสุด เข้าได้ทั้งหมด: MAIN, DASHBOARD, EXECUTIVE และ MASTER CONTROL</p>
-      </div>
-      <div class="card">
-        <span class="permission-badge permission-executive">Executive</span>
-        <h3>Executive</h3>
-        <p class="muted">เข้า MAIN, DASHBOARD และ EXECUTIVE ได้ทั้งหมด แต่ไม่สามารถเข้า MASTER CONTROL</p>
-      </div>
-      <div class="card">
-        <span class="permission-badge permission-employee">Employee</span>
-        <h3>Employee</h3>
-        <p class="muted">เข้า MAIN และ DASHBOARD ได้ทั้งหมด แต่ไม่สามารถเข้า EXECUTIVE และ MASTER CONTROL</p>
-      </div>
-      <div class="card">
-        <span class="permission-badge permission-outsource">Outsource</span>
-        <h3>Outsource</h3>
-        <p class="muted">เข้าได้เฉพาะ Home, Service, Promotion, Doctor, Branch และ Contact ไม่มี Dashboard, Executive หรือ Master Control</p>
-      </div>
+      <div class="card"><span class="permission-badge permission-master">Master</span><h3>Master</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE + MASTER CONTROL</p></div>
+      <div class="card"><span class="permission-badge permission-executive">Executive</span><h3>Executive</h3><p class="muted">MAIN + DASHBOARD + EXECUTIVE</p></div>
+      <div class="card"><span class="permission-badge permission-employee">Employee</span><h3>Employee</h3><p class="muted">MAIN + DASHBOARD</p></div>
+      <div class="card"><span class="permission-badge permission-outsource">Outsource</span><h3>Outsource</h3><p class="muted">Home + Service + Promotion + Doctor + Branch + Contact</p></div>
     </section>
 
-    <div class="notice">
-      เว็บไซต์จะ Sync ข้อมูลจาก Google Sheet ใหม่อัตโนมัติเมื่อเปิดหน้า Login และสามารถกด “Sync Google Sheet” เพื่อบังคับอัปเดตได้
-      หลังแก้ Level ในชีต ให้ผู้ใช้ออกจากระบบแล้ว Login ใหม่เพื่อใช้สิทธิ์ล่าสุด
-    </div>
+    <div class="notice">หลังเปลี่ยน Level ผู้ใช้งานคนนั้นควร Logout และ Login ใหม่ เพื่อให้ Session ใช้สิทธิ์ล่าสุด</div>
 
-    <div class="section"><div><h3>Website Permission</h3><p>${employeeDatabase.length} บัญชี · เฉพาะผู้ใช้งานเว็บไซต์</p></div></div>
+    <div class="section"><div><h3>Website Permission</h3><p>${employeeDatabase.length} บัญชี</p></div></div>
     <div class="table-wrap"><table class="data">
-      <thead><tr><th>รหัสพนักงาน</th><th>ชื่อ</th><th>ตำแหน่ง</th><th>Level</th></tr></thead>
-      <tbody>${rows||'<tr><td colspan="4">ยังไม่มีข้อมูล</td></tr>'}</tbody>
+      <thead><tr><th>รหัสพนักงาน</th><th>ชื่อ</th><th>ตำแหน่ง</th><th>ปัจจุบัน</th><th>เปลี่ยนเป็น</th><th></th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="6">ยังไม่มีข้อมูล</td></tr>'}</tbody>
     </table></div>`;
+
+  document.querySelectorAll(".permission-save-btn").forEach(btn=>btn.addEventListener("click",async()=>{
+    const employeeId=btn.dataset.id;
+    const select=document.querySelector(`.permission-level-select[data-id="${CSS.escape(employeeId)}"]`);
+    const level=select?.value;
+    if(!level) return;
+
+    const current=getLoggedEmployee();
+    if(employeeId===current?.id && current?.level==="Master" && level!=="Master"){
+      if(!confirm("คุณกำลังลดสิทธิ์ Master ของบัญชีที่ Login อยู่ ต้องการดำเนินการต่อหรือไม่?")) return;
+    }
+
+    btn.disabled=true;
+    btn.textContent="กำลังบันทึก...";
+    try{
+      await lumieApiPost({action:"updateLevel",employeeId,level});
+      await loadEmployeeDatabase();
+      toast(`อัปเดต ${employeeId} เป็น ${level} แล้ว`);
+      renderPermissionManagement();
+    }catch(err){
+      toast("แก้ไข Permission ไม่สำเร็จ: "+err.message);
+      btn.disabled=false;
+      btn.textContent="บันทึก";
+    }
+  }));
 }
 
 function makeChart(id,config){
@@ -1144,10 +1358,15 @@ function renderEmployeeManagement(){
     if(!isMaster(getLoggedEmployee())) return;
     syncBtn.disabled=true;
     syncBtn.textContent="กำลัง Sync...";
-    await loadEmployeeDatabase();
-    await syncDoctorDatabase();
-    toast("Sync ข้อมูลทั้งหมดเรียบร้อย");
-    renderEmployeeManagement();
+    try{
+      await syncAllLumieData();
+      toast("Sync ข้อมูลทั้งหมดจาก Apps Script เรียบร้อย");
+      renderEmployeeManagement();
+    }catch(err){
+      toast("Sync ไม่สำเร็จ: "+err.message);
+      syncBtn.disabled=false;
+      syncBtn.textContent="↻ Sync ข้อมูลทั้งหมด";
+    }
   });
 }
 
