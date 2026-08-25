@@ -200,6 +200,13 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 .user-edit-btn:hover,.permission-save-btn:hover,.user-secondary-btn:hover{background:#fff6cf;border-color:#ddc96f}
 .user-edit-btn:disabled,.permission-save-btn:disabled,.user-secondary-btn:disabled{opacity:.55;cursor:wait}
 
+
+/* Contact / Contact Inbox */
+.contact-sender-row{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:11px 0;border-bottom:1px solid #f0ead4;font-size:12.5px}
+.contact-sender-row span{color:var(--muted)}
+.contact-sender-row b{text-align:right;font-weight:500}
+.contact-detail-cell{white-space:normal!important;min-width:300px;max-width:560px;line-height:1.7}
+
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -262,6 +269,7 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
         <a href="#user-management" data-page="user-management">User Management</a>
         <a href="#permission-management" data-page="permission-management">Permission Management</a>
         <a href="#employee-management" data-page="employee-management">Employee Management</a>
+        <a href="#contact-management" data-page="contact-management">Contact Inbox</a>
       </nav>
     </div>
     <div class="sidebar-bottom">
@@ -394,15 +402,27 @@ async function syncAllLumieData(){
 
 
 const pages = {
-  home:["Home","LUMIECLINIC"], about:["About","LUMIECLINIC"], service:["Service","LUMIECLINIC"],
-  promotion:["Promotion","LUMIECLINIC"], doctor:["Doctor","LUMIECLINIC"], branch:["Branch","LUMIECLINIC"],
-  contact:["Contact","LUMIECLINIC"], executive:["Executive Dashboard","POWER BI"],
-  sales:["Sales Performance","POWER BI"], customer:["Customer Performance","POWER BI"],
+  home:["Home","LUMIECLINIC"],
+  about:["About","LUMIECLINIC"],
+  service:["Service","LUMIECLINIC"],
+  promotion:["Promotion","LUMIECLINIC"],
+  doctor:["Doctor","LUMIECLINIC"],
+  branch:["Branch","LUMIECLINIC"],
+  contact:["Contact","LUMIECLINIC"],
+
+  executive:["Executive","POWER BI"],
+  sales:["Sale Performance","POWER BI"],
+  customer:["Customer","POWER BI"],
   ads:["Ad Performance","POWER BI"],
-  "content-management":["Content Management","MASTER CONTROL"],
+
+  "doctor-performance":["Doctor","EXECUTIVE"],
+  "sale-content-performance":["Sale Performance","EXECUTIVE"],
+  "admin-sale-performance":["Admin Sale Performance","EXECUTIVE"],
+
   "user-management":["User Management","MASTER CONTROL"],
   "permission-management":["Permission Management","MASTER CONTROL"],
-  "employee-messages":["Employee Messages","MASTER CONTROL"]
+  "employee-management":["Employee Management","MASTER CONTROL"],
+  "contact-management":["Contact Inbox","MASTER CONTROL"]
 };
 
 /* ---------- content data (sample — replace with real clinic content) ---------- */
@@ -611,7 +631,7 @@ function isOutsource(emp){ return employeeLevel(emp)==="outsource"; }
 const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","contact"];
 const DASHBOARD_PAGES=["executive","sales","customer","ads"];
 const EXECUTIVE_PAGES=["doctor-performance","sale-content-performance","admin-sale-performance"];
-const MASTER_PAGES=["user-management","permission-management","employee-management"];
+const MASTER_PAGES=["user-management","permission-management","employee-management","contact-management"];
 
 function canAccessPage(emp,page){
   if(isMaster(emp)) return true;
@@ -791,6 +811,7 @@ loginForm.addEventListener("submit",e=>{
     const master=employeeDatabase.find(x=>x.id===id) || {...BUILTIN_EMPLOYEE_SNAPSHOT[0]};
     sessionStorage.setItem("lumie_employee",JSON.stringify(master));
     sessionStorage.setItem("lumie_logged_in","true");
+    location.hash="#home";
     showApp();
     return;
   }
@@ -800,6 +821,7 @@ loginForm.addEventListener("submit",e=>{
   if(emp){
     sessionStorage.setItem("lumie_employee",JSON.stringify(emp));
     sessionStorage.setItem("lumie_logged_in","true");
+    location.hash="#home";
     showApp();
     return;
   }
@@ -809,7 +831,7 @@ loginForm.addEventListener("submit",e=>{
   // ลองอัปเดตเบื้องหลัง เผื่อเพิ่งเพิ่มรหัสใหม่ใน Google Sheet
   if(!employeeDbLoading) loadEmployeeDatabase();
 });
-document.getElementById("logoutButton").addEventListener("click",()=>{ sessionStorage.removeItem("lumie_logged_in"); sessionStorage.removeItem("lumie_employee"); showLogin(); });
+document.getElementById("logoutButton").addEventListener("click",()=>{ sessionStorage.removeItem("lumie_logged_in"); sessionStorage.removeItem("lumie_employee"); location.hash="#home"; showLogin(); });
 document.getElementById("menuButton").addEventListener("click",()=>sidebar.classList.toggle("open"));
 window.addEventListener("hashchange",render);
 
@@ -834,7 +856,7 @@ function render(){
     executive:renderExecutive, sales:renderSales, customer:renderCustomer, ads:renderAds,
     "doctor-performance":renderDoctorPerformance,"sale-content-performance":renderSaleContentPerformance,"admin-sale-performance":renderAdminSalePerformance,
     "user-management":renderUserManagement,"permission-management":renderPermissionManagement,
-    "employee-management":renderEmployeeManagement};
+    "employee-management":renderEmployeeManagement,"contact-management":renderContactManagement};
   map[page]();
 }
 
@@ -1282,11 +1304,100 @@ function renderBranch(){
 
 function renderContact(){
   const emp=getLoggedEmployee()||{};
+
   document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">EMPLOYEE CONTACT</div><h1>ติดต่อภายใน</h1><p>สำหรับพนักงานแจ้งปัญหา คำถาม หรือเรื่องที่ต้องการติดต่อทีมภายใน ข้อมูลผู้ส่งจะอ้างอิงจากบัญชีที่ Login</p></section>
-    <section class="grid g2" style="margin-top:24px;align-items:start"><div class="card"><b>ข้อมูลผู้ส่ง</b><div class="branch-row" style="margin-top:14px"><b>ID</b><span>${escapeHtml(emp.id||'-')}</span></div><div class="branch-row"><b>ชื่อ</b><span>${escapeHtml(emp.name||'-')}</span></div><div class="branch-row"><b>ตำแหน่ง</b><span>${escapeHtml(emp.position||'-')}</span></div><div class="notice">ข้อความในเวอร์ชันนี้เก็บใน Browser ของอุปกรณ์ที่ส่ง เนื่องจากเว็บไซต์ GitHub Pages ยังไม่มีฐานข้อมูลเขียนส่วนกลาง</div></div>
-    <div class="card"><b>ส่งข้อความถึง Master</b><form id="contactForm" style="margin-top:14px"><div class="form-grid"><div class="form-field full"><label>หัวข้อ</label><input name="subject" required placeholder="ระบุหัวข้อที่ต้องการติดต่อ"></div><div class="form-field full"><label>รายละเอียด</label><textarea name="detail" required placeholder="อธิบายรายละเอียด"></textarea></div></div><button type="submit" class="btn-primary" style="margin-top:16px">บันทึกข้อความ</button></form></div></section>`;
-  document.getElementById("contactForm").addEventListener("submit",e=>{e.preventDefault();const fd=new FormData(e.target);const items=JSON.parse(localStorage.getItem("lumie_employee_messages")||"[]");items.unshift({id:Date.now(),employeeId:emp.id||"",name:emp.name||"",position:emp.position||"",subject:fd.get("subject"),detail:fd.get("detail"),status:"ใหม่",createdAt:new Date().toLocaleString("th-TH")});localStorage.setItem("lumie_employee_messages",JSON.stringify(items));toast("บันทึกข้อความแล้ว");e.target.reset();});
+    <section class="hero">
+      <div class="eyebrow">EMPLOYEE CONTACT</div>
+      <h1>ติดต่อภายใน</h1>
+      <p>แจ้งปัญหา คำถาม หรือเรื่องที่ต้องการติดต่อภายในบริษัท ข้อมูลผู้ส่งจะอ้างอิงจาก Account ที่ Login โดยอัตโนมัติ</p>
+    </section>
+
+    <section class="grid g2" style="margin-top:24px;align-items:start">
+      <div class="card">
+        <div class="kpi-label">SENDER INFORMATION</div>
+        <h3 style="margin:7px 0 15px">ข้อมูลผู้ส่ง</h3>
+
+        <div class="contact-sender-row">
+          <span>Employee ID</span><b>${escapeHtml(emp.id||"-")}</b>
+        </div>
+        <div class="contact-sender-row">
+          <span>ชื่อ</span><b>${escapeHtml(emp.name||"-")}</b>
+        </div>
+        <div class="contact-sender-row">
+          <span>ตำแหน่ง</span><b>${escapeHtml(emp.position||"-")}</b>
+        </div>
+
+        <div class="notice">
+          ID, ชื่อ และตำแหน่งไม่ต้องกรอกเอง โดย Apps Script จะตรวจ Employee ID กับ Data Employee อีกครั้งก่อนบันทึกลงชีต Contact
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kpi-label">CONTACT FORM</div>
+        <h3 style="margin:7px 0 15px">ส่งข้อความ</h3>
+
+        <form id="contactForm">
+          <div class="form-grid">
+            <div class="form-field full">
+              <label>หัวข้อ</label>
+              <input name="subject" required maxlength="150" placeholder="เช่น ขอแก้ไขข้อมูล / แจ้งปัญหาการใช้งาน">
+            </div>
+
+            <div class="form-field full">
+              <label>รายละเอียด</label>
+              <textarea name="detail" required maxlength="3000" placeholder="ระบุรายละเอียดที่ต้องการแจ้ง"></textarea>
+            </div>
+          </div>
+
+          <button id="contactSubmitBtn" type="submit" class="btn-primary" style="margin-top:16px">
+            ส่งข้อความ
+          </button>
+
+          <div id="contactApiStatus" class="notice" style="display:none"></div>
+        </form>
+      </div>
+    </section>`;
+
+  const form=document.getElementById("contactForm");
+  const submitBtn=document.getElementById("contactSubmitBtn");
+  const status=document.getElementById("contactApiStatus");
+
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
+
+    const fd=new FormData(form);
+    const subject=String(fd.get("subject")||"").trim();
+    const detail=String(fd.get("detail")||"").trim();
+
+    if(!emp.id){
+      toast("ไม่พบข้อมูล Account ที่ Login");
+      return;
+    }
+
+    submitBtn.disabled=true;
+    submitBtn.textContent="กำลังส่ง...";
+    status.style.display="block";
+    status.textContent="กำลังบันทึกข้อความผ่าน Lumie API...";
+
+    try{
+      await lumieApiPost({
+        action:"addContact",
+        employeeId:emp.id,
+        subject,
+        detail
+      });
+
+      status.textContent="ส่งข้อความเรียบร้อยแล้ว";
+      toast("ส่งข้อความเรียบร้อยแล้ว");
+      form.reset();
+    }catch(err){
+      status.textContent="ส่งข้อความไม่สำเร็จ: "+err.message;
+      toast("ส่งข้อความไม่สำเร็จ");
+    }finally{
+      submitBtn.disabled=false;
+      submitBtn.textContent="ส่งข้อความ";
+    }
+  });
 }
 function renderEmployeeManagement(){
   if(!requireMaster()) return;
@@ -1368,6 +1479,92 @@ function renderEmployeeManagement(){
       syncBtn.textContent="↻ Sync ข้อมูลทั้งหมด";
     }
   });
+}
+
+
+function normalizeApiContact(obj){
+  return {
+    id:pickApiValue(obj,["ID","Employee ID","employeeId","id"]),
+    name:pickApiValue(obj,["ชื่อ","Name","name"]),
+    position:pickApiValue(obj,["ตำแหน่ง","Position","position"]),
+    subject:pickApiValue(obj,["หัวข้อ","Subject","subject"]),
+    detail:pickApiValue(obj,["รายละเอียด","Detail","detail"])
+  };
+}
+
+async function renderContactManagement(){
+  if(!requireMaster()) return;
+
+  document.getElementById("pageContent").innerHTML=`
+    <section class="hero">
+      <div class="eyebrow">MASTER CONTROL · APPS SCRIPT API</div>
+      <h1>Contact Inbox</h1>
+      <p>ข้อความที่พนักงานส่งจากหน้า Contact และบันทึกอยู่ในชีต Contact</p>
+    </section>
+
+    <div class="section">
+      <div>
+        <h3>Employee Messages</h3>
+        <p id="contactInboxCount">กำลังโหลด...</p>
+      </div>
+      <button id="refreshContactInboxBtn" class="btn-primary" type="button">↻ Refresh</button>
+    </div>
+
+    <div id="contactInboxArea" class="table-wrap">
+      <div style="padding:24px;color:var(--muted)">กำลังเชื่อมต่อ Lumie API...</div>
+    </div>`;
+
+  const area=document.getElementById("contactInboxArea");
+  const count=document.getElementById("contactInboxCount");
+  const refreshBtn=document.getElementById("refreshContactInboxBtn");
+
+  const load=async()=>{
+    refreshBtn.disabled=true;
+    refreshBtn.textContent="กำลังโหลด...";
+
+    try{
+      const result=await lumieApiGet("contacts");
+      const contacts=(Array.isArray(result.data)?result.data:[])
+        .map(normalizeApiContact)
+        .filter(c=>c.id||c.name||c.subject||c.detail);
+
+      count.textContent=`${contacts.length} ข้อความ`;
+
+      const rows=contacts.slice().reverse().map((c,index)=>`
+        <tr>
+          <td>${contacts.length-index}</td>
+          <td>${escapeHtml(c.id||"-")}</td>
+          <td><b>${escapeHtml(c.name||"-")}</b></td>
+          <td>${escapeHtml(c.position||"-")}</td>
+          <td><b>${escapeHtml(c.subject||"-")}</b></td>
+          <td class="contact-detail-cell">${escapeHtml(c.detail||"-")}</td>
+        </tr>`).join("");
+
+      area.innerHTML=`
+        <table class="data">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ID</th>
+              <th>ชื่อ</th>
+              <th>ตำแหน่ง</th>
+              <th>หัวข้อ</th>
+              <th>รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody>${rows||'<tr><td colspan="6">ยังไม่มีข้อความ</td></tr>'}</tbody>
+        </table>`;
+    }catch(err){
+      count.textContent="โหลดไม่สำเร็จ";
+      area.innerHTML=`<div class="notice" style="margin:18px">ไม่สามารถโหลด Contact Inbox: ${escapeHtml(err.message)}</div>`;
+    }finally{
+      refreshBtn.disabled=false;
+      refreshBtn.textContent="↻ Refresh";
+    }
+  };
+
+  refreshBtn.addEventListener("click",load);
+  await load();
 }
 
 /* ---------- DASHBOARD PAGES ---------- */
