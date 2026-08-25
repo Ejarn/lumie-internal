@@ -207,6 +207,28 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 .contact-sender-row b{text-align:right;font-weight:500}
 .contact-detail-cell{white-space:normal!important;min-width:300px;max-width:560px;line-height:1.7}
 
+
+/* Doctor directory / Council image */
+.doctor-breadcrumb{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:18px 0 4px;padding:11px 14px;border:1px solid var(--line);
+  border-radius:14px;background:rgba(253,230,150,.24);font-size:12px
+}
+.doctor-breadcrumb span{color:var(--muted)}
+.doctor-directory-card{
+  width:100%;text-align:left;font-family:inherit;color:inherit;cursor:pointer;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease
+}
+.doctor-directory-card:hover{
+  transform:translateY(-2px);border-color:#ddc96f;
+  box-shadow:0 10px 24px rgba(65,60,40,.07)
+}
+.doctor-directory-card:disabled{cursor:default;opacity:.7}
+.doctor-directory-index{font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.doctor-directory-name{font-size:16px;font-weight:700;margin:10px 0 8px;line-height:1.55}
+.doctor-directory-action{margin-top:14px;font-size:12px;font-weight:600;color:#7b6816}
+.doctor-council-image{display:block;max-width:100%;max-height:72vh;margin:auto;object-fit:contain}
+
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -338,21 +360,47 @@ function normalizeApiEmployee(obj){
 }
 
 function normalizeApiDoctor(obj){
+  const rawHasImage=
+    obj?.hasCouncilImage ??
+    obj?.["hasCouncilImage"] ??
+    obj?.["แพทยสภา"];
+
   return {
-    name: pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","Name","name"]),
-    license: pickApiValue(obj,["เลข ว","เลข ว.","License","license"])
+    name:pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","Name","name"]),
+    license:pickApiValue(obj,["เลข ว","เลข ว.","License","license"]),
+    hasCouncilImage:
+      rawHasImage===true ||
+      String(rawHasImage||"").toLowerCase()==="true" ||
+      String(rawHasImage||"")==="1"
   };
 }
 
-async function lumieApiGet(action){
-  const res=await fetch(`${LUMIE_API_URL}?action=${encodeURIComponent(action)}&_=${Date.now()}`,{
+async function lumieApiGet(action,params={}){
+  const query=new URLSearchParams({
+    action:String(action||""),
+    _:String(Date.now())
+  });
+
+  Object.entries(params||{}).forEach(([key,value])=>{
+    if(value!==undefined && value!==null && String(value)!==""){
+      query.set(key,String(value));
+    }
+  });
+
+  const res=await fetch(`${LUMIE_API_URL}?${query.toString()}`,{
     method:"GET",
     cache:"no-store",
     redirect:"follow"
   });
+
   if(!res.ok) throw new Error(`API HTTP ${res.status}`);
+
   const result=await res.json();
-  if(!result || result.success!==true) throw new Error(result?.message||"Lumie API error");
+
+  if(!result || result.success!==true){
+    throw new Error(result?.message||"Lumie API error");
+  }
+
   return result;
 }
 
@@ -562,35 +610,81 @@ const DOCTOR_LICENSE_FILES = {
 function doctorLicensePath(license){
   return DOCTOR_LICENSE_FILES[String(license||"").trim()] || "";
 }
-function openDoctorLicense(name,license){
-  const path=doctorLicensePath(license);
-  if(!path){ toast("ยังไม่มีไฟล์ใบอนุญาตของแพทย์ท่านนี้"); return; }
-  const isPdf=/\.pdf$/i.test(path);
+async function openDoctorLicense(name,license){
+  const legacyPath=doctorLicensePath(license);
+
   const modal=document.createElement("div");
   modal.className="doctor-license-overlay";
   modal.innerHTML=`
     <div class="doctor-license-modal">
       <div class="doctor-license-head">
         <div>
-          <div class="eyebrow">MEDICAL LICENSE</div>
+          <div class="eyebrow">DOCTOR · แพทยสภา</div>
           <h3>${escapeHtml(name)}</h3>
           <div class="badge alt">${escapeHtml(license||"-")}</div>
         </div>
         <button class="doctor-license-close" type="button" aria-label="ปิด">×</button>
       </div>
-      <div class="doctor-license-view">
-        ${isPdf
-          ? `<iframe src="${encodeURI(path)}#view=FitH" title="ใบอนุญาต ${escapeHtml(name)}"></iframe>`
-          : `<img src="${encodeURI(path)}" alt="ใบอนุญาต ${escapeHtml(name)}">`}
+
+      <div class="doctor-license-view" id="doctorCouncilView">
+        <div style="padding:42px 20px;text-align:center;color:var(--muted)">
+          กำลังโหลดภาพใบแพทยสภาจาก Google Sheet...
+        </div>
       </div>
-      <div class="doctor-license-actions">
-        <a class="btn-primary" href="${encodeURI(path)}" target="_blank" rel="noopener">ดูใบอนุญาตฉบับเต็ม</a>
-      </div>
+
+      <div class="doctor-license-actions" id="doctorCouncilActions"></div>
     </div>`;
+
   document.body.appendChild(modal);
+
   const close=()=>modal.remove();
   modal.querySelector(".doctor-license-close").addEventListener("click",close);
   modal.addEventListener("click",e=>{if(e.target===modal) close();});
+
+  const view=modal.querySelector("#doctorCouncilView");
+  const actions=modal.querySelector("#doctorCouncilActions");
+
+  try{
+    const result=await lumieApiGet("doctorCouncil",{license});
+    const imageUrl=String(result.imageUrl||"").trim();
+
+    if(!imageUrl){
+      throw new Error("ยังไม่มีภาพใบแพทยสภาใน Google Sheet");
+    }
+
+    view.innerHTML=`
+      <img class="doctor-council-image"
+           src="${escapeHtml(imageUrl)}"
+           alt="ใบแพทยสภา ${escapeHtml(name)}">`;
+
+    actions.innerHTML=`
+      <a class="btn-primary"
+         href="${escapeHtml(imageUrl)}"
+         target="_blank"
+         rel="noopener">เปิดภาพขนาดเต็ม</a>`;
+
+    return;
+  }catch(err){
+    console.warn("Doctor Council API:",err);
+
+    if(legacyPath){
+      const isPdf=/\.pdf$/i.test(legacyPath);
+
+      view.innerHTML=isPdf
+        ? `<iframe src="${encodeURI(legacyPath)}#view=FitH" title="ใบอนุญาต ${escapeHtml(name)}"></iframe>`
+        : `<img src="${encodeURI(legacyPath)}" alt="ใบอนุญาต ${escapeHtml(name)}">`;
+
+      actions.innerHTML=`
+        <span class="muted" style="font-size:12px">กำลังแสดงไฟล์สำรองจากเว็บไซต์</span>
+        <a class="btn-primary" href="${encodeURI(legacyPath)}" target="_blank" rel="noopener">เปิดฉบับเต็ม</a>`;
+    }else{
+      view.innerHTML=`
+        <div class="notice" style="margin:18px">
+          ยังไม่สามารถแสดงภาพใบแพทยสภาได้<br>
+          <span style="font-size:12px">${escapeHtml(err.message||"ไม่พบรูปภาพ")}</span>
+        </div>`;
+    }
+  }
 }
 
 /* ---------- shell / router ---------- */
@@ -1267,32 +1361,61 @@ function renderPromotion(){
 }
 
 function renderDoctor(){
-  const draw=()=> {
+  const draw=()=>{
     const cards=doctorDatabase.map(d=>{
-      const hasLicense=!!doctorLicensePath(d.license);
-      return `<div class="card ${hasLicense?"doctor-card-click":""}" ${hasLicense?`role="button" tabindex="0" data-doctor-name="${escapeHtml(d.name)}" data-doctor-license="${escapeHtml(d.license)}"`:""}>
-        <div class="kpi-label">LUMIE DOCTOR</div>
-        <div style="font-weight:750;font-size:16px;margin:9px 0 7px">${escapeHtml(d.name)}</div>
-        <div class="badge alt">${escapeHtml(d.license||"-")}</div>
-        <div class="doctor-view-hint">${hasLicense?"คลิกเพื่อดูใบอนุญาตแพทย์":"ยังไม่มีไฟล์ใบอนุญาต"}</div>
-      </div>`;
+      const hasLegacy=!!doctorLicensePath(d.license);
+      const hasImage=d.hasCouncilImage===true;
+      const canOpen=hasImage||hasLegacy||!!d.license;
+
+      return `
+        <button class="card doctor-directory-card ${canOpen?"doctor-card-click":""}"
+                type="button"
+                ${canOpen?`data-doctor-name="${escapeHtml(d.name)}" data-doctor-license="${escapeHtml(d.license)}"`:"disabled"}>
+          <div class="doctor-directory-index">DOCTOR</div>
+          <div class="doctor-directory-name">${escapeHtml(d.name)}</div>
+          <div class="badge alt">${escapeHtml(d.license||"-")}</div>
+          <div class="doctor-directory-action">
+            ${hasImage
+              ?"ดูภาพใบแพทยสภา →"
+              :(hasLegacy?"ดูเอกสารแพทย์ →":"คลิกเพื่อตรวจสอบใบแพทยสภา →")}
+          </div>
+        </button>`;
     }).join("");
+
     document.getElementById("pageContent").innerHTML=`
       <section class="hero">
-        <div class="eyebrow">DOCTOR</div>
+        <div class="eyebrow">DOCTOR DIRECTORY</div>
         <h1>ทีมแพทย์ Lumie Clinic</h1>
-        <p>คลิกที่ชื่อหรือการ์ดแพทย์เพื่อดูรายละเอียดใบอนุญาตประกอบวิชาชีพเวชกรรม</p>
+        <p>เลือกชื่อแพทย์เพื่อเปิดดูรายละเอียดและภาพใบแพทยสภาที่เชื่อมจาก Google Sheet</p>
       </section>
-      <div class="section"><div><h3>รายชื่อแพทย์</h3><p>${doctorDatabase.length} คน</p></div></div>
-      <section class="grid g3">${cards||'<div class="card">ยังไม่มีข้อมูลแพทย์</div>'}</section>`;
+
+      <div class="doctor-breadcrumb">
+        <b>Doctor</b><span>›</span><span>ชื่อแพทย์</span><span>›</span><span>ภาพใบแพทยสภา</span>
+      </div>
+
+      <div class="section">
+        <div><h3>รายชื่อแพทย์</h3><p>${doctorDatabase.length} คน</p></div>
+      </div>
+
+      <section class="grid g3">
+        ${cards||'<div class="card">ยังไม่มีข้อมูลแพทย์</div>'}
+      </section>`;
+
     document.querySelectorAll(".doctor-card-click").forEach(card=>{
-      const open=()=>openDoctorLicense(card.dataset.doctorName,card.dataset.doctorLicense);
-      card.addEventListener("click",open);
-      card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+      card.addEventListener("click",()=>{
+        openDoctorLicense(
+          card.dataset.doctorName,
+          card.dataset.doctorLicense
+        );
+      });
     });
   };
+
   draw();
-  syncDoctorDatabase().then(ok=>{ if(ok && location.hash==="#doctor") draw(); });
+
+  syncDoctorDatabase().then(ok=>{
+    if(ok && location.hash==="#doctor") draw();
+  });
 }
 
 function renderBranch(){
