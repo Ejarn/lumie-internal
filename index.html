@@ -6,6 +6,14 @@
 <title>LUMIE | Internal Data Hub</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><style>
+/* LUMIE typography system — DB HelvethaicaMon X Cond as display face */
+@font-face{
+  font-family:"DB HelvethaicaMon X";
+  src:local("DB HelvethaicaMon X Cond"),local("DBHelvethaicaMonX-Cond"),url("./DB HelvethaicaMon X Cond.ttf") format("truetype");
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+}
 :root{
 --yellow:#FDE696;--yellow-deep:#E8B93F;--gray:#737373;--cream:#FEF6E3;--white:#fff;--text:#292929;--muted:#858077;
 --line:#E7E3D7;--bg:#F8F7F3;--green:#6B9E73;--green-bg:#DCEBDD;--red:#D47777;--red-bg:#F6DCDC;--sidebar:252px;
@@ -160,9 +168,39 @@ table.data tr:last-child td{border-bottom:0}
 
 
 /* Rounded professional typography */
-body,button,input,select,textarea,table{font-family:"Mitr","Nunito Sans","Noto Sans Thai",Arial,sans-serif}
-h1,h2,h3,h4,.logo,.nav-title,.kpi-value{font-family:"Mitr","Nunito Sans","Noto Sans Thai",Arial,sans-serif;letter-spacing:0}
+:root{
+  --font-display:"DB HelvethaicaMon X","Mitr","Noto Sans Thai",Arial,sans-serif;
+  --font-ui:"Mitr","Nunito Sans","Noto Sans Thai",Arial,sans-serif;
+}
+body,button,input,select,textarea,table{font-family:var(--font-ui)}
 body{font-weight:400}
+
+/* Display typography: use the condensed brand face only where it adds hierarchy. */
+h1,h2,h3,.logo,.topbar h2,.hero h1,.section h3,.powerbi-hero h1,
+.kpi-value,.price-new,.default-password-card strong{
+  font-family:var(--font-display);
+  font-weight:400;
+  letter-spacing:.01em;
+}
+.hero h1{font-size:clamp(42px,5.7vw,68px);line-height:.92}
+.topbar h2{font-size:32px;line-height:1}
+.section h3{font-size:25px;line-height:1.05}
+.kpi-value{font-size:39px;line-height:.95}
+.price-new{font-size:34px;line-height:1}
+.powerbi-hero h1{font-size:42px;line-height:.95}
+
+/* Card titles get a lighter touch so Thai names/packages stay readable. */
+.doctor-card h4,.doctor-directory-name,.branch-card h4,.promo-card h4{
+  font-family:var(--font-display);
+  font-weight:400;
+  font-size:21px;
+  line-height:1.08;
+}
+
+/* Small controls remain in the UI face for legibility. */
+nav a,.btn-primary,.badge,.permission-badge,.nav-title,.eyebrow,.kpi-label,table.data{
+  font-family:var(--font-ui);
+}
 nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 
 
@@ -472,7 +510,11 @@ nav a,.btn-primary,.badge,.permission-badge{font-weight:500}
 const EMPLOYEE_CSV_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPysVXb8jATcRH2ec0P8arPasi1OYbxS0/gviz/tq?tqx=out:csv&sheet=Data%20Employee";
 const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPysVXb8jATcRH2ec0P8arPasi1OYbxS0/gviz/tq?sheet=Data%20Employee&tqx=responseHandler:__lumieEmployeeCallback";
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
+
+// PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
+const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
+const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
 const BUILTIN_EMPLOYEE_SNAPSHOT = [
   {id:"202600041", level:"Master", position:"Data Controller", name:"Jidapa Chaikram", phone:"0800700067", email:"earn.jc@lumiehouse"},
   {id:"202600023", level:"Employee", position:"Marketing & PR Officer", name:"Parichat Angkanok", phone:"0614910497", email:"atom.pa@lumiehouse.com"},
@@ -685,16 +727,129 @@ const pages = {
 /* ---------- content data (sample — replace with real clinic content) ---------- */
 const SERVICES = [{"name":"WegoMie 0.25 mg แบบแบ่ง (1/16) 1 time","category":"Body Reshape","group":"WegoMie","type":"WegoMie แบบแบ่ง","unit":"time","price":1100,"status":"ใช้งาน"},{"name":"WegoMie 1.00 mg แบบแท่ง 1 แท่ง","category":"Body Reshape","group":"WegoMie","type":"WegoMie แบบแท่ง","unit":"unit","price":21900,"status":"ใช้งาน"},{"name":"WegoMie 2.40 mg แบบแท่ง 1 แท่ง","category":"Body Reshape","group":"WegoMie","type":"WegoMie แบบแท่ง","unit":"unit","price":35900,"status":"ใช้งาน"},{"name":"LumieJaro 2.50 mg (1/16) 1 time","category":"Body Reshape","group":"LumieJaro","type":"LumieJaro แบบแบ่ง","unit":"time","price":2600,"status":"ใช้งาน"},{"name":"LumieJaro 10.00 mg 1 แท่ง","category":"Body Reshape","group":"LumieJaro","type":"LumieJaro แบบแท่ง","unit":"time","price":37000,"status":"ใช้งาน"},{"name":"Titanium Lift - All Mode Facial 1 time","category":"Combination","group":"Titanium Lift - All Mode","type":"All Mode - Facial","unit":"time","price":22000,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal รักแร้ 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ รักแร้","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หนวด 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หนวด","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal Brazilian Style 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ Brazillian Style","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หน้าแข้ง 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หน้าแข้ง","unit":"area","price":1199,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal น่อง 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ น่อง","unit":"area","price":1199,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal สะดือ 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ สะดือ","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal จมูก 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ จมูก","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หว่างคิ้ว 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หว่างคิ้ว","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หู 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หู","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal แขนบน 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ แขน","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal แขนล่าง 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ แขน","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังมือและนิ้วมือ 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลังมือและนิ้วมือ","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังเท้าและนิ้วเท้า 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลังเท้าและนิ้วเท้า","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ลานนม 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ลานนม","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal จอนผม 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ จอนผม","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal เคราคาง 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ เคราคาง","unit":"area","price":999,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ไรผม 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ไรผม","unit":"area","price":999,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ต้นขา ด้านหน้า 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ต้นขา","unit":"area","price":1199,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ต้นขา ด้านหลัง 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ต้นขา","unit":"area","price":1199,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังครึ่งบน ซ้าย 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลัง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังครึ่งบน ขวา 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลัง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังครึ่งล่าง ซ้าย 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลัง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หลังครึ่งล่าง ขวา 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หลัง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หน้าอก ซ้าย 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หน้าอก","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal หน้าอก ขวา 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ หน้าอก","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ท้องครึ่งบน ซ้าย 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ท้อง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ท้องครึ่งบน ขวา 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ท้อง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ท้องครึ่งล่าง ซ้าย 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ท้อง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ท้องครึ่งล่าง ขวา 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ท้อง","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ผิวหน้า 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ผิวหน้า","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal Bikini Line 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ Bikini Line","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ต้นคอ (ท้ายทอย) 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ต้นคอ (ท้ายทอย)","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal เคราคาง ข้างแก้ม 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ เคราคาง ข้างแก้ม","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ก้น 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ก้น","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ร่องก้นและรูก้น 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ก้น","unit":"area","price":999,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal ข้างแก้ม 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"บริเวณ ข้างแก้ม","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 699 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":699,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 899 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":899,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 999 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":999,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 1,199 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":1199,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 1,499 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":1499,"status":"ใช้งาน"},{"name":"Titanium Lift - Hair Removal zone 1,799 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Buffet Titanium Lift - Hair Removal เลือกทำ 1 area","category":"Hair Removal","group":"Titanium Lift - Hair Removal Mode","type":"Unspecified Area","unit":"area","price":1799,"status":"ใช้งาน"},{"name":"Filler : Yvoire Volume Plus 1 ml","category":"Injection","group":"Filler","type":"Yvoire Volume Plus","unit":"ml","price":9000,"status":"ใช้งาน"},{"name":"Filler : Yvoire Contour 1 ml","category":"Injection","group":"Filler","type":"Yvoire Contour","unit":"ml","price":9000,"status":"ใช้งาน"},{"name":"Filler : Yvoire Classic Plus 1 ml","category":"Injection","group":"Filler","type":"Yvoire Classic","unit":"ml","price":9000,"status":"ใช้งาน"},{"name":"Filler : Juvederm volift 1 ml","category":"Injection","group":"Filler","type":"Juvederm Volift","unit":"ml","price":16800,"status":"ใช้งาน"},{"name":"Filler : Juvederm Skinvive 1 ml","category":"Injection","group":"Filler","type":"Juvederm Skinvive","unit":"ml","price":10300,"status":"ใช้งาน"},{"name":"Filler : Juvederm Ultra Plus 1 ml","category":"Injection","group":"Filler","type":"Juvederm Ultra Plus","unit":"ml","price":10300,"status":"ใช้งาน"},{"name":"Filler : Juvederm voluma 1 ml","category":"Injection","group":"Filler","type":"Juvederm Voluma","unit":"ml","price":19400,"status":"ใช้งาน"},{"name":"Filler : Yvoire (ไม่ระบุรุ่น) 1 ml","category":"Injection","group":"Filler","type":"ไม่ระบุรุ่น","unit":"ml","price":9000,"status":"ใช้งาน"},{"name":"ค่าฉีดสลายฟิลเลอร์ 1 จุด","category":"Injection","group":"Filler","type":"ฉีดสลาย Filler","unit":"area","price":2000,"status":"ใช้งาน"},{"name":"Botox : Nabota 100 Units 1 bottle","category":"Injection","group":"Botox","type":"Botox Nabota","unit":"bottle","price":11600,"status":"ใช้งาน"},{"name":"Botox : Allergan 50 Units 1 bottle","category":"Injection","group":"Botox","type":"Botox Allergan","unit":"bottle","price":11600,"status":"ใช้งาน"},{"name":"Botox : Allergan 100 Units 1 bottle","category":"Injection","group":"Botox","type":"Botox Allergan","unit":"bottle","price":22800,"status":"ใช้งาน"},{"name":"Botox: Hutox 1 unit","category":"Injection","group":"Botox","type":"Botox Hutox","unit":"unit","price":78,"status":"ใช้งาน"},{"name":"Sculptra® 1 bottle","category":"Injection","group":"Sculptra®","type":"Sculptra® (ขวด)","unit":"bottle","price":32500,"status":"ใช้งาน"},{"name":"RADIESSE® Plus 1 Syringe","category":"Injection","group":"RADIESSE®","type":"RADIESSE® Plus","unit":"syringe","price":38000,"status":"ใช้งาน"},{"name":"HArmonyCa 1 Syringe","category":"Injection","group":"HArmonyCa","type":"HarmonyCA [Syringe]","unit":"syringe","price":25900,"status":"ใช้งาน"},{"name":"PROFHILO 1 กล่อง","category":"Injection","group":"PROFHILO","type":"PROFHILO [กล่อง]","unit":"box","price":32500,"status":"ใช้งาน"},{"name":"Rejuran Classic (กล่องดำ) 1 Syringe (2 ml)","category":"Injection","group":"Rejuran","type":"Rejunran Classic (กล่องดำ)","unit":"syringe","price":12900,"status":"ใช้งาน"},{"name":"Rejuran HB Plus (กล่องแดง) 1 Syringe (1 ml)","category":"Injection","group":"Rejuran","type":"Rejunran HB Plus (กล่องแดง)","unit":"syringe","price":12900,"status":"ใช้งาน"},{"name":"PN Integration ครึ่ง Syringe (1 ml)","category":"Injection","group":"PN Integration","type":"PN Integration","unit":"ml","price":5900,"status":"ใช้งาน"},{"name":"PN Integration 1 Syringe (2 ml)","category":"Injection","group":"PN Integration","type":"PN Integration","unit":"syringe","price":10300,"status":"ใช้งาน"},{"name":"Lumie V-Fat 1 ขวด (10 ml)","category":"Injection","group":"Lumie V-FAT","type":"Lumie V-FAT (ขวด)","unit":"bottle","price":12900,"status":"ใช้งาน"},{"name":"Lumie V-Fat ครึ่งขวด (5 ml)","category":"Injection","group":"Lumie V-FAT","type":"Lumie V-FAT (แบ่ง)","unit":"bottle","price":6500,"status":"ใช้งาน"},{"name":"Lumie Glow 1 ml","category":"Injection","group":"Lumie Glow","type":"Lumie Glow","unit":"ml","price":3000,"status":"ใช้งาน"},{"name":"Lumie Glow 1.5 ml 1 session","category":"Injection","group":"Lumie Glow","type":"Lumie Glow","unit":"session","price":2600,"status":"ใช้งาน"},{"name":"Lumie White 1 ml","category":"Injection","group":"Lumie White","type":"Lumie White","unit":"ml","price":2000,"status":"ใช้งาน"},{"name":"Lumie White 2.5 ml 1 session","category":"Injection","group":"Lumie White","type":"Lumie White","unit":"session","price":2600,"status":"ใช้งาน"},{"name":"Therafill 1 Syringe (1ml)","category":"Injection","group":"Therafill","type":"Therafill","unit":"syringe","price":28600,"status":"ใช้งาน"},{"name":"Therafill ครึ่ง Syringe (0.5ml)","category":"Injection","group":"Therafill","type":"Therafill","unit":"time","price":14500,"status":"ใช้งาน"},{"name":"Lumie Push Blink (Push injection) 1 time","category":"Injection","group":"Lumie Push Blink","type":"Lumie Push Blink (Push injection)","unit":"time","price":1500,"status":"ใช้งาน"},{"name":"Skin Glow 1 ml","category":"Injection","group":"Skin Glow","type":"Skin Glow","unit":"ml","price":2000,"status":"ไม่ใช้งาน"},{"name":"Potenza บริเวณหน้าและคอ 1 time","category":"Rejuvenate","group":"Potenza","type":"Potenza บริเวณหน้าและคอ","unit":"time","price":14000,"status":"ใช้งาน"},{"name":"Potenza บริเวณหน้า 1 time","category":"Rejuvenate","group":"Potenza","type":"Potenza บริเวณหน้า","unit":"time","price":12000,"status":"ใช้งาน"},{"name":"Titanium Lift - Rejuvenate Mode Facial 1 mode","category":"Rejuvenate","group":"Titanium Lift - Rejuvenate Mode","type":"Rejuvenate Mode - Facial","unit":"mode","price":5200,"status":"ใช้งาน"},{"name":"Titanium Lift - Rejuvenate Mode Body 1 area","category":"Rejuvenate","group":"Titanium Lift - Rejuvenate Mode","type":"Rejuvenate Mode - Body","unit":"area","price":4600,"status":"ใช้งาน"},{"name":"Titanium Lift - Brightening Mode Facial 1 mode","category":"Rejuvenate","group":"Titanium Lift - Brightening Mode","type":"Brightening Mode - Facial","unit":"mode","price":3900,"status":"ใช้งาน"},{"name":"Titanium Lift - Brightening Mode Body 1 area","category":"Rejuvenate","group":"Titanium Lift - Brightening Mode","type":"Brightening Mode - Body","unit":"area","price":3300,"status":"ใช้งาน"},{"name":"SylFirmX Plus (Microneeding RF) (Facial + Neck) 1 time","category":"Rejuvenate","group":"SylfirmX Plus","type":"SylfirmX ทั่วหน้าและคอ","unit":"time","price":13000,"status":"ใช้งาน"},{"name":"Ulthera Prime 1 Line","category":"Skin Tightening","group":"Ulthera Prime","type":"Ulthera Prime (Unspecifed Area)","unit":"line","price":169,"status":"ไม่ใช้งาน"},{"name":"Titanium Lift - Lifting Mode Facial 1 mode","category":"Skin Tightening","group":"Titanium Lift - Lifting Mode","type":"Lifting Mode - Facial","unit":"mode","price":12900,"status":"ใช้งาน"},{"name":"Titanium Lift - Lifting Mode Body 1 area","category":"Skin Tightening","group":"Titanium Lift - Lifting Mode","type":"Lifting Mode - Body","unit":"area","price":12400,"status":"ใช้งาน"},{"name":"Ultraformer MPT 4D Lift 1 shot","category":"Skin Tightening","group":"Ultraformer MPT 4D Lift","type":"Ultraformer MPT 4D Lift (Unspecified Area)","unit":"shot","price":65,"status":"ใช้งาน"},{"name":"Volnewmer®(Monopolar RF) (Facial) 1 shot","category":"Skin Tightening","group":"Volnewmer®(Monopolar RF)","type":"Volnewmer®(Monopolar RF) Facial","unit":"shot","price":65,"status":"ใช้งาน"},{"name":"Lumie Skin Mask 1 time","category":"Treatment","group":"Facial & Skin Mask","type":"Lumie Skin Mask","unit":"time","price":400,"status":"ใช้งาน"},{"name":"IV : Paper Glow Blink 1 time","category":"Wellness","group":"Paper Glow Blink","type":"IV : Paper Glow Blink","unit":"time","price":4200,"status":"ใช้งาน"},{"name":"IV : Reset Blink  1 time","category":"Wellness","group":"Reset Blink","type":"IV : Reset Blink","unit":"time","price":3000,"status":"ใช้งาน"},{"name":"IV : Focus Blink 1 time","category":"Wellness","group":"Focus Blink","type":"IV : Focus Blink","unit":"time","price":4200,"status":"ใช้งาน"},{"name":"IV : Power Blink 1 time","category":"Wellness","group":"Power Blink","type":"IV : Power Blink","unit":"time","price":3000,"status":"ใช้งาน"},{"name":"IV : Body Burn Blink 1 time","category":"Wellness","group":"Body Burn Blink","type":"IV : Body Burn Blink","unit":"time","price":3000,"status":"ใช้งาน"},{"name":"ค่าฉีดสลายฟิลเลอร์ 1 จุด","category":"Injection","group":"Filler","type":"ฉีดสลาย Filler","unit":"ml","price":2000,"status":"ไม่ใช้งาน"}];
 
-const PROMOTIONS = [
- {name:"Pro 8.8 : Lumie White buy 5 get 1", detail:"Lumie White 2.5 ml x6", category:"Injection", type:"Package", value:9888},
- {name:"Pro 8.8 : Lumie Glow buy 5 get 1", detail:"Lumie Glow 1.5 ml x6", category:"Injection", type:"Package", value:9888},
- {name:"Pro 8.8 : Center lift", detail:"Ultraformer MPT 4D Lift 300 Shots", category:"Lifting", type:"Package", value:9888},
- {name:"Pro 8.8 : Idol Lift", detail:"Ultraformer MPT 4D Lift 400 Shots + hutox 50 Units", category:"Lifting", type:"Package", value:14888},
- {name:"Pro 8.8 : Star Lift", detail:"Volnewmer 400 Shots + Hutox 50 Units", category:"Lifting", type:"Package", value:14888},
- {name:"Pro 8.8 : Queen Lift", detail:"Thaitanum Lift All mode + MPT 4D Lift 200 Shots", category:"Lifting", type:"Package", value:14888},
- {name:"Pro 8.8 : Legend Lift", detail:"Thaitanum Lift All mode + Volnewmer 200 Shots", category:"Lifting", type:"Package", value:14888},
- {name:"Pro 8.8 : Unnie Eyes", detail:"Therafill 0.5 CC + PN Integration 1 CC", category:"Injection", type:"Package", value:14888}
+const PROMOTION_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPysVXb8jATcRH2ec0P8arPasi1OYbxS0/gviz/tq?sheet=Promotion&tqx=responseHandler:__lumiePromotionCallback";
+const PROMOTION_CACHE_KEY = "lumie_promotion_db_website_sheet_v1";
+const BUILTIN_PROMOTION_SNAPSHOT = [
+  {campaign:"Pro 9.9",packageId:"PK0000260803012",name:"Pro ลับ : ดริปแถมแฟต",detail:"Lumie Push Blink (Push injection) 1 time",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:1199},
+  {campaign:"Pro 9.9",packageId:"PK0000260803013",name:"Pro ลับ : Glow แถมแฟต",detail:"Lumie Glow 3 ml",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:3599},
+  {campaign:"Pro 9.9",packageId:"PK0000260803014",name:"Pro ลับ : White แถมแฟต",detail:"Lumie White 5 ml",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:3599},
+  {campaign:"Pro 9.9",packageId:"PK0000260803015",name:"Pro ลับ : โบ Hutox 100U แถมแฟต",detail:"Botox: Hutox 100 unit",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:5999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803016",name:"Pro ลับ : ฟิลเลอร์ Yvoire แถมแฟต",detail:"Filler : Yvoire 1 cc",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:5999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803017",name:"Pro ลับ : MPT 150 แถมแฟต",detail:"Ultraformer MPT 4D Lift 150 shot",gift:"Lumie V-Fact 5 CC",category:"Lifting",type:"Package",value:5999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803018",name:"Pro ลับ : MPT 400 แถมแฟต",detail:"Ultraformer MPT 4D Lift 400 shot",gift:"Lumie V-Fact 5 CC",category:"Lifting",type:"Package",value:14999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803019",name:"Pro ลับ : ใต้ตาแถมแฟต",detail:"PN Integration 1 CC + Therafill 0.5 CC",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:14999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803020",name:"Pro ลับ : โบ Allergan 50U แถมแฟต",detail:"Botox : Allergan 50 Units 1 bottle",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:12599},
+  {campaign:"Pro 9.9",packageId:"PK0000260803021",name:"Pro ลับ : โบ Nabota 100U แถมแฟต",detail:"Botox : Nabota 100 Units 1 bottle",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:8999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803022",name:"Pro ลับ : ปากกา WegoMie 1.00 mg แบบแท่ง 1 แท่ง แถมแฟต",detail:"WegoMie 1.00 mg แบบแท่ง 1 แท่ง",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:14999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803023",name:"Pro ลับ : Queen Lift แถมแฟต",detail:"Titanium Lift - All Mode Facial 1 time + Ultraformer MPT 4D Lift 200 shot",gift:"Lumie V-Fact 5 CC",category:"Lifting",type:"Package",value:14999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803024",name:"Pro ลับ : Ultra Queen Lift แถมแฟต",detail:"Titanium Lift - All Mode Facial 1 time + Ultraformer MPT 4D Lift 500 shot",gift:"Lumie V-Fact 5 CC",category:"Lifting",type:"Package",value:19999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803025",name:"Pro ลับ : Legend Lift แถมแฟต",detail:"Titanium Lift - All Mode Facial 1 time + Volnewmer®(Monopolar RF) (Facial) 200 shot",gift:"Lumie V-Fact 5 CC",category:"Lifting",type:"Package",value:14999},
+  {campaign:"Pro 9.9",packageId:"PK0000260803026",name:"Pro ลับ : โบ Hutox 50U แถมแฟต",detail:"Botox: Hutox 50 unit",gift:"Lumie V-Fact 5 CC",category:"Injection",type:"Package",value:3599},
+  {campaign:"Pro 9.9",packageId:"PK0000260803027",name:"Pro ลับ 9.9: Titanium Lift 1 time + Botox Hutox 50 units",detail:"Titanium Lift - Lifting Mode Facial 1 mode + Botox: Hutox 50 unit",gift:"-",category:"Lifting",type:"Package",value:9999},
+  {campaign:"Pro เปิดสาขาใหม่ บาวกะปิ/ซีคอน",packageId:"PK0000260801028",name:"Pro [SCS, BKP]: Botox: Hutox 50 unit",detail:"Botox: Hutox 50 unit",gift:"50 Units",category:"Injection",type:"Package",value:2999},
+  {campaign:"Pro เปิดสาขาใหม่ บาวกะปิ/ซีคอน",packageId:"PK0000260801029",name:"Pro [SCS, BKP]: Volnewmer (Monopolar RF) (Facial) 150 shot Free 50 Shots",detail:"Volnewmer (Monopolar RF) (Facial) 150 shot Free 50 Shots",gift:"200 Shots",category:"Lifting",type:"Package",value:5999},
+  {campaign:"Pro เปิดสาขาใหม่ บาวกะปิ/ซีคอน",packageId:"PK0000260801030",name:"Pro [SCS, BKP]: Ultraformer MPT 4D Lift 150 shot Free 50 Shots",detail:"Ultraformer MPT 4D Lift 150 shot Free 50 Shots",gift:"200 Shots",category:"Lifting",type:"Package",value:5999},
+  {campaign:"Pro เปิดสาขาใหม่ บาวกะปิ/ซีคอน",packageId:"PK0000260801031",name:"Pro [SCS, BKP]: Volnewmer (Monopolar RF) (Facial) 300 shot Free 50 Shots",detail:"Volnewmer (Monopolar RF) (Facial) 300 shot Free 50 Shots",gift:"350 Shots",category:"Lifting",type:"Package",value:9999},
+  {campaign:"Pro เปิดสาขาใหม่ บาวกะปิ/ซีคอน",packageId:"PK0000260801032",name:"Pro [SCS, BKP]: Ultraformer MPT 4D Lift 300 shot Free 50 Shots",detail:"Ultraformer MPT 4D Lift 300 shot Free 50 Shots",gift:"350 Shots",category:"Lifting",type:"Package",value:9999}
 ];
+let promotionDatabase=[...BUILTIN_PROMOTION_SNAPSHOT];
+let promotionSyncSource="ข้อมูลสำรองล่าสุด";
+
+function parsePromotionValue(value){
+  const cleaned=String(value??"").replace(/,/g,"").replace(/[^0-9.-]/g,"");
+  const n=Number(cleaned);
+  return Number.isFinite(n)?n:0;
+}
+
+function normalizeApiPromotion(obj){
+  return {
+    campaign:pickApiValue(obj,["แคมเปญ","Campaign","campaign"]),
+    packageId:pickApiValue(obj,["Package ID","PackageID","packageId","id"]),
+    name:pickApiValue(obj,["Package Name","PackageName","name"]),
+    detail:pickApiValue(obj,["Detail","รายละเอียด","detail"]),
+    gift:pickApiValue(obj,["ของแถม","Gift","gift"]),
+    category:pickApiValue(obj,["Category","หมวดหมู่","category"]),
+    type:pickApiValue(obj,["Type","ประเภท","type"]),
+    value:parsePromotionValue(pickApiValue(obj,["มูลค่าPackage","มูลค่า Package","Package Value","Value","value"]))
+  };
+}
+
+function cachePromotionDatabase(){
+  try{
+    localStorage.setItem(PROMOTION_CACHE_KEY,JSON.stringify({savedAt:Date.now(),rows:promotionDatabase}));
+  }catch{}
+}
+
+function loadPromotionCache(){
+  try{
+    const cached=JSON.parse(localStorage.getItem(PROMOTION_CACHE_KEY)||"null");
+    if(!cached || !Array.isArray(cached.rows) || !cached.rows.length) return false;
+    promotionDatabase=cached.rows.map(normalizeApiPromotion).filter(p=>p.name||p.packageId);
+    promotionSyncSource="ข้อมูลล่าสุดที่บันทึกไว้";
+    return promotionDatabase.length>0;
+  }catch{return false;}
+}
+
+function loadPromotionViaGviz(){
+  return new Promise((resolve,reject)=>{
+    const old=document.getElementById("lumiePromotionGviz");
+    if(old) old.remove();
+    const timer=setTimeout(()=>{ cleanup(); reject(new Error("Promotion GViz timeout")); },8000);
+    function cleanup(){
+      clearTimeout(timer);
+      const el=document.getElementById("lumiePromotionGviz");
+      if(el) el.remove();
+      try{ delete window.__lumiePromotionCallback; }catch{}
+    }
+    window.__lumiePromotionCallback=function(resp){
+      try{
+        if(!resp || resp.status==="error") throw new Error("Google Sheets Promotion GViz error");
+        const headers=(resp.table.cols||[]).map(c=>String(c.label||"").trim());
+        const rows=(resp.table.rows||[]).map(r=>(r.c||[]).map(c=>c ? (c.f ?? c.v ?? "") : ""));
+        const data=rows.map(row=>{
+          const obj={};
+          headers.forEach((h,i)=>{ if(h) obj[h]=row[i]??""; });
+          return normalizeApiPromotion(obj);
+        }).filter(p=>p.name||p.packageId);
+        if(!data.length) throw new Error("ไม่พบข้อมูลในแท็บ Promotion");
+        promotionDatabase=data;
+        promotionSyncSource="Google Sheet · website / Promotion";
+        cachePromotionDatabase();
+        cleanup();
+        resolve(true);
+      }catch(err){ cleanup(); reject(err); }
+    };
+    const script=document.createElement("script");
+    script.id="lumiePromotionGviz";
+    script.src=PROMOTION_GVIZ_URL+"&_="+Date.now();
+    script.onerror=()=>{ cleanup(); reject(new Error("โหลด Google Sheet Promotion ไม่สำเร็จ")); };
+    document.head.appendChild(script);
+  });
+}
+
+async function syncPromotionDatabase(){
+  loadPromotionCache();
+  try{
+    await loadPromotionViaGviz();
+    return true;
+  }catch(gvizErr){
+    console.warn("Google Sheet Promotion GViz ใช้งานไม่ได้:",gvizErr);
+    try{
+      const result=await lumieApiGet("promotions");
+      const source=Array.isArray(result.data)?result.data:(Array.isArray(result.promotions)?result.promotions:[]);
+      const data=source.map(normalizeApiPromotion).filter(p=>p.name||p.packageId);
+      if(!data.length) throw new Error("API ไม่ส่งข้อมูล Promotion");
+      promotionDatabase=data;
+      promotionSyncSource="Lumie API · Google Sheet Promotion";
+      cachePromotionDatabase();
+      return true;
+    }catch(apiErr){
+      console.warn("Lumie Promotion API ใช้งานไม่ได้:",apiErr);
+      if(!promotionDatabase.length) promotionDatabase=[...BUILTIN_PROMOTION_SNAPSHOT];
+      return false;
+    }
+  }
+}
 
 const DOCTORS = [
  {name:"นพ. บัณฑิต สาดตระกูลวัฒนา (หมอมิล)", license:"ว.76639"},
@@ -856,7 +1011,49 @@ const BUILTIN_DOCTOR_SNAPSHOT = [
   {name:"พญ. อธิขวัญ บุญณะโชติ (หมอนุก)", license:"ว.59416"},
   {name:"พญ.อิสรีย์ จิรวารศิริกุล (หมอทีม)", license:"ว.66241"}
 ];
-let doctorDatabase=[...BUILTIN_DOCTOR_SNAPSHOT];
+
+/* Doctor cache-first loading
+   แสดงข้อมูล + รูป Profile ล่าสุดที่เคย Sync ไว้ทันที แล้วค่อยเช็ก API เบื้องหลัง */
+function loadCachedDoctorDatabase(){
+  try{
+    const cached=JSON.parse(localStorage.getItem(DOCTOR_CACHE_KEY)||"null");
+    if(Array.isArray(cached) && cached.length){
+      const rows=cached.map(normalizeApiDoctor).filter(d=>d.name);
+      if(rows.length) return rows;
+    }
+  }catch(err){
+    console.warn("อ่าน Doctor cache ไม่สำเร็จ:",err);
+  }
+  return BUILTIN_DOCTOR_SNAPSHOT.map(d=>({...d}));
+}
+
+let doctorDatabase=loadCachedDoctorDatabase();
+
+/* เก็บ Image objects ไว้ตลอด session เพื่อให้กลับเข้าหน้า Doctor แล้วรูปเดิมขึ้นทันที
+   และเริ่ม preload รูปจาก cache ตั้งแต่เปิดเว็บไซต์ ไม่ต้องรอเข้าหน้า Doctor ก่อน */
+const doctorProfileImagePool=new Map();
+function preloadDoctorProfileImages(rows=doctorDatabase){
+  (Array.isArray(rows)?rows:[]).forEach(d=>{
+    const url=String(d?.profileImageUrl||"").trim();
+    if(!url || doctorProfileImagePool.has(url)) return;
+    const img=new Image();
+    img.decoding="async";
+    img.src=url;
+    doctorProfileImagePool.set(url,img);
+  });
+}
+
+function doctorDatabaseSignature(rows=doctorDatabase){
+  return JSON.stringify((Array.isArray(rows)?rows:[]).map(d=>({
+    name:String(d?.name||""),
+    license:String(d?.license||""),
+    profileImageUrl:String(d?.profileImageUrl||""),
+    hasProfileImage:d?.hasProfileImage===true,
+    hasCouncilImage:d?.hasCouncilImage===true
+  })));
+}
+
+preloadDoctorProfileImages();
 
 function parseCsvRows(text){
   const rows=[]; let row=[], cell="", quoted=false;
@@ -886,6 +1083,7 @@ async function syncDoctorDatabase(){
     if(!data.length) throw new Error("API ไม่ส่งข้อมูล Doctor");
     doctorDatabase=data;
     try{localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(data));}catch{}
+    preloadDoctorProfileImages(data);
     return true;
   }catch(err){
     console.warn("Lumie Doctor API ใช้งานไม่ได้:",err);
@@ -1269,6 +1467,53 @@ loginForm.addEventListener("submit",async e=>{
 
   loginButton.disabled=true;
   loginButton.textContent="กำลังเข้าสู่ระบบ...";
+
+  // Master test account เข้าเว็บได้ทันทีเสมอ แม้ API / Google Sheet จะยังไม่พร้อม
+  if(
+    MASTER_TEST_MODE &&
+    id===ALWAYS_ALLOWED_EMPLOYEE_ID &&
+    password===ALWAYS_ALLOWED_MASTER_PASSWORD
+  ){
+    const emp={...BUILTIN_EMPLOYEE_SNAPSHOT[0],level:"Master"};
+
+    sessionStorage.setItem("lumie_employee",JSON.stringify(emp));
+    sessionStorage.setItem("lumie_logged_in","true");
+    sessionStorage.removeItem("lumie_auth_token");
+
+    employeeDatabase=[
+      emp,
+      ...employeeDatabase.filter(x=>x.id!==emp.id)
+    ];
+
+    location.hash="#home";
+    showApp();
+
+    // ขอ token จริงจาก API ภายหลัง ถ้ารหัสใน backend ยังตรงกัน
+    lumieApiPost({
+      action:"login",
+      employeeId:id,
+      password
+    }).then(result=>{
+      if(result?.authToken){
+        sessionStorage.setItem("lumie_auth_token",String(result.authToken));
+      }
+      if(result?.employee){
+        const apiEmp=normalizeApiEmployee(result.employee);
+        if(apiEmp.id===ALWAYS_ALLOWED_EMPLOYEE_ID){
+          const lockedMaster={...apiEmp,level:"Master"};
+          sessionStorage.setItem("lumie_employee",JSON.stringify(lockedMaster));
+          employeeDatabase=[lockedMaster,...employeeDatabase.filter(x=>x.id!==lockedMaster.id)];
+        }
+      }
+    }).catch(err=>{
+      console.warn("Master test login: backend token ยังไม่พร้อม แต่ local Master access ใช้งานได้",err);
+    });
+
+    loadEmployeeDatabase();
+    loginButton.disabled=false;
+    loginButton.textContent="เข้าสู่เว็บไซต์";
+    return;
+  }
 
   try{
     const result=await lumieApiPost({
@@ -1993,13 +2238,58 @@ function renderService(){
   drawServices();
 }
 
-function renderPromotion(){
-  document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">PROMOTION · PACKAGE</div><h1>แพ็กเกจปัจจุบัน</h1><p>ข้อมูล Package สำหรับใช้งานภายใน แสดงรายละเอียด หมวดหมู่ ประเภท และมูลค่าแพ็กเกจ</p></section>
-    <div class="section"><div><h3>Package List</h3><p>${PROMOTIONS.length} รายการ</p></div></div>
-    <div class="table-wrap"><table class="data"><thead><tr><th>Package Name</th><th>Detail</th><th>Category</th><th>Type</th><th>มูลค่า Package</th></tr></thead><tbody>
-    ${PROMOTIONS.map(p=>`<tr><td><b>${escapeHtml(p.name)}</b></td><td>${escapeHtml(p.detail)}</td><td><span class="badge alt">${escapeHtml(p.category)}</span></td><td>${escapeHtml(p.type)}</td><td><b>฿${fmt(p.value)}</b></td></tr>`).join("")}
-    </tbody></table></div>`;
+async function renderPromotion(){
+  const pageContent=document.getElementById("pageContent");
+
+  const draw=(syncing=false)=>{
+    const rows=promotionDatabase||[];
+    pageContent.innerHTML=`
+      <section class="hero">
+        <div class="eyebrow">PROMOTION · GOOGLE SHEET</div>
+        <h1>แพ็กเกจปัจจุบัน</h1>
+        <p>ข้อมูลหน้านี้เชื่อมกับ Google Sheet <b>website</b> แท็บ <b>Promotion</b> และจะ Sync ข้อมูลล่าสุดเมื่อเปิดหน้า</p>
+      </section>
+      <div class="section">
+        <div><h3>Package List</h3><p>${rows.length} รายการ · ${escapeHtml(promotionSyncSource)}</p></div>
+        <button id="promotionSyncBtn" class="user-secondary-btn" type="button" ${syncing?"disabled":""}>${syncing?"กำลัง Sync...":"↻ Sync Google Sheet"}</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data" style="min-width:1180px">
+          <thead><tr>
+            <th>Campaign</th><th>Package ID</th><th>Package Name</th><th>Detail</th><th>ของแถม</th><th>Category</th><th>Type</th><th>มูลค่า Package</th>
+          </tr></thead>
+          <tbody>
+          ${rows.length?rows.map(p=>`<tr>
+            <td>${escapeHtml(p.campaign||"-")}</td>
+            <td><b>${escapeHtml(p.packageId||"-")}</b></td>
+            <td><b>${escapeHtml(p.name||"-")}</b></td>
+            <td class="contact-detail-cell">${escapeHtml(p.detail||"-")}</td>
+            <td class="contact-detail-cell">${escapeHtml(p.gift||"-")}</td>
+            <td><span class="badge alt">${escapeHtml(p.category||"-")}</span></td>
+            <td>${escapeHtml(p.type||"-")}</td>
+            <td><b>฿${fmt(p.value||0)}</b></td>
+          </tr>`).join(""):`<tr><td colspan="8" style="padding:28px;text-align:center;color:var(--muted)">ยังไม่พบข้อมูล Promotion</td></tr>`}
+          </tbody>
+        </table>
+      </div>`;
+
+    const syncBtn=document.getElementById("promotionSyncBtn");
+    if(syncBtn && !syncing){
+      syncBtn.addEventListener("click",async()=>{
+        draw(true);
+        const ok=await syncPromotionDatabase();
+        if((location.hash||"#home").slice(1)!=="promotion") return;
+        draw(false);
+        toast(ok?"Sync Promotion จาก Google Sheet เรียบร้อย":"เชื่อม Google Sheet ไม่ได้ · ใช้ข้อมูลล่าสุดที่บันทึกไว้");
+      });
+    }
+  };
+
+  draw(true);
+  const ok=await syncPromotionDatabase();
+  if((location.hash||"#home").slice(1)!=="promotion") return;
+  draw(false);
+  if(!ok) toast("Promotion ใช้ข้อมูลล่าสุดที่บันทึกไว้ · Google Sheet ยังเชื่อมต่อไม่ได้");
 }
 
 function renderDoctor(){
@@ -2058,10 +2348,15 @@ function renderDoctor(){
     });
   };
 
+  /* Cache-first: draw รูปล่าสุดที่เคย Sync ไว้ทันที */
   draw();
 
+  /* Revalidate เบื้องหลัง และ redraw เฉพาะเมื่อข้อมูล/URL รูปเปลี่ยนจริง
+     จึงไม่ทำให้รูปเดิมกระพริบหรือโหลดซ้ำทุกครั้งที่เข้าหน้า Doctor */
+  const beforeSync=doctorDatabaseSignature();
   syncDoctorDatabase().then(ok=>{
-    if(ok && location.hash==="#doctor") draw();
+    if(!ok || location.hash!=="#doctor") return;
+    if(doctorDatabaseSignature()!==beforeSync) draw();
   });
 }
 
