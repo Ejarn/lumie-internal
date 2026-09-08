@@ -1643,8 +1643,8 @@ const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","c
 const OUTSOURCE_PAGES=["outsource-ad-optimize","outsource-content","outsource-graphic"];
 const DASHBOARD_PAGES=["executive","sales","customer","ads"];
 const EXECUTIVE_PAGES=["doctor-performance","sale-content-performance","admin-sale-performance"];
-const MANAGER_BLOCKED_PAGES=[...EXECUTIVE_PAGES,...MASTER_PAGES];
 const MASTER_PAGES=["user-management","permission-management","employee-management","doctor-management","branch-management","contact-management"];
+const MANAGER_BLOCKED_PAGES=[...EXECUTIVE_PAGES,...MASTER_PAGES];
 
 function outsourceAllowedWorkspacePages(level){
   const l=String(level||"").trim().toLowerCase();
