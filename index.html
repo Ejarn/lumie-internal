@@ -845,8 +845,8 @@ table.data.promotion-table .badge{
   <div class="nav-title dashboard-title">EXECUTIVE</div>
   <nav>
     <a href="#doctor-performance" data-page="doctor-performance">Doctor</a>
-    <a href="#sale-content-performance" data-page="sale-content-performance">Sale Performance</a>
-    <a href="#admin-sale-performance" data-page="admin-sale-performance">Admin Sale Performance</a>
+    <a href="#sale-content-performance" data-page="sale-content-performance">Sale Staff</a>
+    <a href="#admin-sale-performance" data-page="admin-sale-performance">Admin Sale Staff</a>
   </nav>
 </div>
 
@@ -902,7 +902,10 @@ const POWER_BI_PAGES = {
   executive: "https://app.powerbi.com/view?r=eyJrIjoiYzcxYTU0YTItMzFlZC00ZmYxLWIxMzktMDY1NWRlOGQ1NmMxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=17a0ae960e8b6249d63e",
   sales: "https://app.powerbi.com/view?r=eyJrIjoiYzcxYTU0YTItMzFlZC00ZmYxLWIxMzktMDY1NWRlOGQ1NmMxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=c169e153a3aacb3f9389",
   customer: "https://app.powerbi.com/view?r=eyJrIjoiYzcxYTU0YTItMzFlZC00ZmYxLWIxMzktMDY1NWRlOGQ1NmMxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=42bd57a3281eca54c4f7",
-  ads: "https://app.powerbi.com/view?r=eyJrIjoiYzcxYTU0YTItMzFlZC00ZmYxLWIxMzktMDY1NWRlOGQ1NmMxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=196d294e7f031cedfcba"
+  ads: "https://app.powerbi.com/view?r=eyJrIjoiYzcxYTU0YTItMzFlZC00ZmYxLWIxMzktMDY1NWRlOGQ1NmMxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=196d294e7f031cedfcba",
+  doctorPerformance: "https://app.powerbi.com/view?r=eyJrIjoiOWUxYzYxMjQtZWJmYi00OTFiLWFjM2MtOTlhYWU2MjYwMDcxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=d380f2a9037fd18ed012",
+  saleStaff: "https://app.powerbi.com/view?r=eyJrIjoiOWUxYzYxMjQtZWJmYi00OTFiLWFjM2MtOTlhYWU2MjYwMDcxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=2cb3e62c320afac2294d",
+  adminSaleStaff: "https://app.powerbi.com/view?r=eyJrIjoiOWUxYzYxMjQtZWJmYi00OTFiLWFjM2MtOTlhYWU2MjYwMDcxIiwidCI6ImZkMjA2NzE1LTc1MDktNGFlNS05Yjk2LTc2YmI5Nzg4NmE4NCIsImMiOjEwfQ%3D%3D&pageName=d2026a3c435946ff61c8"
 };
 const OUTSOURCE_CONTENT_DRIVE_ID = "15Ce3c_jE7dStDd9pShUn7sfIneP9Xwfg";
 const OUTSOURCE_CONTENT_DRIVE_URL = `https://drive.google.com/drive/folders/${OUTSOURCE_CONTENT_DRIVE_ID}`;
@@ -1105,8 +1108,8 @@ const pages = {
   ads:["Ad Performance","POWER BI"],
 
   "doctor-performance":["Doctor","EXECUTIVE"],
-  "sale-content-performance":["Sale Performance","EXECUTIVE"],
-  "admin-sale-performance":["Admin Sale Performance","EXECUTIVE"],
+  "sale-content-performance":["Sale Staff","EXECUTIVE"],
+  "admin-sale-performance":["Admin Sale Staff","EXECUTIVE"],
 
   "user-management":["User Management","MASTER CONTROL"],
   "permission-management":["Permission Management","MASTER CONTROL"],
@@ -2129,23 +2132,37 @@ function requireMaster(){
   }
   return true;
 }
+function renderExecutivePowerBI(sectionTitle,pageKey){
+  const url=POWER_BI_PAGES[pageKey];
+  document.getElementById("pageContent").innerHTML=`
+    <section class="hero powerbi-hero">
+      <div class="eyebrow">EXECUTIVE · POWER BI</div>
+      <h1>${sectionTitle}</h1>
+      <p>Executive Performance Dashboard · Power BI</p>
+    </section>
+
+    <div class="powerbi-frame-wrap">
+      <iframe
+        title="Lumie Executive - ${sectionTitle}"
+        src="${url}"
+        frameborder="0"
+        allowfullscreen="true"
+        loading="eager">
+      </iframe>
+    </div>
+  `;
+}
+
 function renderDoctorPerformance(){
-  document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">EXECUTIVE</div><h1>Doctor</h1>
-    <p>พื้นที่สำหรับจัดการและติดตาม Content Performance ที่เกี่ยวข้องกับแพทย์</p></section>
-    <div class="card" style="margin-top:18px"><h3>Doctor Performance</h3><p class="muted">พร้อมสำหรับเพิ่มข้อมูลและเครื่องมือจัดการ Content ในขั้นถัดไป</p></div>`;
+  renderExecutivePowerBI("Doctor","doctorPerformance");
 }
+
 function renderSaleContentPerformance(){
-  document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">EXECUTIVE</div><h1>Sale Performance</h1>
-    <p>พื้นที่สำหรับจัดการและติดตาม Content Performance ของทีม Sale</p></section>
-    <div class="card" style="margin-top:18px"><h3>Sale Performance</h3><p class="muted">พร้อมสำหรับเพิ่มข้อมูลและเครื่องมือจัดการ Content ในขั้นถัดไป</p></div>`;
+  renderExecutivePowerBI("Sale Staff","saleStaff");
 }
+
 function renderAdminSalePerformance(){
-  document.getElementById("pageContent").innerHTML=`
-    <section class="hero"><div class="eyebrow">EXECUTIVE</div><h1>Admin Sale Performance</h1>
-    <p>พื้นที่สำหรับจัดการและติดตาม Content Performance ของ Admin Sale</p></section>
-    <div class="card" style="margin-top:18px"><h3>Admin Sale Performance</h3><p class="muted">พร้อมสำหรับเพิ่มข้อมูลและเครื่องมือจัดการ Content ในขั้นถัดไป</p></div>`;
+  renderExecutivePowerBI("Admin Sale Staff","adminSaleStaff");
 }
 
 
