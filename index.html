@@ -993,6 +993,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
+const FRONTEND_BUILD = "V16-Login-Runtime-Fix";
 const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -1756,8 +1757,8 @@ const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","c
 const OUTSOURCE_PAGES=["outsource-ad-optimize","outsource-content","outsource-graphic"];
 const DASHBOARD_PAGES=["executive","sales","customer","ads"];
 const EXECUTIVE_PAGES=["doctor-performance","sale-content-performance","admin-sale-performance"];
-const MANAGER_BLOCKED_PAGES=[...EXECUTIVE_PAGES,...MASTER_PAGES];
 const MASTER_PAGES=["user-management","permission-management","employee-management","doctor-management","branch-management","contact-management"];
+const MANAGER_BLOCKED_PAGES=[...EXECUTIVE_PAGES,...MASTER_PAGES];
 
 function outsourceAllowedWorkspacePages(level){
   const l=String(level||"").trim().toLowerCase();
@@ -3746,6 +3747,71 @@ function renderEmployeeManagement(){
       }
     });
   });
+}
+
+function readDoctorImageFile(file){
+  return new Promise((resolve,reject)=>{
+    if(!file){
+      resolve(null);
+      return;
+    }
+
+    const allowed=["image/jpeg","image/png","image/webp"];
+
+    if(!allowed.includes(file.type)){
+      reject(new Error("รองรับเฉพาะ JPG, PNG และ WEBP"));
+      return;
+    }
+
+    if(file.size > 5 * 1024 * 1024){
+      reject(new Error("ไฟล์รูปต้องไม่เกิน 5 MB"));
+      return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+      const value=String(reader.result||"");
+      const comma=value.indexOf(",");
+
+      if(comma<0){
+        reject(new Error("ไม่สามารถอ่านไฟล์รูปได้"));
+        return;
+      }
+
+      resolve({
+        fileName:file.name,
+        mimeType:file.type,
+        base64:value.slice(comma+1)
+      });
+    };
+
+    reader.onerror=()=>{
+      reject(new Error("ไม่สามารถอ่านไฟล์รูปได้"));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+async function uploadDoctorImageFromInput(license,imageType,input){
+  const file=input?.files?.[0];
+
+  if(!file) return false;
+
+  const image=await readDoctorImageFile(file);
+
+  await lumieApiPost({
+    action:"uploadDoctorImage",
+    license,
+    imageType,
+    fileName:image.fileName,
+    mimeType:image.mimeType,
+    base64:image.base64
+  });
+
+  return true;
 }
 
 function renderDoctorManagement(){
