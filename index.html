@@ -185,6 +185,7 @@ table.data tr:last-child td{border-bottom:0}
 /* Permission level colors */
 .permission-master{background:#FDE696!important;color:#3f3a2d!important;border-color:#E5CC6A!important}
 .permission-executive{background:#D95F76!important;color:#fff!important;border-color:#D95F76!important}
+.permission-manager{background:#8575B8!important;color:#fff!important;border-color:#8575B8!important}
 .permission-employee{background:#69B98A!important;color:#fff!important;border-color:#69B98A!important}
 .permission-outsource{background:#6998C9!important;color:#fff!important;border-color:#6998C9!important}
 .permission-badge{display:inline-flex;align-items:center;justify-content:center;min-width:92px;padding:7px 12px;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:.01em;border:1px solid transparent}
@@ -746,6 +747,34 @@ table.data.promotion-table .badge{
   .calendar-agenda-actions{margin-top:7px}
 }
 /* === End Calendar owner / edit controls V12 === */
+
+
+
+/* === Calendar compact event fields V13 === */
+.calendar-event-topic{
+  font-weight:700;
+  line-height:1.25;
+  margin-bottom:3px;
+}
+.calendar-event-meta{
+  display:block;
+  color:var(--muted);
+  font-size:10.5px;
+  margin-top:2px;
+  line-height:1.22;
+}
+.calendar-event-creator{
+  display:block;
+  color:#6f6540;
+  font-size:10.5px;
+  margin-top:2px;
+  line-height:1.22;
+}
+@media(max-width:820px){
+  .calendar-event-meta{display:block!important;font-size:9.5px}
+  .calendar-event-creator{display:block!important;font-size:9.5px}
+}
+/* === End Calendar compact event fields V13 === */
 
 </style>
 
@@ -1580,6 +1609,7 @@ function permissionClass(level){
   const l=String(level||"").trim().toLowerCase();
   if(l==="master") return "permission-master";
   if(l==="executive") return "permission-executive";
+  if(l==="manager") return "permission-manager";
   if(l==="employee") return "permission-employee";
   if(l==="outsource" || l.startsWith("outsource-")) return "permission-outsource";
   return "";
@@ -1592,13 +1622,17 @@ function employeeLevel(emp){
   return String(emp?.level||"").trim().toLowerCase();
 }
 function isMaster(emp){ return employeeLevel(emp)==="master"; }
+function isManager(emp){ return employeeLevel(emp)==="manager"; }
+function hasManagementAccess(emp){
+  return employeeLevel(emp)==="master";
+}
 function hasExecutiveAccess(emp){
   const level=employeeLevel(emp);
   return level==="master" || level==="executive";
 }
 function hasDashboardAccess(emp){
   const level=employeeLevel(emp);
-  return level==="master" || level==="executive" || level==="employee";
+  return level==="master" || level==="executive" || level==="manager" || level==="employee";
 }
 function isOutsource(emp){
   const level=employeeLevel(emp);
@@ -1609,6 +1643,7 @@ const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","c
 const OUTSOURCE_PAGES=["outsource-ad-optimize","outsource-content","outsource-graphic"];
 const DASHBOARD_PAGES=["executive","sales","customer","ads"];
 const EXECUTIVE_PAGES=["doctor-performance","sale-content-performance","admin-sale-performance"];
+const MANAGER_BLOCKED_PAGES=[...EXECUTIVE_PAGES,...MASTER_PAGES];
 const MASTER_PAGES=["user-management","permission-management","employee-management","doctor-management","branch-management","contact-management"];
 
 function outsourceAllowedWorkspacePages(level){
@@ -1625,7 +1660,7 @@ function outsourceAllowedWorkspacePages(level){
 function hasOutsourceMenuAccess(emp){
   const level=employeeLevel(emp);
 
-  if(["master","executive","employee"].includes(level)) return true;
+  if(["master","executive","manager","employee"].includes(level)) return true;
   return outsourceAllowedWorkspacePages(level).length>0;
 }
 
@@ -1636,6 +1671,10 @@ function canAccessPage(emp,page){
 
   if(level==="executive"){
     return !MASTER_PAGES.includes(page);
+  }
+
+  if(level==="manager"){
+    return !MANAGER_BLOCKED_PAGES.includes(page);
   }
 
   if(level==="employee"){
@@ -1671,9 +1710,14 @@ function showApp(){
     });
   }
 
-  if(dashboardMenu) dashboardMenu.classList.toggle("hidden",!hasDashboardAccess(emp));
+  if(dashboardMenu){
+    dashboardMenu.classList.toggle("hidden",!hasDashboardAccess(emp));
+    dashboardMenu.querySelectorAll("a[data-page]").forEach(link=>{
+      link.classList.toggle("hidden",!canAccessPage(emp,link.dataset.page));
+    });
+  }
   if(executiveMenu) executiveMenu.classList.toggle("hidden",!hasExecutiveAccess(emp));
-  if(masterMenu) masterMenu.classList.toggle("hidden",!isMaster(emp));
+  if(masterMenu) masterMenu.classList.toggle("hidden",!hasManagementAccess(emp));
   if(aboutNavLink) aboutNavLink.classList.toggle("hidden",isOutsource(emp));
   if(calendarNavLink) calendarNavLink.classList.toggle("hidden",isOutsource(emp));
 
@@ -2154,6 +2198,7 @@ function renderUserManagement(){
               <select id="userLevel" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff">
                 <option>Master</option>
                 <option>Executive</option>
+                <option>Manager</option>
                 <option selected>Employee</option>
                 <option>Outsource</option>
                 <option>Outsource-Content</option>
@@ -2382,7 +2427,7 @@ function renderPermissionManagement(){
     <td>${permissionBadge(e.level)}</td>
     <td>
       <select class="permission-level-select" data-id="${escapeHtml(e.id)}" style="padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff">
-        ${["Master","Executive","Employee","Outsource","Outsource-Content","Outsource-Graphic","Outsource-Ad Optimize","Outsource-All"].map(l=>`<option value="${l}" ${l===e.level?"selected":""}>${l}</option>`).join("")}
+        ${["Master","Executive","Manager","Employee","Outsource","Outsource-Content","Outsource-Graphic","Outsource-Ad Optimize","Outsource-All"].map(l=>`<option value="${l}" ${l===e.level?"selected":""}>${l}</option>`).join("")}
       </select>
     </td>
     <td><button class="permission-save-btn" data-id="${escapeHtml(e.id)}" type="button">บันทึก</button></td>
@@ -2392,12 +2437,13 @@ function renderPermissionManagement(){
     <section class="hero">
       <div class="eyebrow">MASTER CONTROL · APPS SCRIPT API</div>
       <h1>Permission Management</h1>
-      <p>Master สามารถเปลี่ยน Level ได้จากเว็บไซต์และบันทึกกลับฐานข้อมูลผ่าน Apps Script</p>
+      <p>Master สามารถจัดการ Level และ Master Control ได้จากเว็บไซต์ ส่วน Manager ไม่มีสิทธิ์เข้า Master Control</p>
     </section>
 
     <section class="grid g2" style="margin-top:18px">
       <div class="card"><span class="permission-badge permission-master">Master</span><h3>Master</h3><p class="muted">MAIN + CALENDAR + DASHBOARD + EXECUTIVE + OUTSOURCE + MASTER CONTROL</p></div>
       <div class="card"><span class="permission-badge permission-executive">Executive</span><h3>Executive</h3><p class="muted">MAIN + CALENDAR + DASHBOARD + EXECUTIVE + OUTSOURCE</p></div>
+      <div class="card"><span class="permission-badge permission-manager">Manager</span><h3>Manager</h3><p class="muted">MAIN + CALENDAR + DASHBOARD ทุกหน้า + OUTSOURCE · ไม่เข้า MASTER CONTROL และหมวด EXECUTIVE</p></div>
       <div class="card"><span class="permission-badge permission-employee">Employee</span><h3>Employee</h3><p class="muted">MAIN + CALENDAR + DASHBOARD + OUTSOURCE</p></div>
       <div class="card"><span class="permission-badge permission-outsource">Outsource</span><h3>Outsource</h3><p class="muted">MAIN เฉพาะ Home / Service / Promotion / Doctor / Branch / Contact</p></div>
 
@@ -2450,13 +2496,15 @@ function makeChart(id,config){
 
 /* ---------- MAIN PAGES ---------- */
 function renderHome(){
+  const emp=getLoggedEmployee();
+  const executiveAllowed=canAccessPage(emp,"executive");
   document.getElementById("pageContent").innerHTML=`
     <section class="hero">
       <div class="eyebrow">LUMIECLINIC INTERNAL DATA HUB</div>
       <h1>ดูภาพรวมธุรกิจ<br>แล้วค่อยเจาะลึกข้อมูล</h1>
       <p>ศูนย์รวมข้อมูลภายในสำหรับทีมงาน ใช้ติดตามข้อมูลคลินิก และดู Sales, Customer, Ad Performance ในที่เดียว</p>
       <div class="hero-actions">
-        <a class="action" href="#executive">เปิด Executive Dashboard</a>
+        ${executiveAllowed?'<a class="action" href="#executive">เปิด Executive Dashboard</a>':""}
         <a class="action" href="#sales">ดู Sales Performance</a>
         <a class="action" href="#promotion">ดูโปรโมชั่นปัจจุบัน</a>
       </div>
@@ -2464,7 +2512,7 @@ function renderHome(){
 
     <div class="section"><div><h3>Dashboard</h3><p>เลือกหัวข้อที่ต้องการดูจากเมนู</p></div></div>
     <section class="grid g4">
-      ${homeCard("Executive","ภาพรวมธุรกิจ","KPI / Trend / Business Signals","#executive")}
+      ${executiveAllowed?homeCard("Executive","ภาพรวมธุรกิจ","KPI / Trend / Business Signals","#executive"):""}
       ${homeCard("Sales","ยอดขาย","Branch / Package / รายการล่าสุด","#sales")}
       ${homeCard("Customer","ลูกค้า","Unique Customer / SPC","#customer")}
       ${homeCard("Ads","การตลาด","Spend / Leads / Booking / CPB","#ads")}
@@ -2540,6 +2588,7 @@ function canCreateCalendarEvent(emp){
 }
 
 function calendarEventOwnedBy(event,emp){
+  if(isMaster(emp)) return true;
   const employeeId=String(emp?.id||emp?.employeeId||"").trim();
   const ownerId=String(event?.createdById||"").trim();
   if(!employeeId) return false;
@@ -2670,10 +2719,11 @@ function renderCalendarMonthGrid(){
 
     html+=`<div class="calendar-day${outside?" outside":""}${todayClass}">
       <div class="calendar-day-number">${d.getDate()}</div>
-      ${events.slice(0,3).map(e=>`<div class="calendar-event" title="${escapeHtml([e.topic,e.location,e.relate,e.createBy].filter(Boolean).join(" · "))}">
-        <div><span class="calendar-event-time">${escapeHtml(e.time||"ทั้งวัน")}</span> <span class="calendar-event-topic">${escapeHtml(e.topic||"-")}</span></div>
-        ${e.location?`<div class="calendar-event-meta">${escapeHtml(e.location)}</div>`:""}
-        ${e.createBy?`<div class="calendar-event-creator">โดย ${escapeHtml(e.createBy)}</div>`:""}
+      ${events.slice(0,3).map(e=>`<div class="calendar-event" title="${escapeHtml([e.topic,e.time,e.location,e.createBy].filter(Boolean).join(" · "))}">
+        <div class="calendar-event-topic">${escapeHtml(e.topic||"-")}</div>
+        <div class="calendar-event-meta">เวลา: ${escapeHtml(e.time||"ทั้งวัน")}</div>
+        <div class="calendar-event-meta">สถานที่: ${escapeHtml(e.location||"-")}</div>
+        <div class="calendar-event-creator">สร้างโดย: ${escapeHtml(e.createBy||"-")}</div>
       </div>`).join("")}
       ${events.length>3?`<div class="calendar-event-meta" style="margin-top:5px">+${events.length-3} กิจกรรม</div>`:""}
     </div>`;
@@ -2682,15 +2732,26 @@ function renderCalendarMonthGrid(){
   return html+"</div>";
 }
 
-function renderCalendarAgenda(emp){
-  const rows=calendarDatabase.slice()
-    .sort((a,b)=>{
-      const da=normalizeCalendarDate(a.date);
-      const db=normalizeCalendarDate(b.date);
-      return da.localeCompare(db) || String(a.time||"").localeCompare(String(b.time||""));
-    });
+function getLatestCalendarDate(){
+  const dates=calendarDatabase
+    .map(e=>normalizeCalendarDate(e.date))
+    .filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d))
+    .sort((a,b)=>b.localeCompare(a));
 
-  if(!rows.length) return `<div class="calendar-empty">ยังไม่มีกิจกรรมใน Calendar</div>`;
+  return dates[0]||"";
+}
+
+function renderCalendarAgenda(emp){
+  const latestDate=getLatestCalendarDate();
+
+  if(!latestDate){
+    return `<div class="calendar-empty">ยังไม่มีกิจกรรมใน Calendar</div>`;
+  }
+
+  const rows=calendarDatabase
+    .filter(e=>normalizeCalendarDate(e.date)===latestDate)
+    .slice()
+    .sort((a,b)=>String(a.time||"").localeCompare(String(b.time||"")));
 
   return `<div class="calendar-agenda">${rows.map(e=>{
     const own=calendarEventOwnedBy(e,emp) && !!String(e.eventId||"").trim();
@@ -2734,7 +2795,7 @@ async function renderCalendar(){
       <section class="hero">
         <div class="eyebrow">TEAM CALENDAR · GOOGLE SHEET</div>
         <h1>Calendar</h1>
-        <p>ตารางประชุม งาน และกิจกรรมของทีมสำหรับ Master / Executive / Employee · ทุกกิจกรรมแสดงชื่อผู้สร้าง และแก้ไข/ลบได้เฉพาะผู้สร้างเอง</p>
+        <p>ตารางประชุม งาน และกิจกรรมของทีมสำหรับ Master / Executive / Manager / Employee · ทุกกิจกรรมแสดงชื่อผู้สร้าง · ผู้สร้างแก้ไข/ลบของตัวเองได้ และ Master จัดการได้ทุกกิจกรรม</p>
         <div class="hero-actions">
           <a class="action" href="${CALENDAR_SHEET_URL}" target="_blank" rel="noopener noreferrer">เปิด Google Sheet ↗</a>
           <button id="calendarSyncBtn" class="action" type="button" ${syncing?"disabled":""}>${syncing?"กำลัง Sync...":"↻ Sync Calendar"}</button>
@@ -2760,7 +2821,7 @@ async function renderCalendar(){
         <div class="section" style="margin:0 0 14px">
           <div>
             <h3>${editingEvent?"แก้ไขกิจกรรม":"เพิ่มกิจกรรม"}</h3>
-            <p>${editingEvent?"แก้ไขได้เฉพาะกิจกรรมที่ Account นี้สร้าง":"ข้อมูลจะถูกบันทึกลง Google Sheet ผ่าน Lumie API"}</p>
+            <p>${editingEvent?"ผู้สร้างแก้ไขกิจกรรมของตัวเองได้ · Master แก้ไขได้ทุกกิจกรรม":"ข้อมูลจะถูกบันทึกลง Google Sheet ผ่าน Lumie API"}</p>
             ${editingEvent?`<div class="calendar-form-mode">กำลังแก้ไข · ${escapeHtml(editingEvent.topic||"กิจกรรม")}</div>`:""}
           </div>
         </div>
@@ -2788,7 +2849,7 @@ async function renderCalendar(){
             </div>
             <div class="form-field full">
               <label>Create by</label>
-              <div class="calendar-created-by">${escapeHtml(creator||"-")}</div>
+              <div class="calendar-created-by">${escapeHtml(editingEvent?.createBy||creator||"-")}</div>
             </div>
           </div>
           <button id="calendarSubmitBtn" class="btn-primary" type="submit" style="margin-top:14px">${editingEvent?"บันทึกการแก้ไข":"บันทึกกิจกรรม"}</button>
@@ -2797,7 +2858,7 @@ async function renderCalendar(){
         </form>
       </section>`:``}
 
-      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>ชื่อผู้สร้างจะแสดงทุกกิจกรรม · ปุ่มแก้ไข/ลบจะแสดงเฉพาะกิจกรรมของตัวเอง</p></div></div>
+      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>${getLatestCalendarDate()?`แสดงเฉพาะวันที่ล่าสุด: ${escapeHtml(calendarDisplayDate(getLatestCalendarDate()))}`:"ยังไม่มีกิจกรรม"} · ปุ่มแก้ไข/ลบจะแสดงสำหรับกิจกรรมของตัวเอง และ Master จะเห็นทุกกิจกรรม</p></div></div>
       ${renderCalendarAgenda(emp)}
     `;
 
@@ -2829,7 +2890,7 @@ async function renderCalendar(){
         const id=String(btn.dataset.calendarEdit||"");
         const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("แก้ไขได้เฉพาะกิจกรรมที่ตัวเองสร้าง");
+          toast("แก้ไขได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
           return;
         }
         calendarEditingEventId=id;
@@ -2843,7 +2904,7 @@ async function renderCalendar(){
         const id=String(btn.dataset.calendarDelete||"");
         const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("ลบได้เฉพาะกิจกรรมที่ตัวเองสร้าง");
+          toast("ลบได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
           return;
         }
         if(!confirm(`ยืนยันลบกิจกรรม “${target.topic||"กิจกรรมนี้"}” ?`)) return;
@@ -2880,7 +2941,7 @@ async function renderCalendar(){
           : null;
 
         if(activeEdit && !calendarEventOwnedBy(activeEdit,emp)){
-          toast("แก้ไขได้เฉพาะกิจกรรมที่ตัวเองสร้าง");
+          toast("แก้ไขได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
           calendarEditingEventId="";
           draw(false);
           return;
@@ -3385,7 +3446,9 @@ function renderEmployeeManagement(){
     phone:e.phone||"-",
     email:e.email||"-",
     license:"-",
-    canDelete:String(e.id||"")!=="202600041" && String(e.id||"")!==String(loggedEmp?.id||"")
+    canDelete:String(e.id||"")!=="202600041"
+      && String(e.id||"")!==String(loggedEmp?.id||"")
+      && !(isManager(loggedEmp) && String(e.level||"").trim().toLowerCase()==="master")
   }));
 
   const doctorRows=doctorDatabase.map(d=>({
