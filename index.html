@@ -1370,6 +1370,50 @@ table.data.promotion-table .badge{
 }
 /* === End Optimistic Calendar Status V24 === */
 
+
+
+/* === Calendar Description V27 === */
+#calendarDescription{
+  width:100%;
+  min-height:150px;
+  padding:12px 13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  outline:none;
+  background:#fff;
+  color:var(--text);
+  font:inherit;
+  line-height:1.55;
+  resize:vertical;
+}
+#calendarDescription:focus{
+  border-color:#c8b86a;
+  box-shadow:0 0 0 4px #FDE69655;
+}
+.calendar-detail-row-label{
+  display:block;
+  width:100%;
+  margin-bottom:3px;
+  color:#8a857c;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.calendar-detail-description{
+  width:100%;
+  white-space:normal;
+  line-height:1.68;
+  overflow-wrap:anywhere;
+}
+.calendar-detail-link{
+  color:#426a9d;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  word-break:break-all;
+}
+.calendar-detail-link:hover{opacity:.78}
+/* === End Calendar Description V27 === */
+
 </style>
 
 </head>
@@ -1482,7 +1526,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V26-Calendar-Google-Style-Popover";
+const FRONTEND_BUILD = "V27-Calendar-Full-Description";
 const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -3168,6 +3212,7 @@ function normalizeCalendarApiEvent(obj){
     endTime:pickApiValue(obj,["End Time","EndTime","endTime","เวลาสิ้นสุด"]),
     location:pickApiValue(obj,["Location","location","สถานที่"]),
     topic:pickApiValue(obj,["Topic","topic","หัวข้อ"]),
+    description:pickApiValue(obj,["Description","description","รายละเอียด","รายละเอียดเพิ่มเติม"]),
     relate:pickApiValue(obj,["Relate","relate","ผู้เกี่ยวข้อง"]),
     department:pickApiValue(obj,["Department","department","ประเภทงาน","แผนก"]),
     status:pickApiValue(obj,["Status","status","สถานะ"]),
@@ -3269,6 +3314,7 @@ function setCalendarRowsFromCsv(text){
     endTime:col("End Time","EndTime","เวลาสิ้นสุด"),
     location:col("Location","สถานที่"),
     topic:col("Topic","หัวข้อ"),
+    description:col("Description","รายละเอียด","รายละเอียดเพิ่มเติม"),
     relate:col("Relate","ผู้เกี่ยวข้อง"),
     department:col("Department","ประเภทงาน","แผนก"),
     status:col("Status","สถานะ"),
@@ -3289,6 +3335,7 @@ function setCalendarRowsFromCsv(text){
     endTime:idx.endTime>=0?String(r[idx.endTime]??"").trim():"",
     location:String(r[idx.location]??"").trim(),
     topic:String(r[idx.topic]??"").trim(),
+    description:idx.description>=0?String(r[idx.description]??"").trim():"",
     relate:String(r[idx.relate]??"").trim(),
     department:idx.department>=0?String(r[idx.department]??"").trim():"",
     status:idx.status>=0?String(r[idx.status]??"").trim():"Pending",
@@ -3448,6 +3495,34 @@ function calendarTaskToggleMarkup(event,emp,compact=false){
   return `<button type="button" class="calendar-task-toggle ${completed?"checked":""} ${syncing?"syncing":""} ${compact?"compact":""}" data-calendar-toggle="${escapeHtml(event.eventId)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}" ${syncing?"disabled":""}>${icon}</button>`;
 }
 
+function calendarDetailRichText(value){
+  const text=String(value||"");
+  if(!text) return "";
+
+  const urlRegex=/https?:\/\/[^\s]+/gi;
+  let out="";
+  let lastIndex=0;
+  let match;
+
+  while((match=urlRegex.exec(text))!==null){
+    const rawUrl=match[0];
+    let cleanUrl=rawUrl;
+    let trailing="";
+
+    while(/[),.;!?]$/.test(cleanUrl)){
+      trailing=cleanUrl.slice(-1)+trailing;
+      cleanUrl=cleanUrl.slice(0,-1);
+    }
+
+    out+=escapeHtml(text.slice(lastIndex,match.index));
+    out+=`<a class="calendar-detail-link" href="${escapeHtml(cleanUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(cleanUrl)}</a>${escapeHtml(trailing)}`;
+    lastIndex=match.index+rawUrl.length;
+  }
+
+  out+=escapeHtml(text.slice(lastIndex));
+  return out.replace(/\n/g,"<br>");
+}
+
 function calendarDetailIconMarkup(event){
   const completed=calendarEventIsCompleted(event);
   return `<span class="calendar-detail-check ${completed?"checked":""}">${completed?"✓":""}</span>`;
@@ -3469,6 +3544,7 @@ function renderCalendarEventDetailModal(emp){
   const dateText=calendarDisplayDate(event.date);
   const timeText=[event.time,event.endTime].filter(Boolean).join(" - ") || "ไม่ระบุเวลา";
   const locationText=String(event.location||"").trim();
+  const descriptionText=String(event.description||"").trim();
   const relateText=String(event.relate||"").trim();
   const creatorText=String(event.createBy||"").trim() || "-";
 
@@ -3514,11 +3590,21 @@ function renderCalendarEventDetailModal(emp){
             </div>
           </div>`:""}
 
-          ${relateText?`
+          ${descriptionText?`
           <div class="calendar-detail-row calendar-detail-description-row">
             <span class="calendar-detail-row-icon">☷</span>
             <div class="calendar-detail-row-content">
-              <span class="calendar-detail-value calendar-detail-description">${escapeHtml(relateText)}</span>
+              <span class="calendar-detail-row-label">รายละเอียด</span>
+              <div class="calendar-detail-value calendar-detail-description">${calendarDetailRichText(descriptionText)}</div>
+            </div>
+          </div>`:""}
+
+          ${relateText?`
+          <div class="calendar-detail-row">
+            <span class="calendar-detail-row-icon">♙</span>
+            <div class="calendar-detail-row-content">
+              <span class="calendar-detail-row-label">Relate</span>
+              <span class="calendar-detail-value">${escapeHtml(relateText)}</span>
             </div>
           </div>`:""}
 
@@ -3748,6 +3834,7 @@ async function renderCalendar(){
       status:optimisticStatus,
       location:String(target.location||""),
       topic:String(target.topic||""),
+      description:String(target.description||""),
       relate:String(target.relate||"-")
     };
 
@@ -3885,6 +3972,10 @@ async function renderCalendar(){
             <div class="form-field">
               <label for="calendarTopic">Topic</label>
               <input id="calendarTopic" name="topic" value="${escapeHtml(editingEvent?.topic||"")}" placeholder="หัวข้อประชุมหรืองาน" required>
+            </div>
+            <div class="form-field full">
+              <label for="calendarDescription">Description / รายละเอียดเพิ่มเติม <span class="muted">(ไม่บังคับ)</span></label>
+              <textarea id="calendarDescription" name="description" placeholder="ใส่รายละเอียดงาน, Note, Link, Brief หรือข้อมูลที่ต้องการให้เห็นเมื่อกดกิจกรรม">${escapeHtml(editingEvent?.description||"")}</textarea>
             </div>
             <div class="form-field full">
               <label for="calendarRelate">Relate</label>
@@ -4151,6 +4242,7 @@ async function renderCalendar(){
           status:fd.get("completed")?"Completed":"Pending",
           location:String(fd.get("location")||"").trim(),
           topic:String(fd.get("topic")||"").trim(),
+          description:String(fd.get("description")||"").trim(),
           relate:String(fd.get("relate")||"").trim()
         };
 
