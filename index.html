@@ -1072,182 +1072,272 @@ table.data.promotion-table .badge{
 
 
 
-/* === LUMIE Calendar Event Detail V23 === */
-.calendar-event-clickable{cursor:pointer;transition:transform .14s ease,box-shadow .14s ease,filter .14s ease}
-.calendar-event-clickable:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(0,0,0,.07)}
-.calendar-event-compact-meta{font-size:9.5px;color:var(--muted);margin-top:2px;padding-left:24px}
-.calendar-detail-overlay{
+/* === LUMIE Calendar Google-style Floating Detail V26 === */
+.calendar-event-clickable{
+  cursor:pointer;
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease;
+}
+.calendar-event-clickable:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px rgba(0,0,0,.07);
+}
+.calendar-event-compact-meta{
+  font-size:9.5px;
+  color:var(--muted);
+  margin-top:2px;
+  padding-left:24px;
+}
+
+/* Transparent click-away layer: closes the card without darkening the Calendar. */
+.calendar-detail-dismiss-layer{
   position:fixed;
   inset:0;
-  z-index:120;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(41,39,34,.22);
-  backdrop-filter:blur(2px);
+  z-index:118;
+  border:0;
+  padding:0;
+  margin:0;
+  background:transparent;
+  cursor:default;
 }
-.calendar-detail-card{
-  position:relative;
-  width:min(500px,calc(100vw - 28px));
-  max-height:min(760px,calc(100vh - 36px));
+
+.calendar-detail-popover{
+  position:fixed;
+  z-index:119;
+  visibility:hidden;
+  width:min(438px,calc(100vw - 28px));
+  max-height:min(690px,calc(100vh - 28px));
   overflow:auto;
-  border:1px solid var(--line);
-  border-radius:22px;
+  border:1px solid #e4e0d6;
+  border-radius:20px;
   background:#fff;
-  box-shadow:0 24px 70px rgba(42,38,29,.22);
+  color:var(--text);
+  box-shadow:
+    0 18px 50px rgba(49,45,36,.18),
+    0 2px 10px rgba(49,45,36,.08);
+  overscroll-behavior:contain;
 }
-.calendar-detail-topbar{
+
+.calendar-detail-toolbar{
   position:sticky;
   top:0;
   z-index:2;
-  min-height:54px;
+  min-height:48px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:10px 12px 8px 18px;
-  background:rgba(255,255,255,.96);
-  border-bottom:1px solid #efede5;
+  padding:7px 8px 5px 14px;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #f0eee7;
+  backdrop-filter:blur(8px);
 }
-.calendar-detail-accent{
-  width:44px;
-  height:7px;
-  border-radius:999px;
-  background:#d5d1c6;
-}
-.calendar-detail-card.calendar-dept-content .calendar-detail-accent{background:#EDACC3}
-.calendar-detail-card.calendar-dept-marketing .calendar-detail-accent{background:#E8CD61}
-.calendar-detail-card.calendar-dept-production .calendar-detail-accent{background:#9FCFE7}
-.calendar-detail-card.calendar-dept-kol .calendar-detail-accent{background:#C7A9E6}
-.calendar-detail-actions-top{display:flex;align-items:center;gap:4px}
-.calendar-detail-icon-btn{
-  width:36px;
-  height:36px;
-  border:0;
-  border-radius:50%;
-  background:transparent;
-  color:#65615a;
-  cursor:pointer;
-  font-size:19px;
-  display:grid;
-  place-items:center;
-}
-.calendar-detail-icon-btn:hover{background:#f5f3ed;color:#262521}
-.calendar-detail-icon-btn.danger:hover{background:#fff0ef;color:#9b4741}
-.calendar-detail-main{padding:20px 24px 24px}
-.calendar-detail-title-row{
-  display:grid;
-  grid-template-columns:28px minmax(0,1fr);
-  gap:14px;
-  align-items:start;
-}
-.calendar-detail-title-row h3{
-  margin:0;
-  font-family:var(--font-display);
-  font-size:25px;
-  line-height:1.18;
-  font-weight:700;
-  letter-spacing:-.01em;
-}
-.calendar-detail-check{
-  width:20px;
-  height:20px;
-  margin-top:4px;
-  border:2px solid #77736b;
-  border-radius:6px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  font-size:12px;
-  font-weight:800;
-}
-.calendar-detail-check.checked{background:#6FA57A;border-color:#6FA57A}
-.calendar-detail-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.calendar-detail-list{display:grid;gap:16px;margin-top:23px}
-.calendar-detail-row{
-  display:grid;
-  grid-template-columns:28px minmax(0,1fr);
-  gap:12px;
-  align-items:start;
-}
-.calendar-detail-row-icon{
-  width:26px;
-  height:26px;
-  display:grid;
-  place-items:center;
-  color:#716d65;
-  font-size:17px;
-}
-.calendar-detail-row div{display:grid;gap:2px}
-.calendar-detail-row b{font-size:12px;color:#3f3c36}
-.calendar-detail-row span:not(.calendar-detail-row-icon){font-size:13px;line-height:1.55;color:#6c685f;word-break:break-word}
-.calendar-detail-task-row{margin-top:22px;padding-top:18px;border-top:1px solid #efede5}
-.calendar-detail-complete-btn{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#faf9f5;
-  padding:12px 13px;
+.calendar-detail-toolbar-spacer{min-width:20px}
+.calendar-detail-actions-top{
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:2px;
+}
+.calendar-detail-icon-btn{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  color:#666159;
+  font-family:inherit;
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+}
+.calendar-detail-icon-btn:hover{
+  background:#f4f2ec;
+  color:#26241f;
+}
+.calendar-detail-icon-btn.danger:hover{
+  background:#fff0ef;
+  color:#9b4741;
+}
+
+.calendar-detail-body{
+  padding:12px 22px 22px;
+}
+
+.calendar-detail-title-row{
+  display:grid;
+  grid-template-columns:18px minmax(0,1fr);
+  align-items:start;
+  gap:12px;
+  padding:4px 0 12px;
+}
+.calendar-detail-color-dot{
+  width:11px;
+  height:11px;
+  margin-top:7px;
+  border-radius:3px;
+  background:#bdb9ae;
+}
+.calendar-detail-color-dot.calendar-dept-content{background:#E998B5}
+.calendar-detail-color-dot.calendar-dept-marketing{background:#E8C84F}
+.calendar-detail-color-dot.calendar-dept-production{background:#74BDE1}
+.calendar-detail-color-dot.calendar-dept-kol{background:#A77BD0}
+
+.calendar-detail-title-content h3{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:22px;
+  line-height:1.22;
+  font-weight:700;
+  letter-spacing:-.01em;
+  word-break:break-word;
+}
+.calendar-detail-date-line{
+  margin-top:4px;
+  color:#716c63;
+  font-size:12.5px;
+  line-height:1.45;
+}
+
+.calendar-detail-list{
+  display:grid;
+  gap:14px;
+  margin-top:3px;
+}
+.calendar-detail-row{
+  display:grid;
+  grid-template-columns:24px minmax(0,1fr);
+  align-items:start;
+  gap:10px;
+}
+.calendar-detail-row-icon{
+  min-height:24px;
+  display:grid;
+  place-items:center;
+  color:#777169;
+  font-size:15px;
+}
+.calendar-detail-row-content{
+  min-width:0;
+  display:flex;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:5px 8px;
+  padding-top:2px;
+}
+.calendar-detail-row-content small{
+  width:100%;
+  color:#918b82;
+  font-size:10.5px;
+  line-height:1.4;
+}
+.calendar-detail-value{
+  color:#4e4a43;
+  font-size:12.5px;
+  line-height:1.55;
+  word-break:break-word;
+}
+.calendar-detail-description-row .calendar-detail-row-content{
+  display:block;
+}
+.calendar-detail-description{
+  display:block;
+  white-space:pre-wrap;
+  max-height:240px;
+  overflow:auto;
+}
+.calendar-detail-status-content{
+  align-items:center;
+}
+
+.calendar-detail-task-row{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid #efede6;
+}
+.calendar-detail-complete-btn{
+  width:100%;
+  border:1px solid #dedbd2;
+  border-radius:13px;
+  background:#faf9f5;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
   text-align:left;
   cursor:pointer;
 }
-.calendar-detail-complete-btn:hover{background:#f6f7f2}
-.calendar-detail-complete-btn.completed{background:#edf6ee;border-color:#c5ddc8}
+.calendar-detail-complete-btn:hover{
+  background:#f6f7f2;
+}
+.calendar-detail-complete-btn.completed{
+  background:#edf6ee;
+  border-color:#c5ddc8;
+}
+.calendar-detail-complete-btn.syncing{
+  opacity:.82;
+  cursor:wait;
+}
 .calendar-detail-complete-box{
-  width:25px;
-  height:25px;
+  width:23px;
+  height:23px;
   flex:none;
   border:1.5px solid #8c887f;
   border-radius:7px;
   display:grid;
   place-items:center;
+  background:#fff;
   color:#fff;
+  font-size:12px;
   font-weight:800;
 }
-.calendar-detail-complete-btn.completed .calendar-detail-complete-box{background:#6FA57A;border-color:#6FA57A}
-.calendar-detail-complete-btn span:last-child{display:grid;gap:2px}
-.calendar-detail-complete-btn b{font-size:12.5px;color:#393731}
-.calendar-detail-complete-btn small{font-size:10.5px;color:var(--muted)}
-.calendar-detail-footer{
-  display:flex;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:18px;
+.calendar-detail-complete-btn.completed .calendar-detail-complete-box{
+  background:#6FA57A;
+  border-color:#6FA57A;
 }
-.calendar-detail-secondary,
-.calendar-detail-danger{
-  border:1px solid var(--line);
-  border-radius:11px;
-  padding:9px 14px;
-  background:#fff;
-  color:#4c4943;
-  font-family:inherit;
-  font-size:11px;
-  font-weight:700;
-  cursor:pointer;
+.calendar-detail-complete-btn span:last-child{
+  display:grid;
+  gap:1px;
 }
-.calendar-detail-secondary:hover{background:#f7f5ef}
-.calendar-detail-danger{border-color:#ebc5c1;color:#a34e48}
-.calendar-detail-danger:hover{background:#fff2f1}
-.calendar-detail-card.calendar-state-completed .calendar-detail-title-row h3{
+.calendar-detail-complete-btn b{
+  color:#393731;
+  font-size:12px;
+}
+.calendar-detail-complete-btn small{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.calendar-detail-popover.calendar-state-completed .calendar-detail-title-content h3{
   text-decoration:line-through;
-  color:#6f6b63;
+  text-decoration-thickness:1.5px;
+  color:#777269;
 }
+
+/* Mobile behaves like Google-style bottom sheet. */
 @media(max-width:620px){
-  .calendar-detail-overlay{padding:0;align-items:flex-end}
-  .calendar-detail-card{
-    width:100%;
-    max-height:88vh;
-    border-radius:22px 22px 0 0;
+  .calendar-detail-dismiss-layer{
+    background:rgba(40,37,31,.08);
   }
-  .calendar-detail-main{padding:18px 18px 24px}
-  .calendar-detail-title-row h3{font-size:22px}
+  .calendar-detail-popover{
+    left:0!important;
+    right:0!important;
+    top:auto!important;
+    bottom:0!important;
+    width:100%;
+    max-height:82vh;
+    border-radius:20px 20px 0 0;
+    border-left:0;
+    border-right:0;
+    border-bottom:0;
+  }
+  .calendar-detail-body{
+    padding:10px 18px 24px;
+  }
+  .calendar-detail-title-content h3{
+    font-size:21px;
+  }
 }
-/* === End LUMIE Calendar Event Detail V23 === */
+/* === End LUMIE Calendar Google-style Floating Detail V26 === */
 
 
 
@@ -1392,7 +1482,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V25-Calendar-Team-Edit";
+const FRONTEND_BUILD = "V26-Calendar-Google-Style-Popover";
 const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -1425,6 +1515,7 @@ let calendarDatabase = [];
 let calendarSyncSource = "กำลังเชื่อมต่อ";
 let calendarEditingEventId = "";
 let calendarDetailEventId = "";
+let calendarDetailAnchor = null;
 const calendarPendingStatusSync = new Map();
 let calendarViewDate = new Date();
 calendarViewDate = new Date(calendarViewDate.getFullYear(),calendarViewDate.getMonth(),1);
@@ -3362,117 +3453,171 @@ function calendarDetailIconMarkup(event){
   return `<span class="calendar-detail-check ${completed?"checked":""}">${completed?"✓":""}</span>`;
 }
 
+function calendarDetailDepartmentDot(event){
+  return `<span class="calendar-detail-color-dot ${calendarDepartmentClass(event?.department)}"></span>`;
+}
+
 function renderCalendarEventDetailModal(emp){
   if(!calendarDetailEventId) return "";
 
   const event=calendarDatabase.find(e=>String(e.eventId||"")===String(calendarDetailEventId||""));
   if(!event) return "";
 
-  const own=calendarEventOwnedBy(event,emp) && !!String(event.eventId||"").trim();
+  const canManage=calendarEventOwnedBy(event,emp) && !!String(event.eventId||"").trim();
   const department=normalizeCalendarDepartment(event.department);
   const departmentText=department || "ยังไม่ได้ระบุประเภท";
   const dateText=calendarDisplayDate(event.date);
   const timeText=[event.time,event.endTime].filter(Boolean).join(" - ") || "ไม่ระบุเวลา";
   const locationText=String(event.location||"").trim();
   const relateText=String(event.relate||"").trim();
+  const creatorText=String(event.createBy||"").trim() || "-";
 
   return `
-    <div class="calendar-detail-overlay" data-calendar-detail-close-overlay>
-      <article class="calendar-detail-card ${calendarDepartmentClass(event.department)} ${calendarEventStateClass(event)}" role="dialog" aria-modal="true" aria-label="รายละเอียดกิจกรรม">
-        <div class="calendar-detail-topbar">
-          <div class="calendar-detail-accent"></div>
-          <div class="calendar-detail-actions-top">
-            ${own?`<button type="button" class="calendar-detail-icon-btn" data-calendar-detail-edit title="แก้ไข" aria-label="แก้ไข">✎</button>`:""}
-            ${own?`<button type="button" class="calendar-detail-icon-btn danger" data-calendar-detail-delete title="ลบ" aria-label="ลบ">⌫</button>`:""}
-            <button type="button" class="calendar-detail-icon-btn" data-calendar-detail-close title="ปิด" aria-label="ปิด">×</button>
+    <button
+      type="button"
+      class="calendar-detail-dismiss-layer"
+      data-calendar-detail-close-overlay
+      aria-label="ปิดรายละเอียดกิจกรรม">
+    </button>
+
+    <article
+      id="calendarDetailPopover"
+      class="calendar-detail-popover ${calendarDepartmentClass(event.department)} ${calendarEventStateClass(event)}"
+      role="dialog"
+      aria-modal="false"
+      aria-label="รายละเอียดกิจกรรม">
+
+      <div class="calendar-detail-toolbar">
+        <div class="calendar-detail-toolbar-spacer"></div>
+        <div class="calendar-detail-actions-top">
+          ${canManage?`<button type="button" class="calendar-detail-icon-btn" data-calendar-detail-edit title="แก้ไขกิจกรรม" aria-label="แก้ไขกิจกรรม">✎</button>`:""}
+          ${canManage?`<button type="button" class="calendar-detail-icon-btn danger" data-calendar-detail-delete title="ลบกิจกรรม" aria-label="ลบกิจกรรม">⌫</button>`:""}
+          <button type="button" class="calendar-detail-icon-btn" data-calendar-detail-close title="ปิด" aria-label="ปิด">×</button>
+        </div>
+      </div>
+
+      <div class="calendar-detail-body">
+        <div class="calendar-detail-title-row">
+          ${calendarDetailDepartmentDot(event)}
+          <div class="calendar-detail-title-content">
+            <h3>${escapeHtml(event.topic||"กิจกรรม")}</h3>
+            <div class="calendar-detail-date-line">${escapeHtml(dateText||"-")} · ${escapeHtml(timeText)}</div>
           </div>
         </div>
 
-        <div class="calendar-detail-main">
-          <div class="calendar-detail-title-row">
-            ${calendarDetailIconMarkup(event)}
-            <div>
-              <h3>${escapeHtml(event.topic||"กิจกรรม")}</h3>
-              <div class="calendar-detail-badges">
-                ${calendarDepartmentBadge(event.department)}
-                ${calendarStatusBadge(event)}
-              </div>
+        <div class="calendar-detail-list">
+          ${locationText?`
+          <div class="calendar-detail-row">
+            <span class="calendar-detail-row-icon">⌖</span>
+            <div class="calendar-detail-row-content">
+              <span class="calendar-detail-value">${escapeHtml(locationText)}</span>
+            </div>
+          </div>`:""}
+
+          ${relateText?`
+          <div class="calendar-detail-row calendar-detail-description-row">
+            <span class="calendar-detail-row-icon">☷</span>
+            <div class="calendar-detail-row-content">
+              <span class="calendar-detail-value calendar-detail-description">${escapeHtml(relateText)}</span>
+            </div>
+          </div>`:""}
+
+          <div class="calendar-detail-row">
+            <span class="calendar-detail-row-icon">●</span>
+            <div class="calendar-detail-row-content">
+              <span class="calendar-detail-value">${escapeHtml(departmentText)}</span>
+              ${calendarDepartmentBadge(event.department)}
             </div>
           </div>
 
-          <div class="calendar-detail-list">
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">◷</span>
-              <div>
-                <b>${escapeHtml(dateText||"-")}</b>
-                <span>${escapeHtml(timeText)}</span>
-              </div>
-            </div>
-
-            ${locationText?`
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">⌖</span>
-              <div>
-                <b>Location</b>
-                <span>${escapeHtml(locationText)}</span>
-              </div>
-            </div>`:""}
-
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">●</span>
-              <div>
-                <b>ประเภทงาน</b>
-                <span>${escapeHtml(departmentText)}</span>
-              </div>
-            </div>
-
-            ${relateText?`
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">☷</span>
-              <div>
-                <b>Relate</b>
-                <span>${escapeHtml(relateText)}</span>
-              </div>
-            </div>`:""}
-
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">♙</span>
-              <div>
-                <b>Create by</b>
-                <span>${escapeHtml(event.createBy||"-")}</span>
-              </div>
-            </div>
-
-            <div class="calendar-detail-row">
-              <span class="calendar-detail-row-icon">↻</span>
-              <div>
-                <b>Sync</b>
-                <span>เชื่อมข้อมูลกับ Google Calendar เบื้องหลัง</span>
-              </div>
+          <div class="calendar-detail-row">
+            <span class="calendar-detail-row-icon">♙</span>
+            <div class="calendar-detail-row-content">
+              <span class="calendar-detail-value">LUMIE Team</span>
+              <small>สร้างโดย: ${escapeHtml(creatorText)}</small>
             </div>
           </div>
 
-          ${own?`
-          <div class="calendar-detail-task-row">
-            <button type="button" class="calendar-detail-complete-btn ${calendarEventIsCompleted(event)?"completed":""} ${calendarStatusIsSyncing(event)?"syncing":""}" data-calendar-detail-toggle ${calendarStatusIsSyncing(event)?"disabled":""}>
-              <span class="calendar-detail-complete-box">${calendarEventIsCompleted(event)?"✓":""}</span>
-              <span>
-                <b>${calendarStatusIsSyncing(event)?"กำลัง Sync…":(calendarEventIsCompleted(event)?"Completed":"Mark as Completed")}</b>
-                <small>${calendarStatusIsSyncing(event)?"เว็บไซต์อัปเดตแล้ว · กำลังส่งข้อมูลไป Google Calendar":(calendarEventIsCompleted(event)?"คลิกเพื่อเปลี่ยนกลับเป็น Pending":"ติ๊กเมื่อกิจกรรมหรืองานนี้เสร็จแล้ว")}</small>
-              </span>
-            </button>
-          </div>`:""}
-
-          ${own?`
-          <div class="calendar-detail-footer">
-            <button type="button" class="calendar-detail-secondary" data-calendar-detail-edit>แก้ไขรายละเอียด</button>
-            <button type="button" class="calendar-detail-danger" data-calendar-detail-delete>ลบกิจกรรม</button>
-          </div>`:""}
+          <div class="calendar-detail-row">
+            <span class="calendar-detail-row-icon">✓</span>
+            <div class="calendar-detail-row-content calendar-detail-status-content">
+              ${calendarStatusBadge(event)}
+            </div>
+          </div>
         </div>
-      </article>
-    </div>
+
+        ${canManage?`
+        <div class="calendar-detail-task-row">
+          <button
+            type="button"
+            class="calendar-detail-complete-btn ${calendarEventIsCompleted(event)?"completed":""} ${calendarStatusIsSyncing(event)?"syncing":""}"
+            data-calendar-detail-toggle
+            ${calendarStatusIsSyncing(event)?"disabled":""}>
+            <span class="calendar-detail-complete-box">${calendarEventIsCompleted(event)?"✓":""}</span>
+            <span>
+              <b>${calendarStatusIsSyncing(event)?"กำลัง Sync…":(calendarEventIsCompleted(event)?"Completed":"Mark as Completed")}</b>
+              <small>${calendarStatusIsSyncing(event)
+                ?"เว็บไซต์อัปเดตแล้ว · กำลัง Sync เบื้องหลัง"
+                :(calendarEventIsCompleted(event)
+                  ?"คลิกเพื่อเปลี่ยนกลับเป็น Pending"
+                  :"ติ๊กเมื่อกิจกรรมหรืองานนี้เสร็จแล้ว")}</small>
+            </span>
+          </button>
+        </div>`:""}
+      </div>
+    </article>
   `;
 }
+
+function positionCalendarDetailPopover(){
+  const popover=document.getElementById("calendarDetailPopover");
+  if(!popover) return;
+
+  const vw=Math.max(document.documentElement?.clientWidth||0,window.innerWidth||0);
+  const vh=Math.max(document.documentElement?.clientHeight||0,window.innerHeight||0);
+
+  if(vw<=620){
+    popover.style.visibility="visible";
+    return;
+  }
+
+  const anchor=calendarDetailAnchor || {
+    left:Math.max(16,(vw/2)-10),
+    right:Math.max(16,(vw/2)+10),
+    top:Math.max(16,(vh/2)-10),
+    bottom:Math.max(16,(vh/2)+10)
+  };
+
+  const margin=14;
+  const gap=10;
+  const width=popover.offsetWidth||430;
+  const height=popover.offsetHeight||420;
+
+  let left=anchor.right+gap;
+
+  if(left+width>vw-margin){
+    left=anchor.left-width-gap;
+  }
+
+  if(left<margin){
+    left=Math.max(margin,Math.min(vw-width-margin,(vw-width)/2));
+  }
+
+  let top=anchor.top-18;
+
+  if(top+height>vh-margin){
+    top=vh-height-margin;
+  }
+
+  if(top<margin){
+    top=margin;
+  }
+
+  popover.style.left=`${Math.round(left)}px`;
+  popover.style.top=`${Math.round(top)}px`;
+  popover.style.visibility="visible";
+}
+
 
 function renderCalendarMonthGrid(emp){
   const year=calendarViewDate.getFullYear();
@@ -3672,7 +3817,7 @@ async function renderCalendar(){
       <section class="hero">
         <div class="eyebrow">TEAM CALENDAR · TWO-WAY SYNC</div>
         <h1>Calendar</h1>
-        <p>ปฏิทินงานภายในบริษัท · คลิกกิจกรรมเพื่อดูรายละเอียด · Google Calendar ทำหน้าที่ Sync เบื้องหลัง ไม่แสดงซ้อนบนเว็บไซต์</p>
+        <p>ปฏิทินงานภายในบริษัท · คลิกกิจกรรมเพื่อเปิดรายละเอียดแบบ Floating Card · Google Calendar Sync อยู่เบื้องหลัง</p>
         <div class="hero-actions">
           <a class="action" href="${CALENDAR_SHEET_URL}" target="_blank" rel="noopener noreferrer">เปิด Google Sheet ↗</a>
           <button id="calendarSyncBtn" class="action" type="button" ${syncing?"disabled":""}>${syncing?"กำลัง Sync...":"↻ Sync Calendar"}</button>
@@ -3771,6 +3916,10 @@ async function renderCalendar(){
       ${renderCalendarEventDetailModal(emp)}
 `;
 
+    if(calendarDetailEventId){
+      requestAnimationFrame(()=>positionCalendarDetailPopover());
+    }
+
     const prev=document.getElementById("calendarPrevMonth");
     const next=document.getElementById("calendarNextMonth");
     const syncBtn=document.getElementById("calendarSyncBtn");
@@ -3801,6 +3950,15 @@ async function renderCalendar(){
         const id=String(card.dataset.calendarOpen||"").trim();
         if(!id) return;
 
+        const rect=card.getBoundingClientRect();
+
+        calendarDetailAnchor={
+          left:rect.left,
+          right:rect.right,
+          top:rect.top,
+          bottom:rect.bottom
+        };
+
         calendarDetailEventId=id;
         draw(false);
       });
@@ -3808,12 +3966,14 @@ async function renderCalendar(){
 
     document.querySelector("[data-calendar-detail-close]")?.addEventListener("click",()=>{
       calendarDetailEventId="";
+      calendarDetailAnchor=null;
       draw(false);
     });
 
     document.querySelector("[data-calendar-detail-close-overlay]")?.addEventListener("click",event=>{
       if(event.target===event.currentTarget){
         calendarDetailEventId="";
+        calendarDetailAnchor=null;
         draw(false);
       }
     });
@@ -3829,6 +3989,7 @@ async function renderCalendar(){
 
         calendarEditingEventId=String(target.eventId||"");
         calendarDetailEventId="";
+        calendarDetailAnchor=null;
         draw(false);
         document.getElementById("calendarFormCard")?.scrollIntoView({behavior:"smooth",block:"start"});
       });
@@ -3869,6 +4030,7 @@ async function renderCalendar(){
 
           if(calendarEditingEventId===String(target.eventId||"")) calendarEditingEventId="";
           calendarDetailEventId="";
+          calendarDetailAnchor=null;
           await syncCalendarDatabase();
           toast("ลบกิจกรรมเรียบร้อย");
           draw(false);
@@ -3944,6 +4106,7 @@ async function renderCalendar(){
     document.addEventListener("keydown",function calendarDetailEscapeHandler(event){
       if(event.key==="Escape" && calendarDetailEventId){
         calendarDetailEventId="";
+        calendarDetailAnchor=null;
         draw(false);
       }
     },{once:true});
