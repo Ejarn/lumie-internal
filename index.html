@@ -1249,6 +1249,37 @@ table.data.promotion-table .badge{
 }
 /* === End LUMIE Calendar Event Detail V23 === */
 
+
+
+/* === Optimistic Calendar Status V24 === */
+.calendar-status-badge.syncing{
+  background:#F3F1EA;
+  border-color:#D8D3C7;
+  color:#777168;
+  margin-left:5px;
+}
+.calendar-task-toggle.syncing{
+  opacity:.72;
+  cursor:wait;
+}
+.calendar-detail-complete-btn.syncing{
+  opacity:.82;
+  cursor:wait;
+}
+.calendar-detail-complete-btn:disabled{
+  cursor:wait;
+}
+@media (prefers-reduced-motion:no-preference){
+  .calendar-status-badge.syncing{
+    animation:calendarSyncPulse 1.25s ease-in-out infinite;
+  }
+}
+@keyframes calendarSyncPulse{
+  0%,100%{opacity:.62}
+  50%{opacity:1}
+}
+/* === End Optimistic Calendar Status V24 === */
+
 </style>
 
 </head>
@@ -1361,7 +1392,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V23-Calendar-Event-Detail";
+const FRONTEND_BUILD = "V25-Calendar-Team-Edit";
 const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -1394,6 +1425,7 @@ let calendarDatabase = [];
 let calendarSyncSource = "กำลังเชื่อมต่อ";
 let calendarEditingEventId = "";
 let calendarDetailEventId = "";
+const calendarPendingStatusSync = new Map();
 let calendarViewDate = new Date();
 calendarViewDate = new Date(calendarViewDate.getFullYear(),calendarViewDate.getMonth(),1);
 
@@ -3095,16 +3127,16 @@ function canCreateCalendarEvent(emp){
 }
 
 function calendarEventOwnedBy(event,emp){
-  if(isMaster(emp)) return true;
-  const employeeId=String(emp?.id||emp?.employeeId||"").trim();
-  const ownerId=String(event?.createdById||"").trim();
-  if(!employeeId) return false;
-  if(ownerId) return ownerId===employeeId;
+  if(!emp || isOutsource(emp)) return false;
 
-  // Legacy fallback. Server still verifies ownership before update/delete.
-  const eventCreator=String(event?.createBy||"").trim().toLowerCase();
-  const currentCreator=calendarCreatorLabel(emp).trim().toLowerCase();
-  return !!eventCreator && eventCreator===currentCreator;
+  const level=employeeLevel(emp);
+
+  return [
+    "master",
+    "executive",
+    "manager",
+    "employee"
+  ].includes(level);
 }
 
 function cacheCalendarDatabase(){
@@ -3170,7 +3202,12 @@ function setCalendarRowsFromCsv(text){
     department:idx.department>=0?String(r[idx.department]??"").trim():"",
     status:idx.status>=0?String(r[idx.status]??"").trim():"Pending",
     createBy:String(r[idx.createBy]??"").trim()
-  })).filter(e=>e.date || e.topic);
+  })).map(e=>{
+    const id=String(e.eventId||"").trim();
+    return calendarPendingStatusSync.has(id)
+      ? {...e,status:calendarPendingStatusSync.get(id)}
+      : e;
+  }).filter(e=>e.date || e.topic);
 }
 
 async function syncCalendarDatabase(){
@@ -3181,6 +3218,12 @@ async function syncCalendarDatabase(){
       const raw=Array.isArray(result.data)?result.data:result.calendar;
       calendarDatabase=raw.map(normalizeCalendarApiEvent)
         .map(e=>({...e,date:normalizeCalendarDate(e.date)}))
+        .map(e=>{
+          const id=String(e.eventId||"").trim();
+          return calendarPendingStatusSync.has(id)
+            ? {...e,status:calendarPendingStatusSync.get(id)}
+            : e;
+        })
         .filter(e=>e.date||e.topic);
       calendarSyncSource="Lumie API";
       cacheCalendarDatabase();
@@ -3279,24 +3322,39 @@ function calendarEventStateClass(event){
   return `calendar-state-${calendarEventState(event)}`;
 }
 
+function calendarStatusIsSyncing(event){
+  const id=String(event?.eventId||"").trim();
+  return !!id && calendarPendingStatusSync.has(id);
+}
+
 function calendarStatusBadge(event){
   const state=calendarEventState(event);
-  if(state==="completed") return `<span class="calendar-status-badge completed">✓ Completed</span>`;
-  if(state==="past") return `<span class="calendar-status-badge past">Past · ยังไม่ Completed</span>`;
-  return `<span class="calendar-status-badge pending">Pending</span>`;
+  let base="";
+  if(state==="completed") base=`<span class="calendar-status-badge completed">✓ Completed</span>`;
+  else if(state==="past") base=`<span class="calendar-status-badge past">Past · ยังไม่ Completed</span>`;
+  else base=`<span class="calendar-status-badge pending">Pending</span>`;
+
+  if(calendarStatusIsSyncing(event)){
+    base+=`<span class="calendar-status-badge syncing">↻ กำลัง Sync…</span>`;
+  }
+
+  return base;
 }
 
 function calendarTaskToggleMarkup(event,emp,compact=false){
   const completed=calendarEventIsCompleted(event);
   const canToggle=calendarEventOwnedBy(event,emp) && !!String(event?.eventId||"").trim();
-  const label=completed?"ทำเครื่องหมายว่ายังไม่เสร็จ":"ทำเครื่องหมายว่า Completed";
+  const syncing=calendarStatusIsSyncing(event);
+  const label=syncing
+    ?"กำลัง Sync สถานะ"
+    :(completed?"ทำเครื่องหมายว่ายังไม่เสร็จ":"ทำเครื่องหมายว่า Completed");
   const icon=completed?"✓":"";
 
   if(!canToggle){
     return `<span class="calendar-task-check-static ${completed?"checked":""}" aria-label="${escapeHtml(label)}">${icon}</span>`;
   }
 
-  return `<button type="button" class="calendar-task-toggle ${completed?"checked":""} ${compact?"compact":""}" data-calendar-toggle="${escapeHtml(event.eventId)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${icon}</button>`;
+  return `<button type="button" class="calendar-task-toggle ${completed?"checked":""} ${syncing?"syncing":""} ${compact?"compact":""}" data-calendar-toggle="${escapeHtml(event.eventId)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}" ${syncing?"disabled":""}>${icon}</button>`;
 }
 
 function calendarDetailIconMarkup(event){
@@ -3396,11 +3454,11 @@ function renderCalendarEventDetailModal(emp){
 
           ${own?`
           <div class="calendar-detail-task-row">
-            <button type="button" class="calendar-detail-complete-btn ${calendarEventIsCompleted(event)?"completed":""}" data-calendar-detail-toggle>
+            <button type="button" class="calendar-detail-complete-btn ${calendarEventIsCompleted(event)?"completed":""} ${calendarStatusIsSyncing(event)?"syncing":""}" data-calendar-detail-toggle ${calendarStatusIsSyncing(event)?"disabled":""}>
               <span class="calendar-detail-complete-box">${calendarEventIsCompleted(event)?"✓":""}</span>
               <span>
-                <b>${calendarEventIsCompleted(event)?"Completed":"Mark as Completed"}</b>
-                <small>${calendarEventIsCompleted(event)?"คลิกเพื่อเปลี่ยนกลับเป็น Pending":"ติ๊กเมื่อกิจกรรมหรืองานนี้เสร็จแล้ว"}</small>
+                <b>${calendarStatusIsSyncing(event)?"กำลัง Sync…":(calendarEventIsCompleted(event)?"Completed":"Mark as Completed")}</b>
+                <small>${calendarStatusIsSyncing(event)?"เว็บไซต์อัปเดตแล้ว · กำลังส่งข้อมูลไป Google Calendar":(calendarEventIsCompleted(event)?"คลิกเพื่อเปลี่ยนกลับเป็น Pending":"ติ๊กเมื่อกิจกรรมหรืองานนี้เสร็จแล้ว")}</small>
               </span>
             </button>
           </div>`:""}
@@ -3522,6 +3580,82 @@ async function renderCalendar(){
   const emp=getLoggedEmployee();
   const canCreate=canCreateCalendarEvent(emp);
 
+  const updateCalendarStatusOptimistically=async(target,nextStatus)=>{
+    const id=String(target?.eventId||"").trim();
+
+    if(!id) return;
+
+    if(calendarPendingStatusSync.has(id)){
+      toast("สถานะนี้กำลัง Sync อยู่");
+      return;
+    }
+
+    const previousStatus=normalizeCalendarStatus(target.status);
+    const optimisticStatus=normalizeCalendarStatus(nextStatus);
+
+    const payload={
+      action:"updateCalendar",
+      eventId:id,
+      date:String(target.date||""),
+      time:String(target.time||""),
+      endTime:String(target.endTime||suggestCalendarEndTime(target.time||"")),
+      department:String(target.department||""),
+      status:optimisticStatus,
+      location:String(target.location||""),
+      topic:String(target.topic||""),
+      relate:String(target.relate||"-")
+    };
+
+    // Local-first: update the visible website immediately.
+    calendarPendingStatusSync.set(id,optimisticStatus);
+    target.status=optimisticStatus;
+    calendarSyncSource="Local update · กำลัง Sync";
+    cacheCalendarDatabase();
+
+    if((location.hash||"#home").slice(1)==="calendar"){
+      draw(false);
+    }
+
+    try{
+      await lumieApiPost(payload);
+
+      // API already writes Sheet + Google Calendar.
+      // Do not wait for another full Calendar refresh here.
+      calendarPendingStatusSync.delete(id);
+      calendarSyncSource="Lumie API · Synced";
+      cacheCalendarDatabase();
+
+      if((location.hash||"#home").slice(1)==="calendar"){
+        draw(false);
+      }
+
+      toast(
+        optimisticStatus==="Completed"
+          ?"✓ Completed · Sync เรียบร้อย"
+          :"เปลี่ยนกลับเป็น Pending แล้ว"
+      );
+    }catch(err){
+      console.error("Optimistic Calendar status sync failed",err);
+
+      calendarPendingStatusSync.delete(id);
+
+      // Network refresh may have replaced the object, so find it again.
+      const current=calendarDatabase.find(e=>String(e.eventId||"").trim()===id);
+      if(current){
+        current.status=previousStatus;
+      }
+
+      calendarSyncSource="Sync ไม่สำเร็จ · คืนค่าสถานะเดิม";
+      cacheCalendarDatabase();
+
+      if((location.hash||"#home").slice(1)==="calendar"){
+        draw(false);
+      }
+
+      toast("Sync สถานะไม่สำเร็จ · คืนค่าเดิมแล้ว: "+err.message);
+    }
+  };
+
   const draw=(syncing=false)=>{
     const monthTitle=calendarViewDate.toLocaleDateString("th-TH",{month:"long",year:"numeric"});
     const creator=calendarCreatorLabel(emp);
@@ -3571,7 +3705,7 @@ async function renderCalendar(){
         <div class="section" style="margin:0 0 14px">
           <div>
             <h3>${editingEvent?"แก้ไขกิจกรรม":"เพิ่มกิจกรรม"}</h3>
-            <p>${editingEvent?"ผู้สร้างแก้ไขกิจกรรมของตัวเองได้ · Master แก้ไขได้ทุกกิจกรรม":"ข้อมูลจะ Sync ไปทั้ง Google Sheet และ Google Calendar ผ่าน Lumie API"}</p>
+            <p>${editingEvent?"Master / Executive / Manager / Employee แก้ไขกิจกรรมร่วมกันได้ทุกกิจกรรม":"ข้อมูลจะ Sync ไปทั้ง Google Sheet และ Google Calendar ผ่าน Lumie API"}</p>
             ${editingEvent?`<div class="calendar-form-mode">กำลังแก้ไข · ${escapeHtml(editingEvent.topic||"กิจกรรม")}</div>`:""}
           </div>
         </div>
@@ -3632,7 +3766,7 @@ async function renderCalendar(){
         </form>
       </section>`:``}
 
-      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>${getLatestCalendarDate()?`แสดงเฉพาะวันที่ล่าสุด: ${escapeHtml(calendarDisplayDate(getLatestCalendarDate()))}`:"ยังไม่มีกิจกรรม"} · ติ๊ก ✓ เพื่อทำเครื่องหมาย Completed · งานที่เลยเวลาแต่ยังไม่ติ๊กจะแสดง Past · แก้ไข/ลบตามสิทธิ์เดิม</p></div></div>
+      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>${getLatestCalendarDate()?`แสดงเฉพาะวันที่ล่าสุด: ${escapeHtml(calendarDisplayDate(getLatestCalendarDate()))}`:"ยังไม่มีกิจกรรม"} · ทีมภายในทุกระดับสามารถแก้ไข ติ๊ก Completed และลบกิจกรรมร่วมกันได้ · Outsource ไม่มีสิทธิ์ Calendar</p></div></div>
       ${renderCalendarAgenda(emp)}
       ${renderCalendarEventDetailModal(emp)}
 `;
@@ -3689,7 +3823,7 @@ async function renderCalendar(){
         const target=calendarDatabase.find(e=>String(e.eventId||"")===String(calendarDetailEventId||""));
 
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("แก้ไขได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์แก้ไข Calendar");
           return;
         }
 
@@ -3701,39 +3835,16 @@ async function renderCalendar(){
     });
 
     document.querySelectorAll("[data-calendar-detail-toggle]").forEach(btn=>{
-      btn.addEventListener("click",async()=>{
+      btn.addEventListener("click",()=>{
         const target=calendarDatabase.find(e=>String(e.eventId||"")===String(calendarDetailEventId||""));
 
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("เปลี่ยนสถานะได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์เปลี่ยนสถานะ Calendar");
           return;
         }
 
         const nextStatus=calendarEventIsCompleted(target)?"Pending":"Completed";
-        btn.disabled=true;
-
-        try{
-          await lumieApiPost({
-            action:"updateCalendar",
-            eventId:String(target.eventId||""),
-            date:String(target.date||""),
-            time:String(target.time||""),
-            endTime:String(target.endTime||suggestCalendarEndTime(target.time||"")),
-            department:String(target.department||""),
-            status:nextStatus,
-            location:String(target.location||""),
-            topic:String(target.topic||""),
-            relate:String(target.relate||"-")
-          });
-
-          await syncCalendarDatabase();
-          toast(nextStatus==="Completed"?"ทำเครื่องหมาย Completed แล้ว":"เปลี่ยนกลับเป็น Pending แล้ว");
-          draw(false);
-        }catch(err){
-          console.error("Calendar detail status update failed",err);
-          toast("เปลี่ยนสถานะไม่ได้: "+err.message);
-          btn.disabled=false;
-        }
+        updateCalendarStatusOptimistically(target,nextStatus);
       });
     });
 
@@ -3742,7 +3853,7 @@ async function renderCalendar(){
         const target=calendarDatabase.find(e=>String(e.eventId||"")===String(calendarDetailEventId||""));
 
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("ลบได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์ลบกิจกรรม Calendar");
           return;
         }
 
@@ -3770,40 +3881,17 @@ async function renderCalendar(){
     });
 
     document.querySelectorAll("[data-calendar-toggle]").forEach(btn=>{
-      btn.addEventListener("click",async()=>{
+      btn.addEventListener("click",()=>{
         const id=String(btn.dataset.calendarToggle||"");
         const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
 
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("เปลี่ยนสถานะได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์เปลี่ยนสถานะ Calendar");
           return;
         }
 
         const nextStatus=calendarEventIsCompleted(target)?"Pending":"Completed";
-        btn.disabled=true;
-
-        try{
-          await lumieApiPost({
-            action:"updateCalendar",
-            eventId:id,
-            date:String(target.date||""),
-            time:String(target.time||""),
-            endTime:String(target.endTime||suggestCalendarEndTime(target.time||"")),
-            department:String(target.department||""),
-            status:nextStatus,
-            location:String(target.location||""),
-            topic:String(target.topic||""),
-            relate:String(target.relate||"-")
-          });
-
-          await syncCalendarDatabase();
-          toast(nextStatus==="Completed"?"ทำเครื่องหมาย Completed แล้ว":"เปลี่ยนกลับเป็น Pending แล้ว");
-          draw(false);
-        }catch(err){
-          console.error("Calendar status update failed",err);
-          toast("เปลี่ยนสถานะไม่ได้: "+err.message);
-          btn.disabled=false;
-        }
+        updateCalendarStatusOptimistically(target,nextStatus);
       });
     });
 
@@ -3812,7 +3900,7 @@ async function renderCalendar(){
         const id=String(btn.dataset.calendarEdit||"");
         const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("แก้ไขได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์แก้ไข Calendar");
           return;
         }
         calendarEditingEventId=id;
@@ -3826,7 +3914,7 @@ async function renderCalendar(){
         const id=String(btn.dataset.calendarDelete||"");
         const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
         if(!target || !calendarEventOwnedBy(target,emp)){
-          toast("ลบได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์ลบกิจกรรม Calendar");
           return;
         }
         if(!confirm(`ยืนยันลบกิจกรรม “${target.topic||"กิจกรรมนี้"}” ?`)) return;
@@ -3881,7 +3969,7 @@ async function renderCalendar(){
           : null;
 
         if(activeEdit && !calendarEventOwnedBy(activeEdit,emp)){
-          toast("แก้ไขได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          toast("บัญชี Outsource ไม่มีสิทธิ์แก้ไข Calendar");
           calendarEditingEventId="";
           draw(false);
           return;
