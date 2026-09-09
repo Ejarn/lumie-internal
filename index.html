@@ -883,40 +883,6 @@ table.data.promotion-table .badge{
 
 
 
-/* === Google Calendar Main Embed V18 === */
-.google-calendar-section{
-  align-items:flex-end;
-  margin-top:28px;
-  margin-bottom:10px;
-}
-.google-calendar-frame-wrap{
-  width:100%;
-  height:720px;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:#fff;
-  box-shadow:0 8px 24px rgba(0,0,0,.04);
-}
-.google-calendar-frame-wrap iframe{
-  display:block;
-  width:100%;
-  height:100%;
-  border:0;
-}
-@media(max-width:820px){
-  .google-calendar-frame-wrap{
-    height:620px;
-    border-radius:14px;
-  }
-  .google-calendar-section{
-    align-items:flex-start;
-  }
-}
-/* === End Google Calendar Main Embed V18 === */
-
-
-
 /* === Calendar Department Colors + Two-way Sync V20 === */
 .calendar-color-legend{
   display:flex;
@@ -955,6 +921,11 @@ table.data.promotion-table .badge{
   background:#DFF1FA;
   border-color:#9FCFE7;
 }
+.calendar-event.calendar-dept-kol,
+.calendar-agenda-item.calendar-dept-kol{
+  background:#EEE4F8;
+  border-color:#C7A9E6;
+}
 .calendar-event.calendar-dept-unassigned,
 .calendar-agenda-item.calendar-dept-unassigned{
   background:#fff;
@@ -962,6 +933,7 @@ table.data.promotion-table .badge{
 .calendar-legend-item.calendar-dept-content{background:#FBE1EA;border-color:#EDACC3;color:#A84D70}
 .calendar-legend-item.calendar-dept-marketing{background:#FFF4C7;border-color:#E8CD61;color:#806A14}
 .calendar-legend-item.calendar-dept-production{background:#DFF1FA;border-color:#9FCFE7;color:#367B9D}
+.calendar-legend-item.calendar-dept-kol{background:#EEE4F8;border-color:#C7A9E6;color:#744B9B}
 .calendar-department-badge{
   display:inline-flex;
   vertical-align:middle;
@@ -976,6 +948,7 @@ table.data.promotion-table .badge{
 .calendar-department-badge.calendar-dept-content{background:#FBE1EA;border-color:#EDACC3;color:#A84D70}
 .calendar-department-badge.calendar-dept-marketing{background:#FFF4C7;border-color:#E8CD61;color:#806A14}
 .calendar-department-badge.calendar-dept-production{background:#DFF1FA;border-color:#9FCFE7;color:#367B9D}
+.calendar-department-badge.calendar-dept-kol{background:#EEE4F8;border-color:#C7A9E6;color:#744B9B}
 #calendarDepartment{
   width:100%;
   padding:11px 13px;
@@ -994,6 +967,108 @@ table.data.promotion-table .badge{
   .calendar-legend-item{font-size:10px;padding:5px 8px}
 }
 /* === End Calendar Department Colors V20 === */
+
+
+
+/* === Calendar Task Status V22 === */
+.calendar-event-head,
+.calendar-agenda-topic-row{
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+}
+.calendar-event-head .calendar-event-topic,
+.calendar-agenda-topic-row .calendar-agenda-topic{
+  flex:1;
+  min-width:0;
+}
+.calendar-task-toggle,
+.calendar-task-check-static{
+  flex:none;
+  width:20px;
+  height:20px;
+  border:1.5px solid #9f9b91;
+  border-radius:6px;
+  display:inline-grid;
+  place-items:center;
+  background:#fff;
+  color:#fff;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:800;
+  line-height:1;
+  padding:0;
+}
+.calendar-task-toggle{cursor:pointer}
+.calendar-task-toggle:hover{border-color:#5f875f;background:#f4faf4}
+.calendar-task-toggle.checked,
+.calendar-task-check-static.checked{
+  background:#6FA57A;
+  border-color:#6FA57A;
+  color:#fff;
+}
+.calendar-task-toggle.compact,
+.calendar-task-check-static.compact{
+  width:17px;
+  height:17px;
+  border-radius:5px;
+  font-size:11px;
+}
+.calendar-task-toggle:disabled{opacity:.5;cursor:wait}
+.calendar-event-status-line{margin-top:3px}
+.calendar-status-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:2px 6px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:700;
+  border:1px solid transparent;
+}
+.calendar-status-badge.pending{background:#fff;border-color:#d8d4c8;color:#79746a}
+.calendar-status-badge.past{background:#f0efec;border-color:#d1cec5;color:#6f6b64}
+.calendar-status-badge.completed{background:#E6F3E7;border-color:#B6D6BA;color:#487653}
+.calendar-state-completed{opacity:.72}
+.calendar-state-completed .calendar-event-topic,
+.calendar-state-completed .calendar-agenda-topic{text-decoration:line-through;text-decoration-thickness:1.5px}
+.calendar-state-past{filter:saturate(.72)}
+.calendar-state-past .calendar-event-topic,
+.calendar-state-past .calendar-agenda-topic{color:#69665f}
+.calendar-task-form-field{margin-top:2px}
+.calendar-task-form-check{
+  display:flex!important;
+  align-items:center;
+  gap:10px;
+  padding:11px 13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#faf9f4;
+  cursor:pointer;
+}
+.calendar-task-form-check input{position:absolute;opacity:0;pointer-events:none}
+.calendar-task-form-box{
+  width:24px;
+  height:24px;
+  border:1.5px solid #99958a;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  color:transparent;
+  background:#fff;
+  flex:none;
+}
+.calendar-task-form-check input:checked + .calendar-task-form-box{
+  background:#6FA57A;
+  border-color:#6FA57A;
+  color:#fff;
+}
+.calendar-task-form-check b{display:block;color:var(--text)}
+.calendar-task-form-check small{display:block;margin-top:2px;color:var(--muted);font-size:11px;font-weight:400}
+@media(max-width:820px){
+  .calendar-status-badge{font-size:8.5px}
+  .calendar-task-toggle,.calendar-task-check-static{width:18px;height:18px}
+}
+/* === End Calendar Task Status V22 === */
 
 </style>
 
@@ -1107,7 +1182,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V20-Calendar-TwoWay-Department-Colors";
+const FRONTEND_BUILD = "V22-Calendar-Task-Status";
 const MASTER_TEST_MODE = true;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -2794,6 +2869,7 @@ function normalizeCalendarApiEvent(obj){
     topic:pickApiValue(obj,["Topic","topic","หัวข้อ"]),
     relate:pickApiValue(obj,["Relate","relate","ผู้เกี่ยวข้อง"]),
     department:pickApiValue(obj,["Department","department","ประเภทงาน","แผนก"]),
+    status:pickApiValue(obj,["Status","status","สถานะ"]),
     createBy:pickApiValue(obj,["Create by","Create By","createBy","createdBy","ผู้สร้าง"])
   };
 }
@@ -2894,6 +2970,7 @@ function setCalendarRowsFromCsv(text){
     topic:col("Topic","หัวข้อ"),
     relate:col("Relate","ผู้เกี่ยวข้อง"),
     department:col("Department","ประเภทงาน","แผนก"),
+    status:col("Status","สถานะ"),
     createBy:col("Create by","Create By","ผู้สร้าง"),
     eventId:col("Event ID"),
     createdById:col("Created by ID","Created By ID")
@@ -2913,6 +2990,7 @@ function setCalendarRowsFromCsv(text){
     topic:String(r[idx.topic]??"").trim(),
     relate:String(r[idx.relate]??"").trim(),
     department:idx.department>=0?String(r[idx.department]??"").trim():"",
+    status:idx.status>=0?String(r[idx.status]??"").trim():"Pending",
     createBy:String(r[idx.createBy]??"").trim()
   })).filter(e=>e.date || e.topic);
 }
@@ -2961,6 +3039,7 @@ function normalizeCalendarDepartment(value){
   if(raw==="content") return "Content";
   if(raw==="marketing") return "Marketing";
   if(raw==="production") return "Production";
+  if(raw==="kol") return "KOL";
 
   return "";
 }
@@ -2971,6 +3050,7 @@ function calendarDepartmentClass(value){
   if(department==="Content") return "calendar-dept-content";
   if(department==="Marketing") return "calendar-dept-marketing";
   if(department==="Production") return "calendar-dept-production";
+  if(department==="KOL") return "calendar-dept-kol";
 
   return "calendar-dept-unassigned";
 }
@@ -2982,13 +3062,66 @@ function calendarDepartmentBadge(value){
   const label={
     Content:"Content",
     Marketing:"Marketing",
-    Production:"Production"
+    Production:"Production",
+    KOL:"KOL"
   }[department];
 
   return `<span class="calendar-department-badge ${calendarDepartmentClass(department)}">${label}</span>`;
 }
 
-function renderCalendarMonthGrid(){
+function normalizeCalendarStatus(value){
+  const raw=String(value||"").trim().toLowerCase();
+
+  if(["completed","complete","done","true","1","yes"].includes(raw)) return "Completed";
+  return "Pending";
+}
+
+function calendarEventIsCompleted(event){
+  return normalizeCalendarStatus(event?.status)==="Completed";
+}
+
+function calendarEventIsPast(event){
+  if(calendarEventIsCompleted(event)) return false;
+
+  const date=normalizeCalendarDate(event?.date);
+  const endTime=String(event?.endTime||event?.time||"").trim();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(endTime)) return false;
+
+  const end=new Date(`${date}T${endTime}:00+07:00`);
+  return !Number.isNaN(end.getTime()) && end.getTime()<Date.now();
+}
+
+function calendarEventState(event){
+  if(calendarEventIsCompleted(event)) return "completed";
+  if(calendarEventIsPast(event)) return "past";
+  return "pending";
+}
+
+function calendarEventStateClass(event){
+  return `calendar-state-${calendarEventState(event)}`;
+}
+
+function calendarStatusBadge(event){
+  const state=calendarEventState(event);
+  if(state==="completed") return `<span class="calendar-status-badge completed">✓ Completed</span>`;
+  if(state==="past") return `<span class="calendar-status-badge past">Past · ยังไม่ Completed</span>`;
+  return `<span class="calendar-status-badge pending">Pending</span>`;
+}
+
+function calendarTaskToggleMarkup(event,emp,compact=false){
+  const completed=calendarEventIsCompleted(event);
+  const canToggle=calendarEventOwnedBy(event,emp) && !!String(event?.eventId||"").trim();
+  const label=completed?"ทำเครื่องหมายว่ายังไม่เสร็จ":"ทำเครื่องหมายว่า Completed";
+  const icon=completed?"✓":"";
+
+  if(!canToggle){
+    return `<span class="calendar-task-check-static ${completed?"checked":""}" aria-label="${escapeHtml(label)}">${icon}</span>`;
+  }
+
+  return `<button type="button" class="calendar-task-toggle ${completed?"checked":""} ${compact?"compact":""}" data-calendar-toggle="${escapeHtml(event.eventId)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${icon}</button>`;
+}
+
+function renderCalendarMonthGrid(emp){
   const year=calendarViewDate.getFullYear();
   const month=calendarViewDate.getMonth();
   const first=new Date(year,month,1);
@@ -3009,8 +3142,12 @@ function renderCalendarMonthGrid(){
 
     html+=`<div class="calendar-day${outside?" outside":""}${todayClass}">
       <div class="calendar-day-number">${d.getDate()}</div>
-      ${events.slice(0,3).map(e=>`<div class="calendar-event ${calendarDepartmentClass(e.department)}" title="${escapeHtml([e.topic,e.time,e.endTime,e.location,e.department,e.createBy].filter(Boolean).join(" · "))}">
-        <div class="calendar-event-topic">${escapeHtml(e.topic||"-")}</div>
+      ${events.slice(0,3).map(e=>`<div class="calendar-event ${calendarDepartmentClass(e.department)} ${calendarEventStateClass(e)}" title="${escapeHtml([e.topic,e.time,e.endTime,e.location,e.department,e.status,e.createBy].filter(Boolean).join(" · "))}">
+        <div class="calendar-event-head">
+          ${calendarTaskToggleMarkup(e,emp,true)}
+          <div class="calendar-event-topic">${escapeHtml(e.topic||"-")}</div>
+        </div>
+        <div class="calendar-event-status-line">${calendarStatusBadge(e)}</div>
         <div class="calendar-event-meta">เวลา: ${escapeHtml(e.time||"ทั้งวัน")}${e.endTime?` - ${escapeHtml(e.endTime)}`:""}</div>
         <div class="calendar-event-meta">สถานที่: ${escapeHtml(e.location||"-")}</div>
         <div class="calendar-event-creator">สร้างโดย: ${escapeHtml(e.createBy||"-")}</div>
@@ -3045,11 +3182,14 @@ function renderCalendarAgenda(emp){
 
   return `<div class="calendar-agenda">${rows.map(e=>{
     const own=calendarEventOwnedBy(e,emp) && !!String(e.eventId||"").trim();
-    return `<div class="calendar-agenda-item ${calendarDepartmentClass(e.department)}">
+    return `<div class="calendar-agenda-item ${calendarDepartmentClass(e.department)} ${calendarEventStateClass(e)}">
       <div class="calendar-agenda-date">${escapeHtml(calendarDisplayDate(e.date))}</div>
       <div class="calendar-agenda-time">${escapeHtml(e.time||"ทั้งวัน")}${e.endTime?` - ${escapeHtml(e.endTime)}`:""}</div>
       <div>
-        <div class="calendar-agenda-topic">${escapeHtml(e.topic||"-")} ${calendarDepartmentBadge(e.department)}</div>
+        <div class="calendar-agenda-topic-row">
+          ${calendarTaskToggleMarkup(e,emp)}
+          <div class="calendar-agenda-topic">${escapeHtml(e.topic||"-")} ${calendarDepartmentBadge(e.department)} ${calendarStatusBadge(e)}</div>
+        </div>
         <div class="calendar-agenda-detail">
           ${e.location?`สถานที่: ${escapeHtml(e.location)}<br>`:""}
           ${e.relate?`เกี่ยวข้อง: ${escapeHtml(e.relate)}<br>`:""}
@@ -3104,9 +3244,9 @@ async function renderCalendar(){
 
     pageContent.innerHTML=`
       <section class="hero">
-        <div class="eyebrow">TEAM CALENDAR · GOOGLE SHEET + GOOGLE CALENDAR</div>
+        <div class="eyebrow">TEAM CALENDAR · TWO-WAY SYNC</div>
         <h1>Calendar</h1>
-        <p>ตารางงานแบบ Two-way Sync ระหว่าง Website, Google Sheet และ Google Calendar · แยกสีตามประเภทงาน Content / Marketing / Production</p>
+        <p>ปฏิทินงานภายในบริษัท · ข้อมูล Sync เบื้องหลังกับ Google Calendar อัตโนมัติ · แยกสีตามประเภทงาน Content / Marketing / Production / KOL</p>
         <div class="hero-actions">
           <a class="action" href="${CALENDAR_SHEET_URL}" target="_blank" rel="noopener noreferrer">เปิด Google Sheet ↗</a>
           <button id="calendarSyncBtn" class="action" type="button" ${syncing?"disabled":""}>${syncing?"กำลัง Sync...":"↻ Sync Calendar"}</button>
@@ -3129,9 +3269,10 @@ async function renderCalendar(){
         <span class="calendar-legend-item calendar-dept-content"><i></i>Content · ชมพู</span>
         <span class="calendar-legend-item calendar-dept-marketing"><i></i>Marketing · เหลือง</span>
         <span class="calendar-legend-item calendar-dept-production"><i></i>Production · ฟ้า</span>
+        <span class="calendar-legend-item calendar-dept-kol"><i></i>KOL · ม่วง</span>
       </div>
 
-      ${renderCalendarMonthGrid()}
+      ${renderCalendarMonthGrid(emp)}
 
       ${canCreate?`
       <section class="card calendar-form-card" id="calendarFormCard">
@@ -3163,11 +3304,12 @@ async function renderCalendar(){
                 <option value="Content" ${normalizeCalendarDepartment(editingEvent?.department)==="Content"?"selected":""}>Content · ชมพู</option>
                 <option value="Marketing" ${normalizeCalendarDepartment(editingEvent?.department)==="Marketing"?"selected":""}>Marketing · เหลือง</option>
                 <option value="Production" ${normalizeCalendarDepartment(editingEvent?.department)==="Production"?"selected":""}>Production · ฟ้า</option>
+                <option value="KOL" ${normalizeCalendarDepartment(editingEvent?.department)==="KOL"?"selected":""}>KOL · ม่วง</option>
               </select>
             </div>
             <div class="form-field">
-              <label for="calendarLocation">Location</label>
-              <input id="calendarLocation" name="location" value="${escapeHtml(editingEvent?.location||"")}" placeholder="เช่น Meeting Room / HQ / Online" required>
+              <label for="calendarLocation">Location <span class="muted">(ไม่บังคับ)</span></label>
+              <input id="calendarLocation" name="location" value="${escapeHtml(editingEvent?.location||"")}" placeholder="เช่น Meeting Room / HQ / Online">
             </div>
             <div class="form-field">
               <label for="calendarTopic">Topic</label>
@@ -3176,6 +3318,16 @@ async function renderCalendar(){
             <div class="form-field full">
               <label for="calendarRelate">Relate</label>
               <input id="calendarRelate" name="relate" value="${escapeHtml(editingEvent?.relate||"")}" placeholder="ระบุทีม / ชื่อบุคคล / ผู้ที่เกี่ยวข้อง" required>
+            </div>
+            <div class="form-field full calendar-task-form-field">
+              <label class="calendar-task-form-check" for="calendarCompleted">
+                <input id="calendarCompleted" name="completed" type="checkbox" ${normalizeCalendarStatus(editingEvent?.status)==="Completed"?"checked":""}>
+                <span class="calendar-task-form-box">✓</span>
+                <span>
+                  <b>Completed</b>
+                  <small>ติ๊กเมื่อกิจกรรมหรืองานนี้เสร็จเรียบร้อยแล้ว</small>
+                </span>
+              </label>
             </div>
             <div class="form-field full">
               <label>Create by</label>
@@ -3188,27 +3340,9 @@ async function renderCalendar(){
         </form>
       </section>`:``}
 
-      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>${getLatestCalendarDate()?`แสดงเฉพาะวันที่ล่าสุด: ${escapeHtml(calendarDisplayDate(getLatestCalendarDate()))}`:"ยังไม่มีกิจกรรม"} · ปุ่มแก้ไข/ลบจะแสดงสำหรับกิจกรรมของตัวเอง และ Master จะเห็นทุกกิจกรรม</p></div></div>
+      <div class="section"><div><h3>กิจกรรมทั้งหมด</h3><p>${getLatestCalendarDate()?`แสดงเฉพาะวันที่ล่าสุด: ${escapeHtml(calendarDisplayDate(getLatestCalendarDate()))}`:"ยังไม่มีกิจกรรม"} · ติ๊ก ✓ เพื่อทำเครื่องหมาย Completed · งานที่เลยเวลาแต่ยังไม่ติ๊กจะแสดง Past · แก้ไข/ลบตามสิทธิ์เดิม</p></div></div>
       ${renderCalendarAgenda(emp)}
-
-      <div class="section google-calendar-section">
-        <div>
-          <h3>Google Calendar หลัก</h3>
-          <p>Two-way Sync · เพิ่ม แก้ไข ลบ หรือเปลี่ยนสีจากเว็บไซต์หรือ Google Calendar แล้วข้อมูลจะถูกจับคู่ด้วย Google Event ID</p>
-        </div>
-        <a class="user-secondary-btn" href="https://calendar.google.com/calendar/u/0/r?cid=${encodeURIComponent(GOOGLE_CALENDAR_MAIN_ID)}" target="_blank" rel="noopener noreferrer">เปิด Google Calendar ↗</a>
-      </div>
-      <div class="google-calendar-frame-wrap">
-        <iframe
-          id="googleCalendarMainFrame"
-          title="LUMIE Main Google Calendar"
-          src="${GOOGLE_CALENDAR_EMBED_URL}"
-          frameborder="0"
-          scrolling="no"
-          loading="eager">
-        </iframe>
-      </div>
-    `;
+`;
 
     const prev=document.getElementById("calendarPrevMonth");
     const next=document.getElementById("calendarNextMonth");
@@ -3231,6 +3365,44 @@ async function renderCalendar(){
       if((location.hash||"#home").slice(1)!=="calendar") return;
       draw(false);
       toast(ok?"Sync Calendar เรียบร้อย":"เชื่อม Calendar ไม่ได้ · ใช้ข้อมูลล่าสุดที่บันทึกไว้");
+    });
+
+    document.querySelectorAll("[data-calendar-toggle]").forEach(btn=>{
+      btn.addEventListener("click",async()=>{
+        const id=String(btn.dataset.calendarToggle||"");
+        const target=calendarDatabase.find(e=>String(e.eventId||"")===id);
+
+        if(!target || !calendarEventOwnedBy(target,emp)){
+          toast("เปลี่ยนสถานะได้เฉพาะกิจกรรมของตัวเอง หรือใช้สิทธิ์ Master");
+          return;
+        }
+
+        const nextStatus=calendarEventIsCompleted(target)?"Pending":"Completed";
+        btn.disabled=true;
+
+        try{
+          await lumieApiPost({
+            action:"updateCalendar",
+            eventId:id,
+            date:String(target.date||""),
+            time:String(target.time||""),
+            endTime:String(target.endTime||suggestCalendarEndTime(target.time||"")),
+            department:String(target.department||""),
+            status:nextStatus,
+            location:String(target.location||""),
+            topic:String(target.topic||""),
+            relate:String(target.relate||"-")
+          });
+
+          await syncCalendarDatabase();
+          toast(nextStatus==="Completed"?"ทำเครื่องหมาย Completed แล้ว":"เปลี่ยนกลับเป็น Pending แล้ว");
+          draw(false);
+        }catch(err){
+          console.error("Calendar status update failed",err);
+          toast("เปลี่ยนสถานะไม่ได้: "+err.message);
+          btn.disabled=false;
+        }
+      });
     });
 
     document.querySelectorAll("[data-calendar-edit]").forEach(btn=>{
@@ -3316,12 +3488,13 @@ async function renderCalendar(){
           time:String(fd.get("time")||"").trim(),
           endTime:String(fd.get("endTime")||"").trim(),
           department:String(fd.get("department")||"").trim(),
+          status:fd.get("completed")?"Completed":"Pending",
           location:String(fd.get("location")||"").trim(),
           topic:String(fd.get("topic")||"").trim(),
           relate:String(fd.get("relate")||"").trim()
         };
 
-        if(!payload.date || !payload.time || !payload.endTime || !payload.department || !payload.location || !payload.topic || !payload.relate){
+        if(!payload.date || !payload.time || !payload.endTime || !payload.department || !payload.topic || !payload.relate){
           status.textContent="กรุณากรอกข้อมูลให้ครบ";
           return;
         }
