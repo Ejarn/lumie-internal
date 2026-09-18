@@ -1944,6 +1944,157 @@ table.data.promotion-table .badge{
 }
 /* === End V31 LIVE GOOGLE CALENDAR === */
 
+
+/* === Calendar compact daily detail V32 === */
+.live-calendar-detail-label{
+  margin-bottom:2px;
+  color:#8a847a;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+/* === End Calendar compact daily detail V32 === */
+
+
+/* ==========================================================
+   PROMOTION LIVE COLUMNS + INTERNAL TEAM V33
+   ========================================================== */
+.promotion-table-wide-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.promotion-table-wide{
+  min-width:1480px;
+}
+.promotion-table-wide th,
+.promotion-table-wide td{
+  vertical-align:top;
+}
+.promotion-table-wide th:nth-child(1),
+.promotion-table-wide th:nth-child(2),
+.promotion-table-wide td:nth-child(1),
+.promotion-table-wide td:nth-child(2){
+  min-width:125px;
+}
+.promotion-table-wide th:nth-child(3),
+.promotion-table-wide td:nth-child(3){
+  min-width:105px;
+}
+.promotion-table-wide th:nth-child(4),
+.promotion-table-wide td:nth-child(4){
+  min-width:150px;
+}
+.promotion-table-wide th:nth-child(5),
+.promotion-table-wide td:nth-child(5){
+  min-width:215px;
+}
+.promotion-table-wide th:nth-child(6),
+.promotion-table-wide td:nth-child(6){
+  min-width:250px;
+}
+.promotion-table-wide th:nth-child(7),
+.promotion-table-wide td:nth-child(7){
+  min-width:180px;
+}
+.promotion-table-wide th:nth-child(8),
+.promotion-table-wide td:nth-child(8){
+  min-width:110px;
+}
+.promotion-table-wide th:nth-child(9),
+.promotion-table-wide td:nth-child(9){
+  min-width:90px;
+}
+.promotion-table-wide th:nth-child(10),
+.promotion-table-wide td:nth-child(10){
+  min-width:125px;
+}
+.promotion-id-chip{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:3px 8px;
+  border:1px solid #e5dfcf;
+  border-radius:8px;
+  background:#faf9f4;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.promotion-value-cell{
+  font-weight:800;
+  white-space:nowrap;
+}
+.promotion-empty-cell{
+  padding:28px!important;
+  text-align:center;
+  color:var(--muted);
+}
+.promotion-live-columns{
+  display:none;
+}
+
+.internal-team-hero{
+  margin-bottom:18px;
+}
+.internal-sheet-frame-wrap{
+  position:relative;
+  width:100%;
+  min-height:720px;
+  overflow:hidden;
+  border:1px solid #e5e0d5;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 8px 26px rgba(50,46,38,.05);
+}
+.internal-sheet-frame-wrap iframe{
+  width:100%;
+  height:82vh;
+  min-height:760px;
+  border:0;
+  display:block;
+  background:#fff;
+}
+.internal-sheet-awaiting{
+  min-height:470px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:8px;
+  padding:40px;
+  border:1px dashed #d8d2c5;
+  border-radius:20px;
+  background:#fcfbf7;
+  text-align:center;
+}
+.internal-sheet-awaiting-icon{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border-radius:17px;
+  background:var(--yellow);
+  font-size:28px;
+}
+.internal-sheet-awaiting h3{
+  margin:5px 0 0;
+  font-family:var(--font-display);
+  font-size:24px;
+}
+.internal-sheet-awaiting p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+@media(max-width:760px){
+  .internal-sheet-frame-wrap,
+  .internal-sheet-frame-wrap iframe{
+    min-height:650px;
+  }
+}
+/* === End PROMOTION LIVE COLUMNS + INTERNAL TEAM V33 === */
+
 </style>
 
 </head>
@@ -1991,12 +2142,13 @@ table.data.promotion-table .badge{
       <a href="#contact" data-page="contact">Contact</a>
     </nav>
 
-    <div id="outsourceMenu" class="hidden">
-      <div class="nav-title dashboard-title">OUTSOURCE</div>
+    <div id="internalTeamMenu" class="hidden">
+      <div class="nav-title dashboard-title">INTERNAL TEAM</div>
       <nav>
-        <a href="#outsource-ad-optimize" data-page="outsource-ad-optimize">Ad Optimize</a>
-        <a href="#outsource-content" data-page="outsource-content">Content</a>
-        <a href="#outsource-graphic" data-page="outsource-graphic">Graphic</a>
+        <a href="#internal-social-plan" data-page="internal-social-plan">Social Plan</a>
+        <a href="#internal-kol" data-page="internal-kol">KOL</a>
+        <a href="#internal-content-creator" data-page="internal-content-creator">Content Creator</a>
+        <a href="#internal-graphic" data-page="internal-graphic">Graphic</a>
       </nav>
     </div>
 
@@ -2057,7 +2209,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V31-GitHub-Live-Google-Calendar";
+const FRONTEND_BUILD = "V34-Internal-Team-Editable-Sheets";
 const MASTER_TEST_MODE = false;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -2298,6 +2450,11 @@ const pages = {
   branch:["Branch","LUMIECLINIC"],
   contact:["Contact","LUMIECLINIC"],
 
+  "internal-social-plan":["Social Plan","INTERNAL TEAM"],
+  "internal-kol":["KOL","INTERNAL TEAM"],
+  "internal-content-creator":["Content Creator","INTERNAL TEAM"],
+  "internal-graphic":["Graphic","INTERNAL TEAM"],
+
   "outsource-ad-optimize":["Ad Optimize","OUTSOURCE"],
   "outsource-content":["Content","OUTSOURCE"],
   "outsource-graphic":["Graphic","OUTSOURCE"],
@@ -2535,8 +2692,22 @@ function parsePromotionValue(value){
 }
 
 function normalizeApiPromotion(obj){
+  const startPromotion=pickApiValue(obj,[
+    "Start Promotion","Start","Start Date","Promotion Start","startPromotion","start"
+  ]);
+
+  const endPromotion=pickApiValue(obj,[
+    "End Promotion","End","End Date","Promotion End","endPromotion","end"
+  ]);
+
+  const legacyPeriod=pickApiValue(obj,[
+    "ระยะเวลา","ระยะเวลาโปรโมชั่น","Promotion Period","Period","period"
+  ]);
+
   return {
-    period:pickApiValue(obj,["ระยะเวลา","ระยะเวลาโปรโมชั่น","Promotion Period","Period","period"]),
+    startPromotion,
+    endPromotion,
+    period:legacyPeriod,
     campaign:pickApiValue(obj,["แคมเปญ","Campaign","campaign"]),
     packageId:pickApiValue(obj,["Package ID","PackageID","packageId","id"]),
     name:pickApiValue(obj,["Package Name","PackageName","name"]),
@@ -2544,7 +2715,11 @@ function normalizeApiPromotion(obj){
     gift:pickApiValue(obj,["ของแถม","Gift","gift"]),
     category:pickApiValue(obj,["Category","หมวดหมู่","category"]),
     type:pickApiValue(obj,["Type","ประเภท","type"]),
-    value:parsePromotionValue(pickApiValue(obj,["มูลค่าPackage","มูลค่า Package","Package Value","Value","value"]))
+    value:parsePromotionValue(
+      pickApiValue(obj,[
+        "มูลค่าPackage","มูลค่า Package","Package Value","Value","value"
+      ])
+    )
   };
 }
 
@@ -3028,6 +3203,13 @@ function isOutsource(emp){
   return level==="outsource" || level.startsWith("outsource-");
 }
 
+const INTERNAL_TEAM_PAGES=["internal-social-plan","internal-kol","internal-content-creator","internal-graphic"];
+
+function hasInternalTeamMenuAccess(emp){
+  const level=employeeLevel(emp);
+  return ["master","executive","manager","employee"].includes(level);
+}
+
 const OUTSOURCE_ALLOWED_PAGES=["home","service","promotion","doctor","branch","contact"];
 const OUTSOURCE_PAGES=["outsource-ad-optimize","outsource-content","outsource-graphic"];
 const DASHBOARD_PAGES=["executive","sales","compare","ads","customer"];
@@ -3084,17 +3266,17 @@ function showApp(){
   employeeDisplay.textContent=emp.name || emp.id;
   employeePosition.textContent=[emp.position,emp.level].filter(Boolean).join(" · ") || "Employee";
   employeeAvatar.textContent=(emp.name||"E").trim().charAt(0).toUpperCase();
-  const outsourceMenu=document.getElementById("outsourceMenu");
+  const internalTeamMenu=document.getElementById("internalTeamMenu");
   const dashboardMenu=document.getElementById("dashboardMenu");
   const executiveMenu=document.getElementById("executiveMenu");
   const masterMenu=document.getElementById("masterMenu");
   const aboutNavLink=document.getElementById("aboutNavLink");
   const calendarNavLink=document.getElementById("calendarNavLink");
 
-  if(outsourceMenu){
-    outsourceMenu.classList.toggle("hidden",!hasOutsourceMenuAccess(emp));
+  if(internalTeamMenu){
+    internalTeamMenu.classList.toggle("hidden",!hasInternalTeamMenuAccess(emp));
 
-    outsourceMenu.querySelectorAll("a[data-page]").forEach(link=>{
+    internalTeamMenu.querySelectorAll("a[data-page]").forEach(link=>{
       link.classList.toggle("hidden",!canAccessPage(emp,link.dataset.page));
     });
   }
@@ -3490,6 +3672,10 @@ function render(){
 
   const map={home:renderHome, calendar:renderCalendar, about:renderAbout, service:renderService, promotion:renderPromotion,
     doctor:renderDoctor, branch:renderBranch, contact:renderContact,
+    "internal-social-plan":renderInternalSocialPlan,
+    "internal-kol":renderInternalKOL,
+    "internal-content-creator":renderInternalContentCreator,
+    "internal-graphic":renderInternalGraphic,
     "outsource-ad-optimize":renderOutsourceAdOptimize,
     "outsource-content":renderOutsourceContent,
     "outsource-graphic":renderOutsourceGraphic,
@@ -4744,6 +4930,7 @@ async function loadLiveCalendarMonth(monthDate,{force=false}={}){
       id:String(event.id||event.eventId||""),
       title:String(event.title||event.Topic||"กิจกรรม"),
       description:String(event.description||event.Description||""),
+      owner:String(event.owner||event.Owner||""),
       location:String(event.location||event.Location||""),
       startDate:String(event.startDate||event.date||""),
       endDate:String(event.endDate||event.startDate||event.date||""),
@@ -4891,8 +5078,16 @@ function renderLiveCalendarDayDetail(){
                     <div class="live-calendar-detail-title-row">
                       <span class="live-calendar-detail-dot"></span>
                       <div>
+                        <div class="live-calendar-detail-label">Topic</div>
                         <h3>${escapeHtml(event.title)}</h3>
-                        <div class="live-calendar-detail-time">${escapeHtml(liveCalendarTimeLabel(event))}</div>
+                      </div>
+                    </div>
+
+                    <div class="live-calendar-detail-info">
+                      <span class="live-calendar-detail-icon">◷</span>
+                      <div>
+                        <b>Time</b>
+                        <p>${escapeHtml(liveCalendarTimeLabel(event))}</p>
                       </div>
                     </div>
 
@@ -4905,14 +5100,13 @@ function renderLiveCalendarDayDetail(){
                         </div>
                       </div>`:""}
 
-                    ${event.description?`
-                      <div class="live-calendar-detail-info">
-                        <span class="live-calendar-detail-icon">☷</span>
-                        <div>
-                          <b>รายละเอียด</b>
-                          <div class="live-calendar-description">${liveCalendarRichText(event.description)}</div>
-                        </div>
-                      </div>`:""}
+                    <div class="live-calendar-detail-info">
+                      <span class="live-calendar-detail-icon">♙</span>
+                      <div>
+                        <b>Owner</b>
+                        <p>${escapeHtml(event.owner||"-")}</p>
+                      </div>
+                    </div>
                   </div>
                 </article>`;
             }).join("")
@@ -5275,38 +5469,63 @@ async function renderPromotion(){
   let promotionSearchQuery="";
 
   const matchesPromotionSearch=(p,query)=>{
-    const q=String(query||"").trim().toLowerCase();
+    const q=String(query||"").trim().toLocaleLowerCase("th");
+
     if(!q) return true;
 
     return [
+      p.startPromotion,
+      p.endPromotion,
+      p.period,
       p.campaign,
+      p.packageId,
       p.name,
-      p.packageId
+      p.detail,
+      p.gift,
+      p.category,
+      p.type,
+      String(p.value||"")
     ].some(value=>
       String(value||"")
-        .toLowerCase()
+        .toLocaleLowerCase("th")
         .includes(q)
     );
   };
 
+  const displayStart=p=>String(p.startPromotion||p.period||"-");
+  const displayEnd=p=>String(p.endPromotion||"-");
+
   const promotionRowsHtml=rows=>{
     if(!rows.length){
-      return `<tr><td colspan="8" style="padding:28px;text-align:center;color:var(--muted)">ไม่พบโปรโมชั่นที่ตรงกับคำค้นหา</td></tr>`;
+      return `
+        <tr>
+          <td colspan="10" class="promotion-empty-cell">
+            ไม่พบโปรโมชั่นที่ตรงกับคำค้นหา
+          </td>
+        </tr>`;
     }
 
-    return rows.map(p=>`<tr>
-      <td data-label="ระยะเวลา">${escapeHtml(p.period||"-")}</td>
-      <td data-label="Campaign">${escapeHtml(p.campaign||"-")}</td>
-      <td data-label="Package Name">
-        <div class="promotion-package-name">${escapeHtml(p.name||"-")}</div>
-        ${p.packageId?`<div class="promotion-package-id">ID: ${escapeHtml(p.packageId)}</div>`:""}
-      </td>
-      <td data-label="Detail">${escapeHtml(p.detail||"-")}</td>
-      <td data-label="ของแถม">${escapeHtml(p.gift||"-")}</td>
-      <td data-label="Category"><span class="badge alt">${escapeHtml(p.category||"-")}</span></td>
-      <td data-label="Type">${escapeHtml(p.type||"-")}</td>
-      <td data-label="มูลค่า Package">฿${fmt(p.value||0)}</td>
-    </tr>`).join("");
+    return rows.map(p=>`
+      <tr>
+        <td data-label="Start Promotion">${escapeHtml(displayStart(p))}</td>
+        <td data-label="End Promotion">${escapeHtml(displayEnd(p))}</td>
+        <td data-label="Campaign">${escapeHtml(p.campaign||"-")}</td>
+        <td data-label="Package ID">
+          <span class="promotion-id-chip">${escapeHtml(p.packageId||"-")}</span>
+        </td>
+        <td data-label="Package Name">
+          <div class="promotion-package-name">${escapeHtml(p.name||"-")}</div>
+        </td>
+        <td data-label="Detail">${escapeHtml(p.detail||"-")}</td>
+        <td data-label="ของแถม">${escapeHtml(p.gift||"-")}</td>
+        <td data-label="Category">
+          <span class="badge alt">${escapeHtml(p.category||"-")}</span>
+        </td>
+        <td data-label="Type">${escapeHtml(p.type||"-")}</td>
+        <td data-label="มูลค่า Package" class="promotion-value-cell">
+          ฿${fmt(p.value||0)}
+        </td>
+      </tr>`).join("");
   };
 
   const updateSearchResults=()=>{
@@ -5317,14 +5536,14 @@ async function renderPromotion(){
     const clearBtn=document.getElementById("promotionSearchClear");
 
     if(tbody) tbody.innerHTML=promotionRowsHtml(filteredRows);
+
     if(count){
       count.textContent=promotionSearchQuery
         ? `พบ ${filteredRows.length} จาก ${rows.length} รายการ`
         : `${rows.length} รายการ`;
     }
-    if(clearBtn){
-      clearBtn.classList.toggle("hidden",!promotionSearchQuery);
-    }
+
+    clearBtn?.classList.toggle("hidden",!promotionSearchQuery);
   };
 
   const draw=(syncing=false)=>{
@@ -5334,16 +5553,33 @@ async function renderPromotion(){
     pageContent.innerHTML=`
       <section class="hero">
         <div class="eyebrow">PROMOTION · GOOGLE SHEET</div>
-        <h1>แพ็กเกจปัจจุบัน</h1>
-        <p>ข้อมูลเชื่อมกับ Google Sheet <b>website</b> แท็บ <b>Promotion</b> และ Sync ข้อมูลล่าสุดเมื่อเปิดหน้า</p>
+        <h1>Promotion</h1>
+        <p>
+          อ่านข้อมูลล่าสุดจาก Google Sheet <b>Website</b> แท็บ <b>Promotion</b>
+          ตามโครงสร้างคอลัมน์ปัจจุบัน
+        </p>
       </section>
 
       <div class="section promotion-list-header">
         <div>
           <h3>Package List</h3>
-          <p><span id="promotionResultCount">${promotionSearchQuery?`พบ ${filteredRows.length} จาก ${rows.length} รายการ`:`${rows.length} รายการ`}</span> · ${escapeHtml(promotionSyncSource)}</p>
+          <p>
+            <span id="promotionResultCount">
+              ${promotionSearchQuery
+                ? `พบ ${filteredRows.length} จาก ${rows.length} รายการ`
+                : `${rows.length} รายการ`}
+            </span>
+            · ${escapeHtml(promotionSyncSource)}
+          </p>
         </div>
-        <button id="promotionSyncBtn" class="user-secondary-btn" type="button" ${syncing?"disabled":""}>${syncing?"กำลัง Sync...":"↻ Sync Google Sheet"}</button>
+
+        <button
+          id="promotionSyncBtn"
+          class="user-secondary-btn"
+          type="button"
+          ${syncing?"disabled":""}>
+          ${syncing?"กำลัง Sync...":"↻ Sync Google Sheet"}
+        </button>
       </div>
 
       <div class="promotion-search-wrap">
@@ -5353,71 +5589,114 @@ async function renderPromotion(){
             id="promotionSearchInput"
             type="search"
             value="${escapeHtml(promotionSearchQuery)}"
-            placeholder="ค้นหาชื่อโปรโมชั่น / Package Name / Package ID"
+            placeholder="ค้นหา Campaign / Package ID / Package Name / Detail"
             autocomplete="off"
             aria-label="ค้นหาโปรโมชั่น">
-          <button id="promotionSearchClear" class="promotion-search-clear ${promotionSearchQuery?"":"hidden"}" type="button" aria-label="ล้างคำค้นหา">×</button>
+
+          <button
+            id="promotionSearchClear"
+            class="promotion-search-clear ${promotionSearchQuery?"":"hidden"}"
+            type="button"
+            aria-label="ล้างคำค้นหา">×</button>
         </div>
-        <div class="promotion-search-hint">ค้นหาได้จาก Campaign, Package Name และ Package ID</div>
+
+        <div class="promotion-search-hint">
+          ข้อมูล: Start Promotion, End Promotion, Campaign, Package ID, Package Name, Detail, ของแถม, Category, Type และมูลค่า Package
+        </div>
       </div>
 
-      <div class="table-wrap promotion-table-wrap">
-        <table class="data promotion-table">
-          <colgroup>
-            <col style="width:12%">
-            <col style="width:9%">
-            <col style="width:20%">
-            <col style="width:20%">
-            <col style="width:12%">
-            <col style="width:9%">
-            <col style="width:7%">
-            <col style="width:11%">
-          </colgroup>
-          <thead><tr>
-            <th>ระยะเวลา</th><th>Campaign</th><th>Package Name</th><th>Detail</th><th>ของแถม</th><th>Category</th><th>Type</th><th>มูลค่า Package</th>
-          </tr></thead>
+      <div class="promotion-live-columns">
+        <span>Start Promotion</span>
+        <span>End Promotion</span>
+        <span>Campaign</span>
+        <span>Package ID</span>
+        <span>Package Name</span>
+        <span>Detail</span>
+        <span>ของแถม</span>
+        <span>Category</span>
+        <span>Type</span>
+        <span>มูลค่า Package</span>
+      </div>
+
+      <div class="table-wrap promotion-table-wrap promotion-table-wide-wrap">
+        <table class="data promotion-table promotion-table-wide">
+          <thead>
+            <tr>
+              <th>Start Promotion</th>
+              <th>End Promotion</th>
+              <th>Campaign</th>
+              <th>Package ID</th>
+              <th>Package Name</th>
+              <th>Detail</th>
+              <th>ของแถม</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>มูลค่า Package</th>
+            </tr>
+          </thead>
+
           <tbody id="promotionTableBody">
             ${promotionRowsHtml(filteredRows)}
           </tbody>
         </table>
-      </div>`;
+      </div>
+    `;
 
     const searchInput=document.getElementById("promotionSearchInput");
     const clearBtn=document.getElementById("promotionSearchClear");
     const syncBtn=document.getElementById("promotionSyncBtn");
 
-    searchInput?.addEventListener("input",e=>{
-      promotionSearchQuery=String(e.target.value||"");
+    searchInput?.addEventListener("input",event=>{
+      promotionSearchQuery=String(event.target.value||"");
       updateSearchResults();
     });
 
     clearBtn?.addEventListener("click",()=>{
       promotionSearchQuery="";
+
       if(searchInput){
         searchInput.value="";
         searchInput.focus();
       }
+
       updateSearchResults();
     });
 
     if(syncBtn && !syncing){
       syncBtn.addEventListener("click",async()=>{
         const currentQuery=promotionSearchQuery;
+
         draw(true);
+
         const ok=await syncPromotionDatabase();
+
         if((location.hash||"#home").slice(1)!=="promotion") return;
+
         promotionSearchQuery=currentQuery;
         draw(false);
-        toast(ok?"Sync Promotion จาก Google Sheet เรียบร้อย":"เชื่อม Google Sheet ไม่ได้ · ใช้ข้อมูลล่าสุดที่บันทึกไว้");
+
+        toast(
+          ok
+            ?"Sync Promotion จาก Google Sheet เรียบร้อย"
+            :"เชื่อม Google Sheet ไม่ได้ · ใช้ข้อมูลล่าสุดที่บันทึกไว้"
+        );
       });
     }
   };
 
   draw(true);
+
   const ok=await syncPromotionDatabase();
+
   if((location.hash||"#home").slice(1)!=="promotion") return;
+
   draw(false);
-  if(!ok) toast("Promotion ใช้ข้อมูลล่าสุดที่บันทึกไว้ · Google Sheet ยังเชื่อมต่อไม่ได้");
+
+  if(!ok){
+    toast(
+      "Promotion ใช้ข้อมูลล่าสุดที่บันทึกไว้ · Google Sheet ยังเชื่อมต่อไม่ได้"
+    );
+  }
 }
 
 function renderDoctor(){
@@ -6466,6 +6745,78 @@ async function renderContactManagement(){
 
   refreshBtn.addEventListener("click",load);
   await load();
+}
+
+
+/* ==========================================================
+   INTERNAL TEAM · GOOGLE SHEET EMBEDS
+   ใส่เฉพาะ src ของ iframe ที่ได้รับจาก Google Sheet ใน object นี้
+   ========================================================== */
+const INTERNAL_TEAM_SHEET_EMBEDS = {
+  socialPlan: "https://docs.google.com/spreadsheets/d/1249QIlp6IFBWq7qo6KjNckApuQHTS28m1qLdd5WQOe0/edit?gid=16092601&rm=minimal#gid=16092601",
+  kol: "https://docs.google.com/spreadsheets/d/1jOzpCHjiv8w925dgtaMjHGmMF_QRS1FdmHXj1-DZOqw/edit?gid=1001&rm=minimal#gid=1001",
+  contentCreator: "https://docs.google.com/spreadsheets/d/1f-ajat7L09qfT-8OlEYi4vC_RT8nerFcwjKlRQ8zFd4/edit?gid=1001&rm=minimal#gid=1001",
+  graphic: "https://docs.google.com/spreadsheets/d/1TE4x6uGHnNuPnuRgmmA4UeeDA-ItGfXgx1VX9HC8wLs/edit?gid=1001&rm=minimal#gid=1001"
+};
+
+function renderInternalTeamSheet(title,key,description){
+  const src=String(INTERNAL_TEAM_SHEET_EMBEDS[key]||"").trim();
+
+  document.getElementById("pageContent").innerHTML=`
+    <section class="hero internal-team-hero">
+      <div class="eyebrow">INTERNAL TEAM · GOOGLE SHEET</div>
+      <h1>${escapeHtml(title)}</h1>
+      <p>${escapeHtml(description)}</p>
+    </section>
+
+    ${src
+      ? `<div class="internal-sheet-frame-wrap">
+          <iframe
+            title="LUMIE Internal Team - ${escapeHtml(title)}"
+            src="${escapeHtml(src)}"
+            loading="eager"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>`
+      : `<section class="internal-sheet-awaiting">
+          <div class="internal-sheet-awaiting-icon">▦</div>
+          <h3>${escapeHtml(title)}</h3>
+          <p>กำลังเชื่อม Google Sheet สำหรับแก้ไขข้อมูล</p>
+        </section>`}
+  `;
+}
+
+function renderInternalSocialPlan(){
+  renderInternalTeamSheet(
+    "Social Plan",
+    "socialPlan",
+    "แผน Social และตารางโพสต์ของทีม"
+  );
+}
+
+function renderInternalKOL(){
+  renderInternalTeamSheet(
+    "KOL",
+    "kol",
+    "ตารางงานและข้อมูล KOL ภายในทีม"
+  );
+}
+
+function renderInternalContentCreator(){
+  renderInternalTeamSheet(
+    "Content Creator",
+    "contentCreator",
+    "ตารางงาน Content Creator ภายในทีม"
+  );
+}
+
+function renderInternalGraphic(){
+  renderInternalTeamSheet(
+    "Graphic",
+    "graphic",
+    "ตารางงาน Graphic ภายในทีม"
+  );
 }
 
 
