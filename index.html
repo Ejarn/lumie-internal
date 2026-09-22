@@ -2095,6 +2095,219 @@ table.data.promotion-table .badge{
 }
 /* === End PROMOTION LIVE COLUMNS + INTERNAL TEAM V33 === */
 
+
+
+/* === Internal Team Warning V35 === */
+.internal-team-warning{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  align-items:start;
+  gap:12px;
+  margin:0 0 16px;
+  padding:14px 16px;
+  border:1px solid #efc7c2;
+  border-radius:14px;
+  background:#fff7f6;
+  color:#6f3f3a;
+}
+.internal-team-warning-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f3d2ce;
+  color:#8c4942;
+  font-size:20px;
+  font-weight:800;
+}
+.internal-team-warning-title{
+  margin-top:1px;
+  font-size:12px;
+  font-weight:800;
+  color:#8c4942;
+}
+.internal-team-warning p{
+  margin:3px 0 0;
+  font-size:12px;
+  line-height:1.55;
+  color:#6f514d;
+}
+.internal-team-warning strong{
+  color:#7d332d;
+}
+@media(max-width:640px){
+  .internal-team-warning{
+    grid-template-columns:34px minmax(0,1fr);
+    padding:12px 13px;
+  }
+  .internal-team-warning-icon{
+    width:30px;
+    height:30px;
+    font-size:17px;
+  }
+}
+/* === End Internal Team Warning V35 === */
+
+
+
+/* === KOL Profile V36 === */
+.kol-profile-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin:0 0 14px;
+  padding:14px;
+  border:1px solid #e6e1d6;
+  border-radius:16px;
+  background:#fff;
+}
+.kol-profile-search-wrap{
+  position:relative;
+  flex:1 1 460px;
+  max-width:720px;
+}
+.kol-profile-search-wrap input{
+  width:100%;
+  height:44px;
+  padding:0 14px 0 40px;
+  border:1px solid #ddd7ca;
+  border-radius:12px;
+  background:#fff;
+  color:var(--text);
+  font:inherit;
+  outline:none;
+}
+.kol-profile-search-wrap input:focus{
+  border-color:#d1bd52;
+  box-shadow:0 0 0 4px #FDE69644;
+}
+.kol-profile-search-icon{
+  position:absolute;
+  left:14px;
+  top:10px;
+  color:#8e887e;
+  font-size:17px;
+}
+.kol-profile-toolbar-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.kol-profile-meta{
+  color:var(--muted);
+  font-size:10.5px;
+  white-space:nowrap;
+}
+.kol-profile-meta b{
+  color:var(--text);
+}
+.kol-profile-table-wrap{
+  overflow:auto;
+  max-height:72vh;
+  border:1px solid #e6e1d6;
+  border-radius:18px;
+  background:#fff;
+}
+.kol-profile-table{
+  min-width:1900px;
+  margin:0;
+}
+.kol-profile-table thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#faf8ef;
+  white-space:nowrap;
+}
+.kol-profile-table th,
+.kol-profile-table td{
+  vertical-align:top;
+  min-width:120px;
+  max-width:280px;
+  overflow-wrap:anywhere;
+}
+.kol-profile-table th:nth-child(1),
+.kol-profile-table td:nth-child(1){
+  min-width:90px;
+}
+.kol-profile-table th:nth-child(2),
+.kol-profile-table td:nth-child(2){
+  position:sticky;
+  left:0;
+  z-index:1;
+  min-width:150px;
+  background:#fff;
+  font-weight:700;
+}
+.kol-profile-table thead th:nth-child(2){
+  z-index:3;
+  background:#faf8ef;
+}
+.kol-profile-link{
+  color:#3f699e;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  white-space:nowrap;
+}
+.kol-profile-empty{
+  color:#aaa49b;
+}
+.kol-profile-approve{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.kol-profile-approve.yes{
+  background:#e8f5ea;
+  color:#44754c;
+  border:1px solid #c6e1ca;
+}
+.kol-profile-approve.no{
+  background:#f4f2ed;
+  color:#817b72;
+  border:1px solid #e0dcd4;
+}
+.kol-profile-empty-row{
+  padding:34px!important;
+  text-align:center;
+  color:var(--muted);
+}
+.kol-profile-error{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+  padding:10px 12px;
+  border:1px solid #efc7c2;
+  border-radius:12px;
+  background:#fff7f6;
+  color:#7a4741;
+  font-size:10.5px;
+}
+@media(max-width:760px){
+  .kol-profile-toolbar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .kol-profile-search-wrap{
+    max-width:none;
+    flex-basis:auto;
+  }
+  .kol-profile-toolbar-right{
+    justify-content:space-between;
+  }
+}
+/* === End KOL Profile V36 === */
+
 </style>
 
 </head>
@@ -2147,6 +2360,7 @@ table.data.promotion-table .badge{
       <nav>
         <a href="#internal-social-plan" data-page="internal-social-plan">Social Plan</a>
         <a href="#internal-kol" data-page="internal-kol">KOL</a>
+        <a href="#internal-kol-profile" data-page="internal-kol-profile">KOL Profile</a>
         <a href="#internal-content-creator" data-page="internal-content-creator">Content Creator</a>
         <a href="#internal-graphic" data-page="internal-graphic">Graphic</a>
       </nav>
@@ -2209,7 +2423,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V34-Internal-Team-Editable-Sheets";
+const FRONTEND_BUILD = "V36-KOL-Profile-Connected";
 const MASTER_TEST_MODE = false;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
@@ -2452,6 +2666,7 @@ const pages = {
 
   "internal-social-plan":["Social Plan","INTERNAL TEAM"],
   "internal-kol":["KOL","INTERNAL TEAM"],
+  "internal-kol-profile":["KOL Profile","INTERNAL TEAM"],
   "internal-content-creator":["Content Creator","INTERNAL TEAM"],
   "internal-graphic":["Graphic","INTERNAL TEAM"],
 
@@ -3203,7 +3418,7 @@ function isOutsource(emp){
   return level==="outsource" || level.startsWith("outsource-");
 }
 
-const INTERNAL_TEAM_PAGES=["internal-social-plan","internal-kol","internal-content-creator","internal-graphic"];
+const INTERNAL_TEAM_PAGES=["internal-social-plan","internal-kol","internal-kol-profile","internal-content-creator","internal-graphic"];
 
 function hasInternalTeamMenuAccess(emp){
   const level=employeeLevel(emp);
@@ -3674,6 +3889,7 @@ function render(){
     doctor:renderDoctor, branch:renderBranch, contact:renderContact,
     "internal-social-plan":renderInternalSocialPlan,
     "internal-kol":renderInternalKOL,
+    "internal-kol-profile":renderInternalKOLProfile,
     "internal-content-creator":renderInternalContentCreator,
     "internal-graphic":renderInternalGraphic,
     "outsource-ad-optimize":renderOutsourceAdOptimize,
@@ -6769,6 +6985,14 @@ function renderInternalTeamSheet(title,key,description){
       <p>${escapeHtml(description)}</p>
     </section>
 
+    <section class="internal-team-warning" role="alert" aria-label="ข้อควรระวัง">
+      <div class="internal-team-warning-icon">!</div>
+      <div>
+        <div class="internal-team-warning-title">ข้อควรระวัง</div>
+        <p><strong>ห้ามลบข้อมูลโดยเด็ดขาด</strong> เพราะจะทำให้ข้อมูลทั้งหมดเสียหาย</p>
+      </div>
+    </section>
+
     ${src
       ? `<div class="internal-sheet-frame-wrap">
           <iframe
@@ -6791,7 +7015,7 @@ function renderInternalSocialPlan(){
   renderInternalTeamSheet(
     "Social Plan",
     "socialPlan",
-    "แผน Social และตารางโพสต์ของทีม"
+    "สำหรับลงบันทึกและดูภาพรวม การจัดการ Social Plan"
   );
 }
 
@@ -6799,15 +7023,231 @@ function renderInternalKOL(){
   renderInternalTeamSheet(
     "KOL",
     "kol",
-    "ตารางงานและข้อมูล KOL ภายในทีม"
+    "สำหรับลงบันทึกและดูภาพรวม การจัดการ KOL"
   );
 }
+
+
+let kolProfileDatabase=[];
+let kolProfileHeaders=[];
+let kolProfileLastUpdated="";
+let kolProfileLoading=false;
+let kolProfileError="";
+
+function normalizeKolProfileRows(rows){
+  return (Array.isArray(rows)?rows:[])
+    .filter(row=>{
+      if(!row || typeof row!=="object") return false;
+
+      return Object.values(row).some(value=>
+        String(value??"").trim()!==""
+      );
+    });
+}
+
+function kolProfileCellHtml(header,value){
+  const text=String(value??"").trim();
+  const key=String(header||"").trim().toLowerCase();
+
+  if(!text) return '<span class="kol-profile-empty">-</span>';
+
+  if(
+    [
+      "facebook",
+      "instagram",
+      "tiktok",
+      "profile image",
+      "clean face image"
+    ].includes(key)
+  ){
+    if(/^https?:\/\//i.test(text)){
+      return `<a class="kol-profile-link" href="${escapeHtml(text)}" target="_blank" rel="noopener noreferrer">เปิดลิงก์ ↗</a>`;
+    }
+
+    return escapeHtml(text);
+  }
+
+  if(key==="approve"){
+    const yes=/^(true|yes|1|approved|approve)$/i.test(text);
+    return `<span class="kol-profile-approve ${yes?"yes":"no"}">${yes?"Approved":"Not Approved"}</span>`;
+  }
+
+  if(key==="status"){
+    const active=/^active$/i.test(text);
+    return `<span class="badge ${active?"new":"alt"}">${escapeHtml(text)}</span>`;
+  }
+
+  return escapeHtml(text);
+}
+
+async function syncKolProfiles(){
+  kolProfileLoading=true;
+  kolProfileError="";
+
+  try{
+    const result=await lumieApiGet("kolProfiles");
+    const rows=Array.isArray(result.data)?result.data:[];
+    const headers=Array.isArray(result.headers)?result.headers:[];
+
+    kolProfileDatabase=normalizeKolProfileRows(rows);
+    kolProfileHeaders=headers.filter(header=>String(header||"").trim());
+    kolProfileLastUpdated=String(result.updatedAt||new Date().toISOString());
+
+    return true;
+  }catch(err){
+    console.error("KOL Profile sync failed:",err);
+    kolProfileError=String(err?.message||err||"โหลด KOL Profile ไม่สำเร็จ");
+    return false;
+  }finally{
+    kolProfileLoading=false;
+  }
+}
+
+async function renderInternalKOLProfile(){
+  const pageContent=document.getElementById("pageContent");
+  let searchQuery="";
+
+  const draw=()=>{
+    const q=searchQuery.trim().toLocaleLowerCase("th");
+
+    const rows=kolProfileDatabase.filter(row=>{
+      if(!q) return true;
+
+      return kolProfileHeaders.some(header=>
+        String(row?.[header]??"")
+          .toLocaleLowerCase("th")
+          .includes(q)
+      );
+    });
+
+    const updatedText=kolProfileLastUpdated
+      ? new Date(kolProfileLastUpdated).toLocaleString("th-TH",{
+          dateStyle:"medium",
+          timeStyle:"short"
+        })
+      : "-";
+
+    pageContent.innerHTML=`
+      <section class="hero">
+        <div class="eyebrow">KOL SPECIALIST · GOOGLE SHEET</div>
+        <h1>KOL Profile</h1>
+        <p>
+          ข้อมูล KOL Profile เชื่อมจาก Google Sheet
+          <b>Website → KOL Profile</b>
+        </p>
+      </section>
+
+      <section class="internal-team-warning" role="alert" aria-label="ข้อควรระวัง">
+        <div class="internal-team-warning-icon">!</div>
+        <div>
+          <div class="internal-team-warning-title">ข้อควรระวัง</div>
+          <p><strong>ห้ามลบข้อมูลโดยเด็ดขาด</strong> เพราะจะทำให้ข้อมูลทั้งหมดเสียหาย</p>
+        </div>
+      </section>
+
+      <section class="kol-profile-toolbar">
+        <div class="kol-profile-search-wrap">
+          <span class="kol-profile-search-icon">⌕</span>
+          <input
+            id="kolProfileSearch"
+            type="search"
+            value="${escapeHtml(searchQuery)}"
+            placeholder="ค้นหา KOL Name / Gender / Category / Social / Status / Note"
+            autocomplete="off">
+        </div>
+
+        <div class="kol-profile-toolbar-right">
+          <div class="kol-profile-meta">
+            <b>${fmt(rows.length)}</b> รายการ
+            <span>· Last Updated ${escapeHtml(updatedText)}</span>
+          </div>
+
+          <button
+            id="kolProfileSyncBtn"
+            class="user-secondary-btn"
+            type="button"
+            ${kolProfileLoading?"disabled":""}>
+            ${kolProfileLoading?"กำลัง Sync...":"↻ Sync KOL Profile"}
+          </button>
+        </div>
+      </section>
+
+      ${kolProfileError?`
+        <div class="kol-profile-error">
+          <b>โหลดข้อมูล KOL Profile ไม่สำเร็จ</b>
+          <span>${escapeHtml(kolProfileError)}</span>
+        </div>`:""}
+
+      <div class="table-wrap kol-profile-table-wrap">
+        <table class="data kol-profile-table">
+          <thead>
+            <tr>
+              ${kolProfileHeaders.map(header=>`<th>${escapeHtml(header)}</th>`).join("")}
+            </tr>
+          </thead>
+
+          <tbody>
+            ${rows.length
+              ? rows.map(row=>`
+                  <tr>
+                    ${kolProfileHeaders.map(header=>`
+                      <td data-label="${escapeHtml(header)}">
+                        ${kolProfileCellHtml(header,row?.[header])}
+                      </td>`).join("")}
+                  </tr>`).join("")
+              : `<tr>
+                  <td colspan="${Math.max(1,kolProfileHeaders.length)}" class="kol-profile-empty-row">
+                    ${kolProfileLoading?"กำลังโหลดข้อมูล KOL Profile...":"ยังไม่มีข้อมูล KOL Profile ที่แสดงได้"}
+                  </td>
+                </tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    const search=document.getElementById("kolProfileSearch");
+    const syncBtn=document.getElementById("kolProfileSyncBtn");
+
+    search?.addEventListener("input",event=>{
+      searchQuery=String(event.target.value||"");
+      draw();
+      const next=document.getElementById("kolProfileSearch");
+      if(next){
+        next.focus();
+        next.setSelectionRange(searchQuery.length,searchQuery.length);
+      }
+    });
+
+    if(syncBtn && !kolProfileLoading){
+      syncBtn.addEventListener("click",async()=>{
+        kolProfileLoading=true;
+        draw();
+
+        await syncKolProfiles();
+
+        if((location.hash||"#home").slice(1)==="internal-kol-profile"){
+          draw();
+        }
+      });
+    }
+  };
+
+  kolProfileLoading=true;
+  draw();
+
+  await syncKolProfiles();
+
+  if((location.hash||"#home").slice(1)!=="internal-kol-profile") return;
+
+  draw();
+}
+
 
 function renderInternalContentCreator(){
   renderInternalTeamSheet(
     "Content Creator",
     "contentCreator",
-    "ตารางงาน Content Creator ภายในทีม"
+    "สำหรับลงบันทึกและดูภาพรวม การจัดการ Content Creator"
   );
 }
 
@@ -6815,7 +7255,7 @@ function renderInternalGraphic(){
   renderInternalTeamSheet(
     "Graphic",
     "graphic",
-    "ตารางงาน Graphic ภายในทีม"
+    "สำหรับลงบันทึกและดูภาพรวม การจัดการ Graphic"
   );
 }
 
