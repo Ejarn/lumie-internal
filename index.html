@@ -2351,6 +2351,166 @@ table.data,table.data td,table.data th{font-size:17px}
 .doctor-directory-index,.doctor-directory-action,.doctor-view-hint{font-size:15px}
 @media(min-width:821px){nav a{font-size:21px}.nav-title{font-size:16px}.hero p{font-size:21px}.section p{font-size:17px}.doctor-card h4,.doctor-directory-name,.branch-card h4{font-size:23px}}
 @media(max-width:820px){nav a{font-size:18px}.hero p{font-size:18px}.branch-row,.doctor-spec{font-size:16px}}
+
+
+/* === About Timeline V43 === */
+.about-timeline-card{
+  padding:28px 30px 30px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(253,230,150,.28),transparent 32%),
+    linear-gradient(145deg,#fff 0 78%,#fff9df 100%);
+}
+.about-timeline{
+  padding-left:34px;
+}
+.about-timeline::before{
+  left:8px;
+  width:2px;
+  background:linear-gradient(180deg,#E8B93F,#FDE696);
+}
+.about-timeline-item{
+  padding-bottom:34px;
+}
+.about-timeline-item:last-child{
+  padding-bottom:0;
+}
+.about-timeline-item .timeline-dot{
+  left:-34px;
+  top:2px;
+  width:17px;
+  height:17px;
+  background:#FDE696;
+  border:4px solid #fff;
+  box-shadow:0 0 0 2px #E2C75B;
+}
+.about-timeline-item .timeline-year{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:3px 9px;
+  border:1px solid #E7D688;
+  border-radius:999px;
+  background:#FFF9DC;
+  color:#6F5D18;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.03em;
+}
+.about-timeline-item h4{
+  margin:9px 0 3px;
+  font-size:22px;
+  line-height:1.25;
+  color:var(--text);
+}
+.timeline-title-en{
+  color:#817A70;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.45;
+}
+.timeline-copy{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+.timeline-copy p{
+  margin:0;
+  padding:10px 12px;
+  border:1px solid #EEE8D8;
+  border-radius:12px;
+  background:rgba(255,255,255,.76);
+  color:#59554D;
+  font-size:14px;
+  line-height:1.7;
+}
+.timeline-lang{
+  display:inline-flex;
+  min-width:30px;
+  justify-content:center;
+  margin-right:8px;
+  padding:2px 6px;
+  border-radius:999px;
+  background:#FDE696;
+  color:#5E501C;
+  font-size:9px;
+  font-weight:800;
+  vertical-align:2px;
+}
+@media(max-width:820px){
+  .about-timeline-card{padding:22px 18px 24px}
+  .about-timeline{padding-left:28px}
+  .about-timeline-item .timeline-dot{left:-28px}
+  .about-timeline-item h4{font-size:19px}
+  .timeline-title-en{font-size:13px}
+  .timeline-copy p{font-size:13px}
+}
+/* === End About Timeline V43 === */
+
+
+
+/* === About Partners V44 === */
+.partner-section-heading{
+  margin-top:34px;
+}
+.partner-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.partner-card{
+  position:relative;
+  overflow:hidden;
+  min-height:260px;
+  padding:16px;
+  border:1px solid #eadfae;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(253,230,150,.32),transparent 34%),
+    linear-gradient(145deg,#fff 0 72%,#fff7d8 100%);
+  box-shadow:0 12px 30px rgba(139,123,67,.08);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.partner-card:hover{
+  transform:translateY(-3px);
+  border-color:#ddc96f;
+  box-shadow:0 16px 36px rgba(139,123,67,.14);
+}
+.partner-logo-stage{
+  width:100%;
+  height:100%;
+  min-height:226px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.6);
+}
+.partner-logo-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.partner-logo-stage-ud{
+  background:#AD3A24;
+}
+.partner-logo-stage-slc{
+  background:#2DA9C0;
+}
+@media(max-width:820px){
+  .partner-grid{
+    grid-template-columns:1fr;
+  }
+  .partner-card{
+    min-height:220px;
+  }
+  .partner-logo-stage{
+    min-height:190px;
+  }
+}
+/* === End About Partners V44 === */
+
 </style>
 
 </head>
@@ -2465,7 +2625,7 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V42-Cache-First-20261008";
+const FRONTEND_BUILD = "V44-About-Partners-20261008";
 const MASTER_TEST_MODE = false;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
 // Never embed a master password or bypass backend authentication in public HTML.
@@ -5589,17 +5749,86 @@ function renderAbout(){
       <div class="card"><b>วิสัยทัศน์</b><p class="muted" style="margin-top:8px;font-size:13px">เป็นคลินิกความงามที่ลูกค้าไว้วางใจมากที่สุดในทุกพื้นที่ที่ให้บริการ</p></div>
     </section>
 
-    <div class="section"><div><h3>เส้นทางของเรา</h3></div></div>
-    <div class="card">
-      <div class="timeline">
-        ${[
-          ["2562","ก่อตั้งสาขาแรก","เปิดให้บริการสาขาแรกด้วยทีมแพทย์ผิวหนังและบริการดูแลผิวหน้าพื้นฐาน"],
-          ["2564","ขยายสู่สาขาที่ 2–3","เพิ่มบริการเลเซอร์และหัตถการเสริมความงามครบวงจร"],
-          ["2566","ระบบดูแลลูกค้าออนไลน์","เริ่มใช้ระบบนัดหมายและติดตามลูกค้าแบบดิจิทัลในทุกสาขา"],
-          ["2569","ครบ 4 สาขา","ให้บริการครอบคลุมพื้นที่กรุงเทพฯ และเตรียมเปิดช่องทางออนไลน์สำหรับลูกค้า"]
-        ].map(t=>`<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">พ.ศ. ${t[0]}</div><h4>${t[1]}</h4><p>${t[2]}</p></div>`).join("")}
+    <div class="section"><div><h3>เส้นทางของเรา</h3><p>Milestones of Lumie Clinic</p></div></div>
+    <div class="card about-timeline-card">
+      <div class="timeline about-timeline">
+        <div class="timeline-item about-timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1 July 2026</div>
+          <h4>จุดเริ่มต้นของ Lumie Clinic</h4>
+          <div class="timeline-title-en">The Beginning of Lumie Clinic</div>
+          <div class="timeline-copy">
+            <p><span class="timeline-lang">TH</span>Lumie Clinic เริ่มต้นเส้นทางแห่งความงามอย่างเป็นทางการ ด้วยการเปิดให้บริการ 2 สาขาแรก ณ เซ็นทรัล ปิ่นเกล้า และเดอะมอลล์ บางแค พร้อมมอบประสบการณ์ความงามที่ออกแบบให้เหมาะกับแต่ละบุคคล</p>
+            <p><span class="timeline-lang">EN</span>Lumie Clinic officially began its journey with the opening of its first two branches at Central Pinklao and The Mall Bangkae, introducing personalized aesthetic experiences tailored to each individual.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item about-timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1 September 2026</div>
+          <h4>ก้าวแรกสู่บริการศัลยกรรม</h4>
+          <div class="timeline-title-en">Our First Step into Aesthetic Surgery</div>
+          <div class="timeline-copy">
+            <p><span class="timeline-lang">TH</span>Lumie Clinic ก้าวสู่การให้บริการด้านศัลยกรรม ด้วยการเปิดตัว <strong>Lumie 1st Nose Project</strong> ภายใต้แนวคิด “ฝากจมูกแรกไว้ที่ลูมี่” พร้อมการดูแลโดยทีมแพทย์จาก SLC Clinic</p>
+            <p><span class="timeline-lang">EN</span>Lumie Clinic expanded into aesthetic surgery with the launch of <strong>Lumie 1st Nose Project</strong>, introducing the concept “Trust Lumie with Your First Nose Surgery,” under the care of medical professionals from SLC Clinic.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item about-timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">9 September 2026</div>
+          <h4>ขยายความงามสู่สาขาที่ 3</h4>
+          <div class="timeline-title-en">Expanding to Our Third Branch</div>
+          <div class="timeline-copy">
+            <p><span class="timeline-lang">TH</span>อีกหนึ่งก้าวของการเติบโต กับการเปิด Lumie Clinic สาขาที่ 3 ณ ซีคอน ศรีนครินทร์ เพื่อขยายการเข้าถึงบริการด้านความงามให้สะดวกและใกล้ชิดลูกค้ามากยิ่งขึ้น</p>
+            <p><span class="timeline-lang">EN</span>Continuing our journey of growth, Lumie Clinic opened its third branch at Seacon Srinakarin, making our aesthetic services more accessible and convenient for our customers.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item about-timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">11 September 2026</div>
+          <h4>เติบโตอย่างต่อเนื่องสู่สาขาที่ 4</h4>
+          <div class="timeline-title-en">Continuing Our Growth with the Fourth Branch</div>
+          <div class="timeline-copy">
+            <p><span class="timeline-lang">TH</span>Lumie Clinic เดินหน้าขยายการให้บริการอย่างต่อเนื่อง ด้วยการเปิดสาขาที่ 4 ณ เดอะมอลล์ บางกะปิ ตอกย้ำความมุ่งมั่นในการส่งมอบบริการความงามที่เข้าถึงได้มากยิ่งขึ้น</p>
+            <p><span class="timeline-lang">EN</span>Lumie Clinic continued its expansion with the opening of its fourth branch at The Mall Bangkapi, reinforcing our commitment to bringing aesthetic services closer to more customers.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item about-timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">8 October 2026</div>
+          <h4>ก้าวสู่ใจกลางกรุงเทพฯ กับสาขาที่ 5</h4>
+          <div class="timeline-title-en">Our Fifth Branch in the Heart of Bangkok</div>
+          <div class="timeline-copy">
+            <p><span class="timeline-lang">TH</span>Lumie Clinic ก้าวสู่ใจกลางกรุงเทพมหานคร ด้วยการเปิดสาขาที่ 5 ณ สยามสแควร์ ซอย 2 อีกหนึ่งหมุดหมายสำคัญของการเติบโต พร้อมส่งต่อประสบการณ์ความงามเฉพาะบุคคลในทำเลใจกลางเมือง</p>
+            <p><span class="timeline-lang">EN</span>Lumie Clinic reached a new milestone with the opening of its fifth branch at Siam Square Soi 2, in the heart of Bangkok, bringing personalized aesthetic experiences to one of the city's most vibrant destinations.</p>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="section partner-section-heading">
+      <div>
+        <h3>Partner ของ Lumie</h3>
+        <p>Our Partners</p>
+      </div>
+    </div>
+
+    <section class="partner-grid">
+      <article class="partner-card" aria-label="UD Clinic Partner">
+        <div class="partner-logo-stage partner-logo-stage-ud">
+          <img src="./partner-ud.jpg" alt="UD Clinic" class="partner-logo-image">
+        </div>
+      </article>
+
+      <article class="partner-card" aria-label="SLC Clinics & Hospital Partner">
+        <div class="partner-logo-stage partner-logo-stage-slc">
+          <img src="./partner-slc.jpg" alt="SLC Clinics & Hospital" class="partner-logo-image">
+        </div>
+      </article>
+    </section>
 
     <div class="section"><div><h3>คุณค่าที่ยึดถือ</h3></div></div>
     <section class="grid g4">
