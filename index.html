@@ -2151,163 +2151,206 @@ table.data.promotion-table .badge{
 
 
 
-/* === KOL Profile V36 === */
-.kol-profile-toolbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  margin:0 0 14px;
-  padding:14px;
-  border:1px solid #e6e1d6;
-  border-radius:16px;
-  background:#fff;
-}
-.kol-profile-search-wrap{
-  position:relative;
-  flex:1 1 460px;
-  max-width:720px;
-}
-.kol-profile-search-wrap input{
-  width:100%;
-  height:44px;
-  padding:0 14px 0 40px;
-  border:1px solid #ddd7ca;
-  border-radius:12px;
-  background:#fff;
-  color:var(--text);
-  font:inherit;
-  outline:none;
-}
-.kol-profile-search-wrap input:focus{
-  border-color:#d1bd52;
-  box-shadow:0 0 0 4px #FDE69644;
-}
-.kol-profile-search-icon{
-  position:absolute;
-  left:14px;
-  top:10px;
-  color:#8e887e;
-  font-size:17px;
-}
-.kol-profile-toolbar-right{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-.kol-profile-meta{
+
+
+
+
+/* === Doctor Detail V40 === */
+.doctor-directory-english{
+  margin:-2px 0 10px;
   color:var(--muted);
   font-size:10.5px;
-  white-space:nowrap;
+  line-height:1.45;
 }
-.kol-profile-meta b{
-  color:var(--text);
+.doctor-directory-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
 }
-.kol-profile-table-wrap{
-  overflow:auto;
-  max-height:72vh;
-  border:1px solid #e6e1d6;
-  border-radius:18px;
-  background:#fff;
-}
-.kol-profile-table{
-  min-width:1900px;
-  margin:0;
-}
-.kol-profile-table thead th{
-  position:sticky;
-  top:0;
-  z-index:2;
-  background:#faf8ef;
-  white-space:nowrap;
-}
-.kol-profile-table th,
-.kol-profile-table td{
-  vertical-align:top;
-  min-width:120px;
-  max-width:280px;
-  overflow-wrap:anywhere;
-}
-.kol-profile-table th:nth-child(1),
-.kol-profile-table td:nth-child(1){
-  min-width:90px;
-}
-.kol-profile-table th:nth-child(2),
-.kol-profile-table td:nth-child(2){
-  position:sticky;
-  left:0;
-  z-index:1;
-  min-width:150px;
-  background:#fff;
-  font-weight:700;
-}
-.kol-profile-table thead th:nth-child(2){
-  z-index:3;
-  background:#faf8ef;
-}
-.kol-profile-link{
-  color:#3f699e;
-  text-decoration:underline;
-  text-underline-offset:2px;
-  white-space:nowrap;
-}
-.kol-profile-empty{
-  color:#aaa49b;
-}
-.kol-profile-approve{
+.doctor-directory-meta span{
   display:inline-flex;
   align-items:center;
-  min-height:26px;
+  min-height:25px;
   padding:3px 8px;
+  border:1px solid #e7e1d5;
   border-radius:999px;
+  background:#faf9f5;
+  color:#655f56;
+  font-size:9.5px;
+  font-weight:700;
+}
+.doctor-detail-overlay{
+  position:fixed;
+  inset:0;
+  z-index:10020;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:rgba(28,26,22,.48);
+  backdrop-filter:blur(5px);
+}
+.doctor-detail-modal{
+  width:min(1040px,96vw);
+  max-height:92vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  border:1px solid #e7e1d4;
+  border-radius:24px;
+  background:#fff;
+  box-shadow:0 28px 90px rgba(0,0,0,.22);
+}
+.doctor-detail-head{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+  padding:20px 24px 17px;
+  border-bottom:1px solid #eee9df;
+  background:linear-gradient(135deg,#fff,#fff8dc);
+}
+.doctor-detail-head h2{
+  margin:4px 0 3px;
+  font-family:var(--font-display);
+  font-size:27px;
+  line-height:1.25;
+}
+.doctor-detail-head p{
+  margin:0;
+  color:var(--muted);
+  font-size:11px;
+}
+.doctor-detail-close{
+  width:40px;
+  height:40px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border:1px solid #ded8cc;
+  border-radius:50%;
+  background:#fff;
+  color:#676159;
+  font:inherit;
+  font-size:25px;
+  cursor:pointer;
+}
+.doctor-detail-body{
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(230px,290px) minmax(0,1fr);
+  gap:22px;
+  padding:22px 24px 26px;
+  overflow:auto;
+}
+.doctor-detail-photo-frame{
+  width:100%;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  border:1px solid #ece3bd;
+  border-radius:18px;
+  background:#f8f4df;
+}
+.doctor-detail-photo{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+.doctor-detail-photo-placeholder{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#fff9df,#f3e2a0);
+  color:#87762c;
+  font-family:var(--font-display);
+  font-size:58px;
+  font-weight:800;
+}
+.doctor-detail-highlight{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid #ece7dc;
+  border-radius:12px;
+  background:#fbfaf6;
+}
+.doctor-detail-highlight span{
+  display:block;
+  margin-bottom:3px;
+  color:#978f84;
   font-size:9px;
   font-weight:800;
-  white-space:nowrap;
 }
-.kol-profile-approve.yes{
-  background:#e8f5ea;
-  color:#44754c;
-  border:1px solid #c6e1ca;
+.doctor-detail-highlight b{
+  display:block;
+  color:#3f3b35;
+  font-size:13px;
 }
-.kol-profile-approve.no{
-  background:#f4f2ed;
-  color:#817b72;
-  border:1px solid #e0dcd4;
-}
-.kol-profile-empty-row{
-  padding:34px!important;
-  text-align:center;
+.doctor-detail-highlight small{
+  display:block;
+  margin-top:2px;
   color:var(--muted);
 }
-.kol-profile-error{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:12px;
-  padding:10px 12px;
-  border:1px solid #efc7c2;
-  border-radius:12px;
-  background:#fff7f6;
-  color:#7a4741;
-  font-size:10.5px;
+.doctor-detail-council-btn{
+  width:100%;
+  margin-top:12px;
+}
+.doctor-detail-grid{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  align-content:start;
+}
+.doctor-detail-row{
+  min-width:0;
+  padding:12px 13px;
+  border:1px solid #ece7dd;
+  border-radius:13px;
+  background:#fcfbf8;
+}
+.doctor-detail-row-wide{
+  grid-column:1/-1;
+}
+.doctor-detail-row span{
+  display:block;
+  margin-bottom:5px;
+  color:#979086;
+  font-size:9px;
+  font-weight:800;
+}
+.doctor-detail-row b{
+  display:block;
+  color:#45413a;
+  font-size:12px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
 }
 @media(max-width:760px){
-  .kol-profile-toolbar{
-    align-items:stretch;
-    flex-direction:column;
-  }
-  .kol-profile-search-wrap{
-    max-width:none;
-    flex-basis:auto;
-  }
-  .kol-profile-toolbar-right{
-    justify-content:space-between;
-  }
+  .doctor-detail-overlay{padding:10px}
+  .doctor-detail-modal{width:100%;max-height:95vh;border-radius:18px}
+  .doctor-detail-body{grid-template-columns:1fr;padding:16px}
+  .doctor-detail-side{width:min(360px,100%);margin:0 auto}
+  .doctor-detail-grid{grid-template-columns:1fr}
+  .doctor-detail-row-wide{grid-column:auto}
 }
-/* === End KOL Profile V36 === */
+/* === End Doctor Detail V40 === */
 
+
+/* LUMIE typography readability +2 steps — 8 October 2026 */
+body{font-size:19px;line-height:1.58}
+nav a{font-size:19px}.nav-title,.eyebrow{font-size:15px}
+.hero p{font-size:20px}.section p{font-size:17px}
+.card p,.card li,.branch-row,.doctor-spec,.doctor-role,.doctor-directory-english,.doctor-directory-meta{font-size:17px;line-height:1.55}
+.doctor-card h4,.doctor-directory-name,.branch-card h4,.promo-card h4,.timeline-item h4{font-size:22px}
+.branch-live-top h4{font-size:22px}.branch-id-label{font-size:14px}
+.badge,.status,.employee small,.kpi-detail,.notice,.sample-note{font-size:15px}
+table.data,table.data td,table.data th{font-size:17px}
+.form-field input,.form-field textarea,.login-card input,.action,.btn-primary{font-size:19px}
+.doctor-directory-index,.doctor-directory-action,.doctor-view-hint{font-size:15px}
+@media(min-width:821px){nav a{font-size:21px}.nav-title{font-size:16px}.hero p{font-size:21px}.section p{font-size:17px}.doctor-card h4,.doctor-directory-name,.branch-card h4{font-size:23px}}
+@media(max-width:820px){nav a{font-size:18px}.hero p{font-size:18px}.branch-row,.doctor-spec{font-size:16px}}
 </style>
 
 </head>
@@ -2360,7 +2403,6 @@ table.data.promotion-table .badge{
       <nav>
         <a href="#internal-social-plan" data-page="internal-social-plan">Social Plan</a>
         <a href="#internal-kol" data-page="internal-kol">KOL</a>
-        <a href="#internal-kol-profile" data-page="internal-kol-profile">KOL Profile</a>
         <a href="#internal-content-creator" data-page="internal-content-creator">Content Creator</a>
         <a href="#internal-graphic" data-page="internal-graphic">Graphic</a>
       </nav>
@@ -2423,10 +2465,10 @@ const EMPLOYEE_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPy
 const EMPLOYEE_CACHE_KEY = "lumie_employee_db_website_sheet_v1";
 
 // PRE-PUBLIC TEST ACCESS: ปิด MASTER_TEST_MODE ก่อนนำเว็บไซต์ขึ้น Public
-const FRONTEND_BUILD = "V37-KOL-Profile-Read-Fix";
+const FRONTEND_BUILD = "V42-Cache-First-20261008";
 const MASTER_TEST_MODE = false;
 const ALWAYS_ALLOWED_EMPLOYEE_ID = "202600041";
-const ALWAYS_ALLOWED_MASTER_PASSWORD = "1234";
+// Never embed a master password or bypass backend authentication in public HTML.
 const BUILTIN_EMPLOYEE_SNAPSHOT = [
   {id:"202600041", level:"Master", position:"Data Controller", name:"Jidapa Chaikram", phone:"0800700067", email:"earn.jc@lumiehouse"},
   {id:"202600023", level:"Employee", position:"Marketing & PR Officer", name:"Parichat Angkanok", phone:"0614910497", email:"atom.pa@lumiehouse.com"},
@@ -2505,16 +2547,98 @@ function normalizeApiDoctor(obj){
   const rawHasCouncil=
     obj?.hasCouncilImage ??
     obj?.["hasCouncilImage"] ??
-    obj?.["แพทยสภา"];
+    false;
 
   const rawHasProfile=
     obj?.hasProfileImage ??
     obj?.["hasProfileImage"] ??
-    obj?.["Profile"];
+    false;
+
+  const thaiTitle=pickApiValue(obj,[
+    "thaiTitle","คำนำหน้า"
+  ]);
+
+  const thaiFormalTitle=pickApiValue(obj,[
+    "thaiFormalTitle","คำนำหน้าชื่อ(ไทย)"
+  ]);
+
+  const firstName=pickApiValue(obj,[
+    "firstName","ชื่อ"
+  ]);
+
+  const lastName=pickApiValue(obj,[
+    "lastName","นามสกุล"
+  ]);
+
+  const englishTitle=pickApiValue(obj,[
+    "englishTitle","คำนำหน้าชื่อ(อังกฤษ)"
+  ]);
+
+  const englishFirstName=pickApiValue(obj,[
+    "englishFirstName","Name"
+  ]);
+
+  const englishLastName=pickApiValue(obj,[
+    "englishLastName","Last Name"
+  ]);
+
+  const nickname=pickApiValue(obj,[
+    "nickname","Nickname"
+  ]);
+
+  const nicknameTh=pickApiValue(obj,[
+    "nicknameTh","ชื่อเล่นไทย"
+  ]);
+
+  const thaiFullName=[thaiTitle,firstName,lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  const englishName=[englishTitle,englishFirstName,englishLastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  const sourceName=pickApiValue(obj,[
+    "name","ชื่อหมอ","ขื่อหมอ","ชื่อแพทย์"
+  ]);
+
+  const displayName=
+    sourceName ||
+    (
+      thaiFullName
+        ? `${thaiFullName}${nicknameTh?` (${nicknameTh})`:""}`
+        : (
+            englishName ||
+            nicknameTh ||
+            nickname ||
+            "Doctor"
+          )
+    );
 
   return {
-    name:pickApiValue(obj,["ชื่อหมอ","ขื่อหมอ","ชื่อแพทย์","Name","name"]),
-    license:pickApiValue(obj,["เลข ว","เลข ว.","License","license"]),
+    name:displayName,
+    license:pickApiValue(obj,[
+      "license","เลข ว","เลข ว.","License"
+    ]),
+    empCode:pickApiValue(obj,[
+      "empCode","Emp.Code","Emp Code"
+    ]).replace(/\.0$/,""),
+
+    thaiFormalTitle,
+    thaiTitle,
+    firstName,
+    lastName,
+    thaiFullName,
+
+    englishTitle,
+    englishFirstName,
+    englishLastName,
+    englishName,
+
+    nickname,
+    nicknameTh,
 
     hasProfileImage:
       rawHasProfile===true ||
@@ -2522,12 +2646,19 @@ function normalizeApiDoctor(obj){
       String(rawHasProfile||"")==="1",
 
     profileImageUrl:
-      pickApiValue(obj,["profileImageUrl","Profile URL","profileUrl"]),
+      pickApiValue(obj,[
+        "profileImageUrl","Profile URL","profileUrl"
+      ]),
 
     hasCouncilImage:
       rawHasCouncil===true ||
       String(rawHasCouncil||"").toLowerCase()==="true" ||
-      String(rawHasCouncil||"")==="1"
+      String(rawHasCouncil||"")==="1",
+
+    councilImageUrl:
+      pickApiValue(obj,[
+        "councilImageUrl","Council URL","councilUrl"
+      ])
   };
 }
 
@@ -2629,11 +2760,13 @@ async function syncAllLumieData(){
   cacheEmployeeDatabase("Apps Script API");
 
   if(doctors.length){
+    stampResourceSync("doctors");
     doctorDatabase=doctors;
     try{localStorage.setItem(DOCTOR_CACHE_KEY,JSON.stringify(doctorDatabase));}catch{}
   }
 
   if(branches.length){
+    stampResourceSync("branches");
     branchDatabase=branches;
     try{localStorage.setItem(BRANCH_CACHE_KEY,JSON.stringify(branchDatabase));}catch{}
   }
@@ -2666,7 +2799,6 @@ const pages = {
 
   "internal-social-plan":["Social Plan","INTERNAL TEAM"],
   "internal-kol":["KOL","INTERNAL TEAM"],
-  "internal-kol-profile":["KOL Profile","INTERNAL TEAM"],
   "internal-content-creator":["Content Creator","INTERNAL TEAM"],
   "internal-graphic":["Graphic","INTERNAL TEAM"],
 
@@ -3024,57 +3156,18 @@ const DOCTORS = [
  {name:"พญ.อิสรีย์ จิรวารศิริกุล (หมอทีม)", license:"ว.66241"}
 ];
 
-const BRANCH_CACHE_KEY = "lumie_branch_db_website_sheet_v1";
+const BRANCH_CACHE_KEY = "lumie_branch_db_website_sheet_20261008_v2";
 
-const BUILTIN_BRANCH_SNAPSHOT = [
-  {
-    id:"CPK",
-    name:"Central Pinklao | Floor 3",
-    address:"",
-    phone:"095-3692244",
-    hours:"10.00 - 20.00",
-    map:"",
-    status:"Active"
-  },
-  {
-    id:"BKE",
-    name:"The mall Bangkae | Floor M",
-    address:"",
-    phone:"088-9875599",
-    hours:"10.00 - 20.00",
-    map:"",
-    status:"Active"
-  },
-  {
-    id:"SCS",
-    name:"Seacon Square Srinakarin",
-    address:"",
-    phone:"",
-    hours:"",
-    map:"",
-    status:"9 September 2026"
-  },
-  {
-    id:"BKP",
-    name:"The mall Bangkapi",
-    address:"",
-    phone:"",
-    hours:"",
-    map:"",
-    status:"11 September 2026"
-  },
-  {
-    id:"SS2",
-    name:"Siam Square Soi 2",
-    address:"",
-    phone:"",
-    hours:"",
-    map:"",
-    status:"Coming soon"
-  }
-];
+const BUILTIN_BRANCH_SNAPSHOT = [{"id":"CPK","name":"Central Pinklao","address":"ชั้น 3 | 7/222 ถ. บรมราชชนนี แขวงอรุณอมรินทร์ เขตบางกอกน้อย กรุงเทพมหานคร 10700","phone":"095-3692244","hours":"10:00 - 20:00","map":"https://maps.app.goo.gl/hK7ujSmazTMsKuWo9","status":"Active"},{"id":"BKE","name":"The mall Bangkae","address":"ชั้น M | 518 ถ. เพชรเกษม แขวงบางแคเหนือ บางแค กรุงเทพมหานคร 10160","phone":"088-9875599","hours":"10.00 - 20.00","map":"https://maps.app.goo.gl/FxjExarnrBetQPJBA","status":"Active"},{"id":"SCS","name":"Seacon Square Srinakarin","address":"ชั้น 3 | 55 ถ. ศรีนครินทร์ แขวงหนองบอน เขตประเวศ กรุงเทพมหานคร 10250","phone":"065-8181996","hours":"10.00 - 20.00","map":"https://maps.app.goo.gl/epo8C4MQfCrR8JuS7","status":"Active"},{"id":"BKP","name":"The mall Bangkapi","address":"ชั้น M | 3522 ถ. ลาดพร้าว แขวงคลองจั่น เขตบางกะปิ กรุงเทพมหานคร 10240","phone":"093-8372746\n | 093-837 2747","hours":"10.00 - 20.00","map":"https://maps.app.goo.gl/roZLEGnuHdGrHmnCA","status":"Active"},{"id":"SS2","name":"Siam Square Soi 2","address":"ชั้น 1 | ถ. พระรามที่ 1 แขวงปทุมวัน เขตปทุมวัน กรุงเทพมหานคร 10330","phone":"091-7738436","hours":"10.00 - 20.00","map":"https://maps.app.goo.gl/7Ji6WGzcrENLe9Tc9","status":"Active"},{"id":"TPL","name":"สำนักงานใหญ่ (Skin)","address":"","phone":"","hours":"","map":"","status":""},{"id":"TPL","name":"สำนักงานใหญ่ (Surgery)","address":"","phone":"088-9834988","hours":"","map":"","status":""}];
 
-let branchDatabase=[...BUILTIN_BRANCH_SNAPSHOT];
+function readBranchCache(){
+  try{
+    const rows=JSON.parse(localStorage.getItem(BRANCH_CACHE_KEY)||"null");
+    if(Array.isArray(rows) && rows.length) return rows.map(normalizeApiBranch).filter(x=>x.name);
+  }catch(e){console.warn("Branch cache unavailable",e);}
+  return [...BUILTIN_BRANCH_SNAPSHOT];
+}
+let branchDatabase=readBranchCache();
 
 function normalizeApiBranch(obj){
   return {
@@ -3098,7 +3191,40 @@ function safeHttpUrl(value){
   return text;
 }
 
-async function syncBranchDatabase(){
+const LUMIE_SYNC_INTERVAL_MS=5*60*1000;
+const lumieSyncInFlight=new Map();
+function resourceSyncDue(key,force){
+  if(force) return true;
+  try{return Date.now()-Number(localStorage.getItem("lumie_last_sync_"+key)||0)>LUMIE_SYNC_INTERVAL_MS;}
+  catch{return true;}
+}
+function stampResourceSync(key){try{localStorage.setItem("lumie_last_sync_"+key,String(Date.now()));}catch{}}
+async function backgroundRevalidate(key,action,force=false){
+  if(lumieSyncInFlight.has(key)) return lumieSyncInFlight.get(key);
+  if(!resourceSyncDue(key,force)) return false;
+  const task=Promise.resolve().then(action).then(ok=>{if(ok)stampResourceSync(key);return ok;})
+    .finally(()=>lumieSyncInFlight.delete(key));
+  lumieSyncInFlight.set(key,task);
+  return task;
+}
+async function syncBranchDatabase(force=false){
+  return backgroundRevalidate("branches",syncBranchDatabaseNetwork,force);
+}
+async function syncBranchDatabaseNetwork(){
+  try{
+    const url="https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPysVXb8jATcRH2ec0P8arPasi1OYbxS0/gviz/tq?tqx=out:csv&sheet=Branch&_="+Date.now();
+    const response=await fetch(url,{cache:"no-store"});
+    if(!response.ok) throw new Error("Branch Sheet unavailable");
+    const parsed=parseCsvRows(await response.text());
+    const headers=parsed.shift()||[];
+    const fresh=parsed.map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]||""]))).map(normalizeApiBranch).filter(b=>b.name);
+    if(!fresh.length) throw new Error("Branch Sheet empty");
+    branchDatabase=fresh;
+    try{localStorage.setItem(BRANCH_CACHE_KEY,JSON.stringify(fresh));}catch{}
+    return true;
+  }catch(sheetErr){
+    console.info("Branch Google Sheet direct sync not available; using API or verified snapshot",sheetErr);
+  }
   try{
     const result=await lumieApiGet("branches");
 
@@ -3166,15 +3292,8 @@ const CHART_COLORS = ["#E8B93F","#6B9E73","#D47777","#8AA6C1","#B48EAD"];
 
 
 const DOCTOR_CSV_URL = "https://docs.google.com/spreadsheets/d/1MNgTyd1sh6UPysVXb8jATcRH2ec0P8arPasi1OYbxS0/gviz/tq?tqx=out:csv&sheet=Doctor";
-const DOCTOR_CACHE_KEY = "lumie_doctor_db_website_sheet_v1";
-const BUILTIN_DOCTOR_SNAPSHOT = [
-  {name:"นพ. บัณฑิต สาดตระกูลวัฒนา (หมอมิล)", license:"ว.76639"},
-  {name:"พญ. กุลธิดา วัชระมณีกาญจน์ (หมอโอ)", license:"ว.57794"},
-  {name:"พญ.ธิดามาศ อุดม (หมอแพง)", license:"ว.74215"},
-  {name:"พญ. พิมบุษพร สิงหอัศวรัตน์ (หมอพริม)", license:"ว.66412"},
-  {name:"พญ. อธิขวัญ บุญณะโชติ (หมอนุก)", license:"ว.59416"},
-  {name:"พญ.อิสรีย์ จิรวารศิริกุล (หมอทีม)", license:"ว.66241"}
-];
+const DOCTOR_CACHE_KEY = "lumie_doctor_db_website_sheet_20261008_v2";
+const BUILTIN_DOCTOR_SNAPSHOT = [{"Profile":"","เลข ว":"ว.57794","Emp.Code":"209900001.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"กุลธิดา","นามสกุล":"วัชระมณีกาญจน์","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Kuntida","Last Name":"Wachramaneekan","Nickname":"Oh","ชื่อเล่นไทย":"หมอโอ","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.76639","Emp.Code":"209900003.0","คำนำหน้าชื่อ(ไทย)":"นาย","คำนำหน้า":"นพ.","ชื่อ":"บัณฑิต","นามสกุล":"สาดตระกูลวัฒนา","คำนำหน้าชื่อ(อังกฤษ)":"Mr.","Name":"Bundit","Last Name":"Sadtrakulwatana","Nickname":"Mill","ชื่อเล่นไทย":"หมอมิล","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.66412","Emp.Code":"209900004.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"พิมบุษพร","นามสกุล":"สิงหอัศวรัตน์","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Pimbootsaporn","Last Name":"Singha-aussavarat","Nickname":"Prim","ชื่อเล่นไทย":"หมอพริม","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.59416","Emp.Code":"209900006.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"อธิขวัญ","นามสกุล":"บุญณะโชติ","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Atikwan","Last Name":"Boonnachot","Nickname":"Nook","ชื่อเล่นไทย":"หมอนุ๊ก","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.66241","Emp.Code":"209900008.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"อิสรีย์","นามสกุล":"จิรวารศิริกุล","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Issaree","Last Name":"Jirawarnsirikul","Nickname":"Team","ชื่อเล่นไทย":"หมอทีม","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.74215","Emp.Code":"209900009.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ธิดามาศ","นามสกุล":"อุุดม","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Tidamas","Last Name":"Udom","Nickname":"Paeng","ชื่อเล่นไทย":"หมอแพง","แพทยสภา":"","":""},{"Profile":"","เลข ว":"","Emp.Code":"209900010.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ดาดนุช","นามสกุล":"ศาสตระรุจิ","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Dadanuch","Last Name":"Sastararuji","Nickname":"Pearpim","ชื่อเล่นไทย":"หมอแพร","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.72968","Emp.Code":"209900011.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ชนิกา","นามสกุล":"ไชยลังกา","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Chanika","Last Name":"Chailungka","Nickname":"Gie","ชื่อเล่นไทย":"หมอกี้","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.69209","Emp.Code":"209900012.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"แพรพิไล","นามสกุล":"พิริยะประทานคุณ","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Praepilai","Last Name":"Piriyapratankun","Nickname":"Mim","ชื่อเล่นไทย":"หมอมิ้ม","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.36100","Emp.Code":"209900013.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ธนวรรณ","นามสกุล":"สุขเสวี","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Tanawan","Last Name":"Sukhsevi","Nickname":"Buang","ชื่อเล่นไทย":"หมอเบื้อง","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.46250","Emp.Code":"209900014.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ธนกร","นามสกุล":"บารมีเสริมส่ง","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Thanakon","Last Name":"Baramesermsong","Nickname":"Key","ชื่อเล่นไทย":"หมอกี้","แพทยสภา":"","":""},{"Profile":"","เลข ว":"ว.33305","Emp.Code":"209900015.0","คำนำหน้าชื่อ(ไทย)":"นาย","คำนำหน้า":"นพ.","ชื่อ":"ประณัฐ","นามสกุล":"ประทุมทาน","คำนำหน้าชื่อ(อังกฤษ)":"Mr.","Name":"Pranat","Last Name":"Pratumtan","Nickname":"Singtoh","ชื่อเล่นไทย":"หมอสิงโต","แพทยสภา":"","":""},{"Profile":"","เลข ว":"","Emp.Code":"209900018.0","คำนำหน้าชื่อ(ไทย)":"นาย","คำนำหน้า":"นพ.","ชื่อ":"กันตวิทย์","นามสกุล":"สวนทวี","คำนำหน้าชื่อ(อังกฤษ)":"Mr.","Name":"Kantawit","Last Name":"Suantawee","Nickname":"Pleng","ชื่อเล่นไทย":"หมอเพลง","แพทยสภา":"","":""},{"Profile":"","เลข ว":"","Emp.Code":"209900019.0","คำนำหน้าชื่อ(ไทย)":"นางสาว","คำนำหน้า":"พญ.","ชื่อ":"ฐิตารีย์","นามสกุล":"พีรโชติวัฒน์","คำนำหน้าชื่อ(อังกฤษ)":"Miss","Name":"Thitaree","Last Name":"Pheerachotiwat","Nickname":"Ploy","ชื่อเล่นไทย":"หมอพลอย","แพทยสภา":"","":""}].map(normalizeApiDoctor);
 
 /* Doctor cache-first loading
    แสดงข้อมูล + รูป Profile ล่าสุดที่เคย Sync ไว้ทันที แล้วค่อยเช็ก API เบื้องหลัง */
@@ -3211,7 +3330,13 @@ function doctorDatabaseSignature(rows=doctorDatabase){
   return JSON.stringify((Array.isArray(rows)?rows:[]).map(d=>({
     name:String(d?.name||""),
     license:String(d?.license||""),
+    empCode:String(d?.empCode||""),
+    thaiFullName:String(d?.thaiFullName||""),
+    englishName:String(d?.englishName||""),
+    nickname:String(d?.nickname||""),
+    nicknameTh:String(d?.nicknameTh||""),
     profileImageUrl:String(d?.profileImageUrl||""),
+    councilImageUrl:String(d?.councilImageUrl||""),
     hasProfileImage:d?.hasProfileImage===true,
     hasCouncilImage:d?.hasCouncilImage===true
   })));
@@ -3237,7 +3362,10 @@ function parseCsvRows(text){
   return rows;
 }
 
-async function syncDoctorDatabase(){
+async function syncDoctorDatabase(force=false){
+  return backgroundRevalidate("doctors",syncDoctorDatabaseNetwork,force);
+}
+async function syncDoctorDatabaseNetwork(){
   try{
     const result=await lumieApiGet("doctors");
     const data=(Array.isArray(result.data)?result.data:[])
@@ -3265,7 +3393,7 @@ async function syncAllDatabasesFromLogin(){
   if(status) status.textContent="กำลังเชื่อม Employee และ Doctor กับ Google Sheet...";
   try{
     await loadEmployeeDatabase();
-    await syncDoctorDatabase();
+    await syncDoctorDatabase(true);
     const empCount=Array.isArray(employeeDatabase)?employeeDatabase.length:0;
     const docCount=Array.isArray(doctorDatabase)?doctorDatabase.length:0;
     if(status) status.textContent=`Employee ${empCount} คน · Doctor ${docCount} คน · Sync เรียบร้อย`;
@@ -3418,7 +3546,7 @@ function isOutsource(emp){
   return level==="outsource" || level.startsWith("outsource-");
 }
 
-const INTERNAL_TEAM_PAGES=["internal-social-plan","internal-kol","internal-kol-profile","internal-content-creator","internal-graphic"];
+const INTERNAL_TEAM_PAGES=["internal-social-plan","internal-kol","internal-content-creator","internal-graphic"];
 
 function hasInternalTeamMenuAccess(emp){
   const level=employeeLevel(emp);
@@ -3663,53 +3791,6 @@ loginForm.addEventListener("submit",async e=>{
   loginButton.disabled=true;
   loginButton.textContent="กำลังเข้าสู่ระบบ...";
 
-  // Master test account เข้าเว็บได้ทันทีเสมอ แม้ API / Google Sheet จะยังไม่พร้อม
-  if(
-    MASTER_TEST_MODE &&
-    id===ALWAYS_ALLOWED_EMPLOYEE_ID &&
-    password===ALWAYS_ALLOWED_MASTER_PASSWORD
-  ){
-    const emp={...BUILTIN_EMPLOYEE_SNAPSHOT[0],level:"Master"};
-
-    sessionStorage.setItem("lumie_employee",JSON.stringify(emp));
-    sessionStorage.setItem("lumie_logged_in","true");
-    sessionStorage.removeItem("lumie_auth_token");
-
-    employeeDatabase=[
-      emp,
-      ...employeeDatabase.filter(x=>x.id!==emp.id)
-    ];
-
-    location.hash="#home";
-    showApp();
-
-    // ขอ token จริงจาก API ภายหลัง ถ้ารหัสใน backend ยังตรงกัน
-    lumieApiPost({
-      action:"login",
-      employeeId:id,
-      password
-    }).then(result=>{
-      if(result?.authToken){
-        sessionStorage.setItem("lumie_auth_token",String(result.authToken));
-      }
-      if(result?.employee){
-        const apiEmp=normalizeApiEmployee(result.employee);
-        if(apiEmp.id===ALWAYS_ALLOWED_EMPLOYEE_ID){
-          const lockedMaster={...apiEmp,level:"Master"};
-          sessionStorage.setItem("lumie_employee",JSON.stringify(lockedMaster));
-          employeeDatabase=[lockedMaster,...employeeDatabase.filter(x=>x.id!==lockedMaster.id)];
-        }
-      }
-    }).catch(err=>{
-      console.warn("Master test login: backend token ยังไม่พร้อม แต่ local Master access ใช้งานได้",err);
-    });
-
-    loadEmployeeDatabase();
-    loginButton.disabled=false;
-    loginButton.textContent="เข้าสู่เว็บไซต์";
-    return;
-  }
-
   try{
     const result=await lumieApiPost({
       action:"login",
@@ -3718,6 +3799,8 @@ loginForm.addEventListener("submit",async e=>{
     });
 
     const emp=normalizeApiEmployee(result.employee||{});
+    // Protected master identity: elevate only after successful server authentication.
+    if(emp.id===ALWAYS_ALLOWED_EMPLOYEE_ID) emp.level="Master";
 
     if(!emp.id){
       throw new Error("ไม่พบข้อมูลผู้ใช้งาน");
@@ -3746,8 +3829,8 @@ loginForm.addEventListener("submit",async e=>{
     location.hash="#home";
     showApp();
 
-    if(isMaster(emp)){
-      loadEmployeeDatabase();
+    if(isMaster(emp) && resourceSyncDue("employees",false)){
+      loadEmployeeDatabase().then(ok=>{if(ok)stampResourceSync("employees");});
     }
   }catch(err){
     sessionStorage.removeItem("lumie_auth_token");
@@ -3889,7 +3972,6 @@ function render(){
     doctor:renderDoctor, branch:renderBranch, contact:renderContact,
     "internal-social-plan":renderInternalSocialPlan,
     "internal-kol":renderInternalKOL,
-    "internal-kol-profile":renderInternalKOLProfile,
     "internal-content-creator":renderInternalContentCreator,
     "internal-graphic":renderInternalGraphic,
     "outsource-ad-optimize":renderOutsourceAdOptimize,
@@ -5915,42 +5997,187 @@ async function renderPromotion(){
   }
 }
 
+function doctorValueOrDash(value){
+  const text=String(value||"").trim();
+  return text || "-";
+}
+
+function openDoctorProfileDetail(doctor){
+  if(!doctor) return;
+
+  const profile=doctor.profileImageUrl
+    ? `<img class="doctor-detail-photo" src="${escapeHtml(doctor.profileImageUrl)}" alt="${escapeHtml(doctor.name)}">`
+    : `<div class="doctor-detail-photo-placeholder">${escapeHtml((doctor.nicknameTh||doctor.firstName||"D").replace(/^หมอ/,"").charAt(0)||"D")}</div>`;
+
+  const modal=document.createElement("div");
+  modal.className="doctor-detail-overlay";
+
+  modal.innerHTML=`
+    <section class="doctor-detail-modal" role="dialog" aria-modal="true" aria-label="รายละเอียดแพทย์ ${escapeHtml(doctor.name)}">
+      <div class="doctor-detail-head">
+        <div>
+          <div class="eyebrow">LUMIE DOCTOR PROFILE</div>
+          <h2>${escapeHtml(doctor.name)}</h2>
+          <p>${escapeHtml(doctor.englishName||"-")}</p>
+        </div>
+
+        <button class="doctor-detail-close" type="button" aria-label="ปิด">×</button>
+      </div>
+
+      <div class="doctor-detail-body">
+        <aside class="doctor-detail-side">
+          <div class="doctor-detail-photo-frame">${profile}</div>
+
+          <div class="doctor-detail-highlight">
+            <span>ชื่อเล่น</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.nicknameTh))}</b>
+            ${doctor.nickname?`<small>${escapeHtml(doctor.nickname)}</small>`:""}
+          </div>
+
+          <div class="doctor-detail-highlight">
+            <span>เลข ว</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.license))}</b>
+          </div>
+
+          ${doctor.license?`
+            <button class="action doctor-detail-council-btn" type="button">
+              ดูข้อมูลแพทยสภา
+            </button>`:""}
+        </aside>
+
+        <div class="doctor-detail-grid">
+          <div class="doctor-detail-row">
+            <span>Emp.Code</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.empCode))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>คำนำหน้าชื่อ (ไทย)</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.thaiFormalTitle))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>คำนำหน้า</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.thaiTitle))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>ชื่อ</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.firstName))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>นามสกุล</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.lastName))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>ชื่อภาษาไทย</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.thaiFullName))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>คำนำหน้าชื่อ (อังกฤษ)</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.englishTitle))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>Name</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.englishFirstName))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>Last Name</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.englishLastName))}</b>
+          </div>
+
+          <div class="doctor-detail-row doctor-detail-row-wide">
+            <span>English Name</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.englishName))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>Nickname</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.nickname))}</b>
+          </div>
+
+          <div class="doctor-detail-row">
+            <span>ชื่อเล่นไทย</span>
+            <b>${escapeHtml(doctorValueOrDash(doctor.nicknameTh))}</b>
+          </div>
+
+          <div class="doctor-detail-row doctor-detail-row-wide">
+            <span>แพทยสภา</span>
+            <b>${doctor.hasCouncilImage?"มีข้อมูลภาพแพทยสภา":(doctor.license?"มีเลขใบประกอบวิชาชีพ":"ยังไม่มีข้อมูล")}</b>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  document.body.appendChild(modal);
+
+  const close=()=>{
+    document.removeEventListener("keydown",onKey);
+    modal.remove();
+  };
+
+  const onKey=event=>{
+    if(event.key==="Escape") close();
+  };
+
+  modal.querySelector(".doctor-detail-close")?.addEventListener("click",close);
+  modal.addEventListener("click",event=>{
+    if(event.target===modal) close();
+  });
+  document.addEventListener("keydown",onKey);
+
+  modal.querySelector(".doctor-detail-council-btn")?.addEventListener("click",()=>{
+    openDoctorLicense(doctor.name,doctor.license);
+  });
+}
+
 function renderDoctor(){
   const draw=()=>{
-    const cards=doctorDatabase.map(d=>{
-      const hasLegacy=!!doctorLicensePath(d.license);
-      const hasCouncil=d.hasCouncilImage===true;
-      const canOpen=hasCouncil||hasLegacy||!!d.license;
-
+    const cards=doctorDatabase.map((d,index)=>{
       const profile=d.profileImageUrl
         ? `<img class="doctor-profile-photo" src="${escapeHtml(d.profileImageUrl)}" alt="${escapeHtml(d.name)}">`
-        : `<div class="doctor-profile-placeholder">${escapeHtml((d.name||"D").replace(/^(นพ\.|พญ\.)\s*/,"").charAt(0)||"D")}</div>`;
+        : `<div class="doctor-profile-placeholder">${escapeHtml((d.nicknameTh||d.firstName||"D").replace(/^หมอ/,"").charAt(0)||"D")}</div>`;
 
       return `
-        <button class="card doctor-directory-card ${canOpen?"doctor-card-click":""}"
+        <button class="card doctor-directory-card doctor-card-click"
                 type="button"
-                ${canOpen?`data-doctor-name="${escapeHtml(d.name)}" data-doctor-license="${escapeHtml(d.license)}"`:"disabled"}>
+                data-doctor-index="${index}">
           <div class="doctor-profile-frame">${profile}</div>
-          <div class="doctor-directory-index">LUMIE DOCTOR</div>
+
+          <div class="doctor-directory-index">${escapeHtml(d.empCode||"LUMIE DOCTOR")}</div>
           <div class="doctor-directory-name">${escapeHtml(d.name)}</div>
-          <div class="badge alt">${escapeHtml(d.license||"-")}</div>
-          <div class="doctor-directory-action">
-            ${hasCouncil
-              ?"ดูภาพใบแพทยสภา →"
-              :(hasLegacy?"ดูเอกสารแพทย์ →":"คลิกเพื่อตรวจสอบใบแพทยสภา →")}
+
+          ${d.englishName
+            ? `<div class="doctor-directory-english">${escapeHtml(d.englishName)}</div>`
+            : ""}
+
+          <div class="doctor-directory-meta">
+            <span>${escapeHtml(d.nicknameTh||d.nickname||"-")}</span>
+            <span>${escapeHtml(d.license||"ยังไม่มีเลข ว")}</span>
           </div>
+
+          <div class="doctor-directory-action">ดูรายละเอียดแพทย์ →</div>
         </button>`;
     }).join("");
 
     document.getElementById("pageContent").innerHTML=`
       <section class="hero">
-        <div class="eyebrow">DOCTOR DIRECTORY</div>
+        <div class="eyebrow">DOCTOR DIRECTORY · GOOGLE SHEET</div>
         <h1>ทีมแพทย์ Lumie Clinic</h1>
-        <p>เลือกแพทย์เพื่อดูข้อมูลและภาพใบแพทยสภา รูป Profile เชื่อมจาก Google Sheet ผ่าน Apps Script</p>
+        <p>
+          ข้อมูลเชื่อมจาก Google Sheet หน้า <b>Doctor</b>
+          · แสดงชื่อไทย ชื่ออังกฤษ ชื่อเล่น Emp.Code เลข ว และข้อมูลแพทยสภา
+        </p>
       </section>
 
       <div class="doctor-breadcrumb">
-        <b>Doctor</b><span>›</span><span>ชื่อแพทย์</span><span>›</span><span>ภาพใบแพทยสภา</span>
+        <b>Doctor</b><span>›</span><span>Profile</span><span>›</span><span>รายละเอียดแพทย์</span>
       </div>
 
       <div class="section">
@@ -5961,28 +6188,25 @@ function renderDoctor(){
         ${cards||'<div class="card">ยังไม่มีข้อมูลแพทย์</div>'}
       </section>`;
 
-    document.querySelectorAll(".doctor-card-click").forEach(card=>{
+    document.querySelectorAll("[data-doctor-index]").forEach(card=>{
       card.addEventListener("click",()=>{
-        openDoctorLicense(
-          card.dataset.doctorName,
-          card.dataset.doctorLicense
-        );
+        const index=Number(card.dataset.doctorIndex);
+        if(Number.isInteger(index) && doctorDatabase[index]){
+          openDoctorProfileDetail(doctorDatabase[index]);
+        }
       });
     });
   };
 
-  /* Cache-first: draw รูปล่าสุดที่เคย Sync ไว้ทันที */
   draw();
 
-  /* Revalidate เบื้องหลัง และ redraw เฉพาะเมื่อข้อมูล/URL รูปเปลี่ยนจริง
-     จึงไม่ทำให้รูปเดิมกระพริบหรือโหลดซ้ำทุกครั้งที่เข้าหน้า Doctor */
   const beforeSync=doctorDatabaseSignature();
+
   syncDoctorDatabase().then(ok=>{
     if(!ok || location.hash!=="#doctor") return;
     if(doctorDatabaseSignature()!==beforeSync) draw();
   });
 }
-
 function renderBranch(){
   const draw=()=>{
     const cards=branchDatabase.map(b=>{
@@ -6044,7 +6268,7 @@ function renderBranch(){
       <section class="hero">
         <div class="eyebrow">BRANCH · LIVE DATA</div>
         <h1>สาขา LUMIE</h1>
-        <p>ข้อมูลหน้านี้เชื่อมกับฐานข้อมูล Branch ผ่าน Lumie API</p>
+        <p>ข้อมูลอ้างอิงจาก Google Sheet Website แท็บ Branch (พร้อมระบบสำรองเมื่อเชื่อมต่อไม่ได้)</p>
       </section>
 
       <div class="section">
@@ -6517,7 +6741,7 @@ function renderDoctorManagement(){
     refreshBtn.addEventListener("click",async()=>{
       refreshBtn.disabled=true;
       refreshBtn.textContent="กำลังโหลด...";
-      await syncDoctorDatabase();
+      await syncDoctorDatabase(true);
       toast("Refresh ข้อมูลแพทย์แล้ว");
       renderDoctorManagement();
     });
@@ -6560,7 +6784,7 @@ function renderDoctorManagement(){
           await uploadDoctorImageFromInput(license,"council",councilInput);
         }
 
-        await syncDoctorDatabase();
+        await syncDoctorDatabase(true);
 
         toast(mode.value==="edit"?"แก้ไขข้อมูลแพทย์เรียบร้อย":"เพิ่มแพทย์เรียบร้อย");
         renderDoctorManagement();
@@ -6801,7 +7025,7 @@ function renderBranchManagement(){
       refreshBtn.disabled=true;
       refreshBtn.textContent="กำลังโหลด...";
 
-      await syncBranchDatabase();
+      await syncBranchDatabase(true);
 
       toast("Refresh ข้อมูล Branch แล้ว");
       renderBranchManagement();
@@ -6846,7 +7070,7 @@ function renderBranchManagement(){
           });
         }
 
-        await syncBranchDatabase();
+        await syncBranchDatabase(true);
 
         toast(
           mode.value==="edit"
@@ -7025,221 +7249,6 @@ function renderInternalKOL(){
     "kol",
     "สำหรับลงบันทึกและดูภาพรวม การจัดการ KOL"
   );
-}
-
-
-let kolProfileDatabase=[];
-let kolProfileHeaders=[];
-let kolProfileLastUpdated="";
-let kolProfileLoading=false;
-let kolProfileError="";
-
-function normalizeKolProfileRows(rows){
-  return (Array.isArray(rows)?rows:[])
-    .filter(row=>{
-      if(!row || typeof row!=="object") return false;
-
-      return Object.values(row).some(value=>
-        String(value??"").trim()!==""
-      );
-    });
-}
-
-function kolProfileCellHtml(header,value){
-  const text=String(value??"").trim();
-  const key=String(header||"").trim().toLowerCase();
-
-  if(!text) return '<span class="kol-profile-empty">-</span>';
-
-  if(
-    [
-      "facebook",
-      "instagram",
-      "tiktok",
-      "profile image",
-      "clean face image"
-    ].includes(key)
-  ){
-    if(/^https?:\/\//i.test(text)){
-      return `<a class="kol-profile-link" href="${escapeHtml(text)}" target="_blank" rel="noopener noreferrer">เปิดลิงก์ ↗</a>`;
-    }
-
-    return escapeHtml(text);
-  }
-
-  if(key==="approve"){
-    const yes=/^(true|yes|1|approved|approve)$/i.test(text);
-    return `<span class="kol-profile-approve ${yes?"yes":"no"}">${yes?"Approved":"Not Approved"}</span>`;
-  }
-
-  if(key==="status"){
-    const active=/^active$/i.test(text);
-    return `<span class="badge ${active?"new":"alt"}">${escapeHtml(text)}</span>`;
-  }
-
-  return escapeHtml(text);
-}
-
-async function syncKolProfiles(){
-  kolProfileLoading=true;
-  kolProfileError="";
-
-  try{
-    const result=await lumieApiGet("kolProfiles");
-    const rows=Array.isArray(result.data)?result.data:[];
-    const headers=Array.isArray(result.headers)?result.headers:[];
-
-    kolProfileDatabase=normalizeKolProfileRows(rows);
-    kolProfileHeaders=headers.filter(header=>String(header||"").trim());
-    kolProfileLastUpdated=String(result.updatedAt||new Date().toISOString());
-
-    return true;
-  }catch(err){
-    console.error("KOL Profile sync failed:",err);
-    kolProfileError=String(err?.message||err||"โหลด KOL Profile ไม่สำเร็จ");
-    return false;
-  }finally{
-    kolProfileLoading=false;
-  }
-}
-
-async function renderInternalKOLProfile(){
-  const pageContent=document.getElementById("pageContent");
-  let searchQuery="";
-
-  const draw=()=>{
-    const q=searchQuery.trim().toLocaleLowerCase("th");
-
-    const rows=kolProfileDatabase.filter(row=>{
-      if(!q) return true;
-
-      return kolProfileHeaders.some(header=>
-        String(row?.[header]??"")
-          .toLocaleLowerCase("th")
-          .includes(q)
-      );
-    });
-
-    const updatedText=kolProfileLastUpdated
-      ? new Date(kolProfileLastUpdated).toLocaleString("th-TH",{
-          dateStyle:"medium",
-          timeStyle:"short"
-        })
-      : "-";
-
-    pageContent.innerHTML=`
-      <section class="hero">
-        <div class="eyebrow">KOL SPECIALIST · GOOGLE SHEET</div>
-        <h1>KOL Profile</h1>
-        <p>
-          ข้อมูล KOL Profile เชื่อมจาก Google Sheet
-          <b>Website → KOL Profile</b>
-        </p>
-      </section>
-
-      <section class="internal-team-warning" role="alert" aria-label="ข้อควรระวัง">
-        <div class="internal-team-warning-icon">!</div>
-        <div>
-          <div class="internal-team-warning-title">ข้อควรระวัง</div>
-          <p><strong>ห้ามลบข้อมูลโดยเด็ดขาด</strong> เพราะจะทำให้ข้อมูลทั้งหมดเสียหาย</p>
-        </div>
-      </section>
-
-      <section class="kol-profile-toolbar">
-        <div class="kol-profile-search-wrap">
-          <span class="kol-profile-search-icon">⌕</span>
-          <input
-            id="kolProfileSearch"
-            type="search"
-            value="${escapeHtml(searchQuery)}"
-            placeholder="ค้นหา KOL Name / Gender / Category / Social / Status / Note"
-            autocomplete="off">
-        </div>
-
-        <div class="kol-profile-toolbar-right">
-          <div class="kol-profile-meta">
-            <b>${fmt(rows.length)}</b> รายการ
-            <span>· Last Updated ${escapeHtml(updatedText)}</span>
-          </div>
-
-          <button
-            id="kolProfileSyncBtn"
-            class="user-secondary-btn"
-            type="button"
-            ${kolProfileLoading?"disabled":""}>
-            ${kolProfileLoading?"กำลัง Sync...":"↻ Sync KOL Profile"}
-          </button>
-        </div>
-      </section>
-
-      ${kolProfileError?`
-        <div class="kol-profile-error">
-          <b>โหลดข้อมูล KOL Profile ไม่สำเร็จ</b>
-          <span>${escapeHtml(kolProfileError)}</span>
-        </div>`:""}
-
-      <div class="table-wrap kol-profile-table-wrap">
-        <table class="data kol-profile-table">
-          <thead>
-            <tr>
-              ${kolProfileHeaders.map(header=>`<th>${escapeHtml(header)}</th>`).join("")}
-            </tr>
-          </thead>
-
-          <tbody>
-            ${rows.length
-              ? rows.map(row=>`
-                  <tr>
-                    ${kolProfileHeaders.map(header=>`
-                      <td data-label="${escapeHtml(header)}">
-                        ${kolProfileCellHtml(header,row?.[header])}
-                      </td>`).join("")}
-                  </tr>`).join("")
-              : `<tr>
-                  <td colspan="${Math.max(1,kolProfileHeaders.length)}" class="kol-profile-empty-row">
-                    ${kolProfileLoading?"กำลังโหลดข้อมูล KOL Profile...":"ยังไม่มีข้อมูล KOL Profile ที่แสดงได้"}
-                  </td>
-                </tr>`}
-          </tbody>
-        </table>
-      </div>
-    `;
-
-    const search=document.getElementById("kolProfileSearch");
-    const syncBtn=document.getElementById("kolProfileSyncBtn");
-
-    search?.addEventListener("input",event=>{
-      searchQuery=String(event.target.value||"");
-      draw();
-      const next=document.getElementById("kolProfileSearch");
-      if(next){
-        next.focus();
-        next.setSelectionRange(searchQuery.length,searchQuery.length);
-      }
-    });
-
-    if(syncBtn && !kolProfileLoading){
-      syncBtn.addEventListener("click",async()=>{
-        kolProfileLoading=true;
-        draw();
-
-        await syncKolProfiles();
-
-        if((location.hash||"#home").slice(1)==="internal-kol-profile"){
-          draw();
-        }
-      });
-    }
-  };
-
-  kolProfileLoading=true;
-  draw();
-
-  await syncKolProfiles();
-
-  if((location.hash||"#home").slice(1)!=="internal-kol-profile") return;
-
-  draw();
 }
 
 
